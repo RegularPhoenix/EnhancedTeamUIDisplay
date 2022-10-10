@@ -41,7 +41,7 @@ namespace EnhancedTeamUIDisplay
 					switch (PlayerClass)
 					{
 						case "Melee":
-							classname += " [" + Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.ClassWarrior") + "]";
+							classname += $"[{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.ClassWarrior")}]";
 							if (!(MiscEventHandler.HasItemInInventory(Ally, ItemID.FlaskofCursedFlames)
 								|| MiscEventHandler.HasItemInInventory(Ally, ItemID.FlaskofFire)
 								|| MiscEventHandler.HasItemInInventory(Ally, ItemID.FlaskofGold)
@@ -60,33 +60,33 @@ namespace EnhancedTeamUIDisplay
 								|| Ally.HasBuff(BuffID.WeaponImbueVenom)
 								))
 							{
-								output += " " + Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.NoFlask");
+								output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.NoFlask")} ";
 							}
-							if (!Ally.HasBuff(BuffID.Sharpened)) output += " " + Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.SharpBuff");
+							if (!Ally.HasBuff(BuffID.Sharpened)) output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.SharpBuff")} ";
 							break;
 						case "Ranged":
-							classname += " [" + Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.ClassRanger") + "]";
+							classname += $"[{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.ClassRanger")}]";
 							if (!(MiscEventHandler.HasItemInInventory(Ally, ItemID.AmmoReservationPotion)
 								|| MiscEventHandler.HasItemInInventory(Ally, ItemID.ArcheryPotion)
 								|| Ally.HasBuff(BuffID.AmmoReservation)
 								|| Ally.HasBuff(BuffID.Archery)
 								))
 							{
-								output += " " + Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.RangerBuff");
+								output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.RangerBuff")} ";
 							}
-							if (!Ally.HasBuff(BuffID.AmmoBox)) output += " " + Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.AmmoBoxBuff");
+							if (!Ally.HasBuff(BuffID.AmmoBox)) output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.AmmoBoxBuff")} ";
 							break;
 						case "Magic":
-							classname += " [" + Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.ClassMage") + "]";
+							classname += $"[{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.ClassMage")}]";
 							if (!(MiscEventHandler.HasItemInInventory(Ally, ItemID.ManaRegenerationPotion)
 								|| MiscEventHandler.HasItemInInventory(Ally, ItemID.MagicPowerPotion)
 								|| Ally.HasBuff(BuffID.ManaRegeneration)
 								|| Ally.HasBuff(BuffID.MagicPower)
 								))
 							{
-								output += " " + Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.MageBuff");
+								output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.MageBuff")} ";
 							}
-							if (!Ally.HasBuff(BuffID.Clairvoyance)) output += " " + Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.CrystalBuff");
+							if (!Ally.HasBuff(BuffID.Clairvoyance)) output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.CrystalBuff")} ";
 							int ManaAmount = MiscEventHandler.CountItemsInInventory(Ally, ItemID.ManaPotion) +
 							MiscEventHandler.CountItemsInInventory(Ally, ItemID.GreaterManaPotion) +
 							MiscEventHandler.CountItemsInInventory(Ally, ItemID.LesserManaPotion) +
@@ -101,21 +101,21 @@ namespace EnhancedTeamUIDisplay
 								}
 							}
 
-							if (ManaAmount == 0) output += " " + Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.OutOfManaPotions");
-							else if (ManaAmount <= 5) output += " " + Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.IsLowOnManaPotions");
+							if (ManaAmount == 0) output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.OutOfManaPotions")} ";
+							else if (ManaAmount <= 5) output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.IsLowOnManaPotions")} ";
 							break;
 						case "Summon":
-							classname += " [" + Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.ClassSummoner") + "]";
+							classname += $"[{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.Summoner")}]";
 							if (!(MiscEventHandler.HasItemInInventory(Ally, ItemID.SummoningPotion)
 								|| Ally.HasBuff(BuffID.Summoning)
 								))
 							{
-								output += " " + Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.SummonBuff");
+								output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.SummonBuff")} ";
 							}
-							if (!Ally.HasBuff(BuffID.Bewitched)) output += " " + Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.BewitchedBuff");
+							if (!Ally.HasBuff(BuffID.Bewitched)) output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.BewitchedBuff")} ";
 							break;
 						case "Rogue":
-							classname += " [" + Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.ClassRogue") + "]";
+							classname += $"[{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.ClassRogue")}]";
 							if (!(MiscEventHandler.HasItemInInventory(Ally, ItemID.FlaskofCursedFlames)
 								|| MiscEventHandler.HasItemInInventory(Ally, ItemID.FlaskofFire)
 								|| MiscEventHandler.HasItemInInventory(Ally, ItemID.FlaskofGold)
@@ -134,7 +134,7 @@ namespace EnhancedTeamUIDisplay
 								|| Ally.HasBuff(BuffID.WeaponImbueVenom)
 								))
 							{
-								output += " " + Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.NoFlask");
+								output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.NoFlask")} ";
 							}
 							if (ModLoader.TryGetMod("CalamityMod", out var mod2))
 							{
@@ -146,7 +146,7 @@ namespace EnhancedTeamUIDisplay
 									|| Ally.HasBuff(ShadowBuff.Type)
 									))
 									{
-										output += " " + Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.RogueBuff");
+										output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.RogueBuff")} ";
 									}
 								}
 							}
@@ -171,11 +171,11 @@ namespace EnhancedTeamUIDisplay
 						}
 					}
 
-					if (HealsAmount == 0) { output += " " + Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.OutOfHPPotions"); textColor = Color.Red; }
-					else if (HealsAmount <= 5) output += " " + Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.IsLowOnHPPotions");
+					if (HealsAmount == 0) { output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.OutOfHPPotions")} "; textColor = Color.Red; }
+					else if (HealsAmount <= 5) output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.IsLowOnHPPotions")} ";
 
-					if (output == "") { output = " - Has required buffs and potions"; textColor = Color.Green; }
-					Main.NewText(Ally.name + classname + output, textColor);
+					if (output == "") { output = "- Has required buffs and potions"; textColor = Color.Green; }
+					Main.NewText($"{Ally.name} {classname} {output}", textColor);
 				}
 			}
 		}
@@ -239,6 +239,6 @@ namespace EnhancedTeamUIDisplay
 			Main.NewText(output, ETUDTextColor);
 		}
 
-		public static void CreateErrorMessage(string className, Exception exception, int? num = null) => Main.NewText("ETUD Error: [" + Regex.Replace(className, "[^A-Z]", "") + "-" + Regex.Replace(exception.GetType().Name, "[^A-Z]", "") + "-" + Convert.ToString(num ?? 0, 2) + "] If this error persists, please contact the mod creator.", Color.Red);
+		public static void CreateErrorMessage(string className, Exception exception, int? num = null) => Main.NewText($"ETUD Error: [{Regex.Replace(className, "[^A-Z]", "")}-{Regex.Replace(exception.GetType().Name, "[^A-Z]", "")}-{Convert.ToString(num ?? 0, 2)}] If this error persists, please contact the mod creator.", Color.Red);
 	}
 }

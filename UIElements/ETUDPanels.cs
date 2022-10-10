@@ -103,7 +103,7 @@ namespace EnhancedTeamUIDisplay
 		{
 			base.DrawSelf(spriteBatch);
 
-			if (IsMouseHovering && Ally != null && ETUDConfig.Instanse.AllowOnClickTeleport) Main.instance.MouseText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.AllowTPLabel") + Ally.name);
+			if (IsMouseHovering && Ally != null && ETUDConfig.Instanse.AllowOnClickTeleport) Main.instance.MouseText($"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.AllowTPLabel")} {Ally.name}");
 			if (IsMouseHovering && !ETUDConfig.Instanse.LockUIPosition) Main.instance.MouseText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.UIUnfrozen").Value);
 
 			Rectangle frame = Frame.GetInnerDimensions().ToRectangle();
@@ -331,11 +331,11 @@ namespace EnhancedTeamUIDisplay
 			{
 				if (!Ally.dead)
 				{
-					HPlabel.SetText(Ally.statLife.ToString() + "/" + Ally.statLifeMax2.ToString());
+					HPlabel.SetText($"{Ally.statLife}/{Ally.statLifeMax2}");
 					
 					if (PlayerClass != "Ranged") Ammolabel.SetText("");
 
-					if (PlayerClass == "Melee") Rlabel.SetText(Ally.HasBuff(BuffID.PotionSickness) ? "" + Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.PotionCD") : "" + Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.PotionReady"));
+					if (PlayerClass == "Melee") Rlabel.SetText(Ally.HasBuff(BuffID.PotionSickness) ? Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.PotionCD").Value : Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.PotionReady").Value);
 					else if (PlayerClass == "Ranged")
 					{
 						int bulletcount = 0;
@@ -345,11 +345,11 @@ namespace EnhancedTeamUIDisplay
 							if (Ally.inventory[i].ammo == AmmoID.Bullet) bulletcount += Ally.inventory[i].stack;
 							if (Ally.inventory[i].ammo == AmmoID.Arrow) arrowcount += Ally.inventory[i].stack;
 						}
-						Ammolabel.SetText("   " + Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.BulletLabel") + " " + bulletcount + " " + Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.ArrowLabel") + " " + arrowcount);
+						Ammolabel.SetText($"   {Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.BulletLabel")} {bulletcount} {Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.ArrowLabel")} {arrowcount}");
 						Rlabel.SetText("");
 					}
-					else if (PlayerClass == "Rogue") if (CalamityHelper.RogueStealth(Ally) == CalamityHelper.RogueStealthMax(Ally) && CalamityHelper.RogueStealthMax(Ally) != 0) Rlabel.SetText("Stealthed"); else Rlabel.SetText("");
-					else Rlabel.SetText(Ally.statMana.ToString() + "/" + Ally.statManaMax2.ToString());
+					else if (PlayerClass == "Rogue") if (CalamityHelper.RogueStealth(Ally) == CalamityHelper.RogueStealthMax(Ally) && CalamityHelper.RogueStealthMax(Ally) != 0) Rlabel.SetText("Stealthed "); else Rlabel.SetText("");
+					else Rlabel.SetText($"{Ally.statMana}/{Ally.statManaMax2}");
 
 					if (!Ally.active)
 					{
@@ -362,7 +362,7 @@ namespace EnhancedTeamUIDisplay
 				}
 				else
 				{
-					Name.SetText(" " + Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.Dead") + " " + (Ally.respawnTimer / 60 + 1).ToString());
+					Name.SetText($"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.Dead")} {(Ally.respawnTimer / 60 + 1)}");
 					Rlabel.SetText("");
 					HPlabel.SetText("");
 					Ammolabel.SetText("");
@@ -530,7 +530,7 @@ namespace EnhancedTeamUIDisplay
 		{
 			base.DrawSelf(spriteBatch);
 
-			if (IsMouseHovering && Ally != null && ETUDConfig.Instanse.AllowOnClickTeleport) Main.instance.MouseText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.AllowTPLabel") + Ally.name);
+			if (IsMouseHovering && Ally != null && ETUDConfig.Instanse.AllowOnClickTeleport) Main.instance.MouseText($"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.AllowTPLabel")} {Ally.name}");
 			if (IsMouseHovering && !ETUDConfig.Instanse.LockUIPosition) Main.instance.MouseText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.UIUnfrozen").Value);
 
 			Rectangle frame = Frame.GetInnerDimensions().ToRectangle();
@@ -768,11 +768,11 @@ namespace EnhancedTeamUIDisplay
 			{
 				if (!Ally.dead)
 				{
-					HPlabel.SetText(Ally.statLife.ToString() + "/" + Ally.statLifeMax2.ToString());
+					HPlabel.SetText($"{Ally.statLife}/{Ally.statLifeMax2}");
 
 					if (PlayerClass != "Ranged") Ammolabel.SetText("");
 
-					if (PlayerClass == "Melee") Rlabel.SetText(Ally.HasBuff(BuffID.PotionSickness) ? "" + Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.PotionCD") : "" + Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.PotionReady"));
+					if (PlayerClass == "Melee") Rlabel.SetText(Ally.HasBuff(BuffID.PotionSickness) ? Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.PotionCD").Value : Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.PotionReady").Value);
 					else if (PlayerClass == "Ranged")
 					{
 						int bulletcount = 0;
@@ -782,11 +782,11 @@ namespace EnhancedTeamUIDisplay
 							if (Ally.inventory[i].ammo == AmmoID.Bullet) bulletcount += Ally.inventory[i].stack;
 							if (Ally.inventory[i].ammo == AmmoID.Arrow) arrowcount += Ally.inventory[i].stack;
 						}
-						Ammolabel.SetText("   " + Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.BulletLabel") + " " + bulletcount + " " + Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.ArrowLabel") + " " + arrowcount);
+						Ammolabel.SetText($"   {Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.BulletLabel")} {bulletcount} {Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.ArrowLabel")} {arrowcount}");
 						Rlabel.SetText("");
 					}
-					else if (PlayerClass == "Rogue") if (CalamityHelper.RogueStealth(Ally) == CalamityHelper.RogueStealthMax(Ally) && CalamityHelper.RogueStealthMax(Ally) != 0) Rlabel.SetText("Stealthed"); else Rlabel.SetText("");
-					else Rlabel.SetText(Ally.statMana.ToString() + "/" + Ally.statManaMax2.ToString());
+					else if (PlayerClass == "Rogue") if (CalamityHelper.RogueStealth(Ally) == CalamityHelper.RogueStealthMax(Ally) && CalamityHelper.RogueStealthMax(Ally) != 0) Rlabel.SetText("Stealthed "); else Rlabel.SetText("");
+					else Rlabel.SetText($"{Ally.statMana}/{Ally.statManaMax2}");
 
 					if (!Ally.active)
 					{
@@ -799,7 +799,7 @@ namespace EnhancedTeamUIDisplay
 				}
 				else
 				{
-					Name.SetText(" " + Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.Dead") + " " + (Ally.respawnTimer / 60 + 1).ToString());
+					Name.SetText($"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.Dead")} {(Ally.respawnTimer / 60 + 1)}");
 					Rlabel.SetText("");
 					HPlabel.SetText("");
 					Ammolabel.SetText("");
@@ -908,7 +908,7 @@ namespace EnhancedTeamUIDisplay
 		{
 			base.DrawSelf(spriteBatch);
 
-			if (IsMouseHovering && Ally != null && ETUDConfig.Instanse.AllowOnClickTeleport) Main.instance.MouseText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.AllowTPLabel") + Ally.name);
+			if (IsMouseHovering && Ally != null && ETUDConfig.Instanse.AllowOnClickTeleport) Main.instance.MouseText($"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.AllowTPLabel")} {Ally.name}");
 			if (IsMouseHovering && !ETUDConfig.Instanse.LockUIPosition) Main.instance.MouseText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.UIUnfrozen").Value);
 
 			Rectangle frame = Frame.GetInnerDimensions().ToRectangle();
@@ -1146,11 +1146,11 @@ namespace EnhancedTeamUIDisplay
 			{
 				if (!Ally.dead)
 				{
-					HPlabel.SetText(Ally.statLife.ToString() + "/" + Ally.statLifeMax2.ToString());
+					HPlabel.SetText($"{Ally.statLife}/{Ally.statLifeMax2}");
 
 					if (PlayerClass != "Ranged") Ammolabel.SetText("");
 
-					if (PlayerClass == "Melee") Rlabel.SetText(Ally.HasBuff(BuffID.PotionSickness) ? "" + Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.PotionCD") : "" + Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.PotionReady"));
+					if (PlayerClass == "Melee") Rlabel.SetText(Ally.HasBuff(BuffID.PotionSickness) ? Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.PotionCD").Value : Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.PotionReady").Value);
 					else if (PlayerClass == "Ranged")
 					{
 						int bulletcount = 0;
@@ -1160,11 +1160,11 @@ namespace EnhancedTeamUIDisplay
 							if (Ally.inventory[i].ammo == AmmoID.Bullet) bulletcount += Ally.inventory[i].stack;
 							if (Ally.inventory[i].ammo == AmmoID.Arrow) arrowcount += Ally.inventory[i].stack;
 						}
-						Ammolabel.SetText("   " + Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.BulletLabel") + " " + bulletcount + " " + Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.ArrowLabel") + " " + arrowcount);
+						Ammolabel.SetText($"   {Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.BulletLabel")} {bulletcount} {Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.ArrowLabel")} {arrowcount}");
 						Rlabel.SetText("");
 					}
-					else if (PlayerClass == "Rogue") if (CalamityHelper.RogueStealth(Ally) == CalamityHelper.RogueStealthMax(Ally) && CalamityHelper.RogueStealthMax(Ally) != 0) Rlabel.SetText("Stealthed"); else Rlabel.SetText("");
-					else Rlabel.SetText(Ally.statMana.ToString() + "/" + Ally.statManaMax2.ToString());
+					else if (PlayerClass == "Rogue") if (CalamityHelper.RogueStealth(Ally) == CalamityHelper.RogueStealthMax(Ally) && CalamityHelper.RogueStealthMax(Ally) != 0) Rlabel.SetText("Stealthed "); else Rlabel.SetText("");
+					else Rlabel.SetText($"{Ally.statMana}/{Ally.statManaMax2}");
 
 					if (!Ally.active)
 					{
@@ -1177,7 +1177,7 @@ namespace EnhancedTeamUIDisplay
 				}
 				else
 				{
-					Name.SetText(" " + Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.Dead") + " " + (Ally.respawnTimer / 60 + 1).ToString());
+					Name.SetText($"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.Dead")} {(Ally.respawnTimer / 60 + 1)}");
 					Rlabel.SetText("");
 					HPlabel.SetText("");
 					Ammolabel.SetText("");

@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace EnhancedTeamUIDisplay
 {
-	internal class ETUDUI1 : UIPanel
+	internal class ETUDUI1 : UIPanel // LEGACY CONTENT - No longer supported or updated in versions 1.0+
 	{
 		private UIText PlayerNameText;
 		private UIText PlayerHPText;

@@ -113,7 +113,7 @@ namespace EnhancedTeamUIDisplay
 				for (int i = 0; i < 3; i++) ArmorTextValue += Equipment[i] != 0 ? $"[i:{Equipment[i]}]" : "";
 				for (int i = 3; i < 10; i++) { if (Equipment[i] != 0) { AccessoriesTextValue += $"[i:{Equipment[i]}]"; currentAcc++; if (currentAcc == 4) AccessoriesTextValue += "\n"; } }
 
-				StatTextValue += $"[i:{ItemID.LifeCrystal}]" + Ally.statLifeMax2 + $" [i:{ItemID.RegenerationPotion}]" + Ally.lifeRegen / 2  + $"\n[i:{ItemID.CobaltShield}]" + Ally.statDefense + $" [i:{ItemID.PaladinsShield}]" + (int)(Ally.endurance * 100) + $"\n[i:{ItemID.HermesBoots}]" + (int)((Ally.accRunSpeed + Ally.maxRunSpeed) / 2f * Ally.moveSpeed * 6) + $" [i:{ItemID.LeafWings}]" + (Math.Round(Ally.wingTimeMax / 60.0, 2) <= 0 ? Math.Round(Ally.wingTimeMax / 60.0, 2) : "N/A");
+				StatTextValue += $"[i:{ItemID.LifeCrystal}] {Ally.statLifeMax2} [i:{ItemID.RegenerationPotion}] {Ally.lifeRegen / 2}\n[i:{ItemID.CobaltShield}] {Ally.statDefense} [i:{ItemID.PaladinsShield}] {(int)(Ally.endurance * 100)}\n[i:{ItemID.HermesBoots}] {(int)((Ally.accRunSpeed + Ally.maxRunSpeed) / 2f * Ally.moveSpeed * 6)} [i:{ItemID.LeafWings}] {(Math.Round(Ally.wingTimeMax / 60.0, 2) <= 0 ? Math.Round(Ally.wingTimeMax / 60.0, 2) : "N/A")}";
 
 				StatText.SetText(StatTextValue);
 				NameText.SetText(Ally.name);
