@@ -1,0 +1,128 @@
+Mods: {
+		EnhancedTeamUIDisplay: {
+								ETUDUI: {
+										EnterTeamLine1: First off,
+										EnterTeamLine2: enter a team
+
+										PlayersNotFoundLine1: No other players
+										PlayersNotFoundLine2: found on your team
+
+										HPLabel: HP: 
+										MPLabel: MP:
+										RespawnLabel: Respawning in: 
+								}
+								ETUDPanels: {
+										AllowTPLabel: Teleport to 
+										UIUnfrozen: Panels are currently dragable. Check config to freeze UI or/and enable other options.
+
+										EnterTeamLabel: At first, enter a team
+
+										NoPlayersLabel: No players found
+										NoPlayersLabel2: No other players found
+
+										PotionCD: On cooldown
+										PotionReady: Ready
+
+										Dead: Dead. Respawning in 
+
+										BulletLabel: Bullets:
+										ArrowLabel: Arrows:
+
+										Offline: Offline
+								}
+								Config: {
+										PanelHeader: Panels
+										AddOptionsHeader: Additional options
+
+										PanelAmount: {
+												Label: Amount of panels
+										}
+
+										EnableAutoToggle: {
+												Label: Enable auto toggle
+												Tooltip: Automatically enables ETUD when any boss appears and disables it when all bosses die or despawn
+										}
+
+										EnableColorMatch: {
+												Label: Advanced colour system
+												Tooltip:
+													'''		
+													New UI: ETUD will try to determine your allies' classes and show corresponding stats and use different colours: 
+													> Warrior - Brown HP - Healing potion cooldown 
+													> Ranger - Green HP - Ammo count 
+													> Mage - Blue HP - Mana 
+													> Summoner - Purple HP - Mana 
+													> [Calamity Mod] Rogue - Yellow HP - Stealth
+													Legacy UI: When enabled, ETUD background color will match your team color
+													'''
+										}
+
+										LockUIPosition: {
+												Label: Lock UI position
+												Tooltip: When enabled, UI position will be locked. If disabled, you can freely move UI using mouse
+										}
+
+										AllowOnClickTeleport: {
+												Label: Allow teleport on click
+												Tooltip: When enabled, click on panel to teleport to the corresponding player (You still need the wormhole potion; Option will not work if "Lock UI position" option is disabled)
+										}
+
+										EnableLegacyUI: {
+												Label: Use legacy design
+												Tooltip: ETUD will use old design (Before version 1.0.0)
+										}
+
+										ShowOfflinePlayers: {
+												Label: Show offline players
+												Tooltip: Offline players will not be removed from UI
+										}
+
+										ShowBuffCheckButton: {
+												Label: Show buff check button
+												Tooltip: 
+													'''
+													Shows button that allows to check your team players' for required buffs.
+													You will still be able to check buffs using /buffcheck command if this options is disabled.
+													'''
+										}
+
+										ShowBossSummary: {
+												Label: Show boss fight summary
+												Tooltip: After boss fight ends shows short dps summary in chat
+										}
+								}
+								ETUDAddOptions: {
+										ETUDInfoBC: ETUD Summary (Buff check):
+										ETUDInfoDPS: ETUD Summary (Boss fight):
+
+										ClassWarrior: Warrior
+										ClassRanger: Ranger
+										ClassMage: Mage
+										ClassSummoner: Summoner
+										ClassRogue: Rogue
+
+										NoFlask: - No flask
+										SharpBuff: - No sharpening station buff
+
+										RangerBuff: - No archery/ammo reservation buff
+										AmmoBoxBuff: - No ammo box buff
+
+										MageBuff: - No magic power/mana regeneration buff
+										CrystalBuff: - No crystal ball buff
+										OutOfManaPotions: - Ran out of mana potions
+										IsLowOnManaPotions: - Is low on mana potions
+
+										SummonBuff: - No summoning buff
+										BewitchedBuff: - No bewitching table buff
+
+										RogueBuff: - No invisibility/shadow buff
+
+										OutOfHPPotions: - Ran out of healing potions
+										IsLowOnHPPotions: - Is low on healing potions
+
+										HasRequired: - Has required buffs and potions
+								}
+
+		}
+}
+	
