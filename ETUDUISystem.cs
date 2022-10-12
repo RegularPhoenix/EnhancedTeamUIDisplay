@@ -11,8 +11,8 @@ namespace EnhancedTeamUIDisplay
 		internal static UserInterface ETUDInterface;
 		internal static UserInterface ETUDAllyStatScreen;
 		private GameTime LastUpdateUIGameTime;
-		private bool AnyBossFound;
-		public static bool updatedps;
+		private bool AnyBossFound; // Can be replaced with Main.CurrentFrameFlags.AnyActiveBossNPC ?
+		public static bool updatedps; 
 		private static bool BossEvaded;
 
 		private string LastBossName = ""; // Actually, this string stores the name of the FIRST boss, so it should be FirstBossName, but :)
@@ -35,13 +35,17 @@ namespace EnhancedTeamUIDisplay
 
 		internal static void OpenAllyStatScreen()
 		{
+			
 			ETUDAllyInfoPanel allyInfoPanel = new ETUDAllyInfoPanel();
 			UIState state = new UIState();
 			state.Append(allyInfoPanel);
 			ETUDAllyStatScreen.SetState(state);
 		}
 
-		internal static void CloseAllyStatScreen() => ETUDAllyStatScreen.SetState(null);
+		internal static void CloseAllyStatScreen()
+		{
+			ETUDAllyStatScreen.SetState(null);
+		}
 
 		internal static void ToggleETUD()
 		{

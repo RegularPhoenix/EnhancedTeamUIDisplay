@@ -1,12 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using System.Text;
+using Terraria.Chat;
+using Terraria.GameInput;
 
 namespace EnhancedTeamUIDisplay
 {
@@ -197,6 +199,7 @@ namespace EnhancedTeamUIDisplay
 			started = true;
 		}
 
+		// NOT WORKING
 		public static void UpdateBossSummary()
 		{		
 			for (int i = 0; i < Main.maxPlayers; i++)
@@ -204,11 +207,15 @@ namespace EnhancedTeamUIDisplay
 				if (Main.player[i] != null && Main.player[i].active && Main.player[i].team == Main.LocalPlayer.team)
 				{
 					bool exists = false;
-					for (int j = 0; j <= arraynum; j++) if (playersdps[j][0] == i) exists = true;
+					for (int j = 0; j <= arraynum; j++) if (playersdps[j][0] == i)
+					{
+							exists = true;
+							int dps = Main.player[i].getDPS();
+							playersdps[j][1] = dps > playersdps[j][1] ? dps : playersdps[j][1];
+					}
 
 					if (!exists)
 					{
-						Main.player[i].checkDPSTime();
 						int dps = Main.player[i].getDPS();
 						playersdps[arraynum] = new int[] { i, (dps > playersdps[arraynum][1]) ? dps : 0 };
 						arraynum++;
@@ -231,10 +238,10 @@ namespace EnhancedTeamUIDisplay
 			if (!special) output += (arg == "" ? "> Team wiped in " : "> " + arg + " killed in ") + FightDuration.ToString(@"hh\:mm\:ss") + "\n";
 			else output += arg + "Fight time: " + FightDuration.ToString(@"hh\:mm\:ss") + "\n";
 			output += addarg + "\n";
-			output += "> Top DPS:" + "\n";
+			/*output += "> Top DPS:" + "\n";
 			output += " 1: " + Main.player[playersdps[0][0]].name + (playersdps[0][1] != 0 ? ( " - Peak DPS: " + playersdps[0][1]) : " - No damage") + "\n";
 			if (playersdps[1][0] != -1) output += " 2: " + Main.player[playersdps[1][0]].name + (playersdps[1][1] != 0 ? (" - Peak DPS: " + playersdps[1][1]) : " - No damage") + "\n";
-			if (playersdps[2][0] != -1) output += " 3: " + Main.player[playersdps[2][0]].name + (playersdps[2][1] != 0 ? (" - Peak DPS: " + playersdps[2][1]) : " - No damage");
+			if (playersdps[2][0] != -1) output += " 3: " + Main.player[playersdps[2][0]].name + (playersdps[2][1] != 0 ? (" - Peak DPS: " + playersdps[2][1]) : " - No damage");*/
 
 			Main.NewText(output, ETUDTextColor);
 		}

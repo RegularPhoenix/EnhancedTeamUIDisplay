@@ -1243,25 +1243,9 @@ namespace EnhancedTeamUIDisplay
 			}
 		}
 
-		public static bool HasItemInInventory(Player player, int itemtype)
-		{
-			bool itemFound = false;
-			for (int i = 0; i < player.inventory.Length; i++)
-			{
-				if (player.inventory[i].type == itemtype) itemFound = true;
-			}
-			return itemFound;
-		}
+		public static bool HasItemInInventory(Player player, int itemtype) => player.HasItem(itemtype);
 
-		public static int CountItemsInInventory(Player player, int itemtype)
-		{
-			int itemCount = 0;
-			for (int i = 0; i < player.inventory.Length; i++)
-			{
-				if (player.inventory[i].type == itemtype) itemCount += player.inventory[i].stack;
-			}
-			return itemCount;
-		}
+		public static int CountItemsInInventory(Player player, int itemtype) => player.CountItem(itemtype);
 	}
 
 	[JITWhenModsEnabled("CalamityMod")]
