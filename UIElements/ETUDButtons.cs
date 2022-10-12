@@ -87,33 +87,38 @@ namespace EnhancedTeamUIDisplay
 			button.Top.Set(0, 0f);
 			button.Width.Set(20, 0f);
 			button.Height.Set(24, 0f);
-			//button.OnMouseDown += OnButtonDown;
-			//button.OnMouseUp += OnButtonUp;
+			button.OnMouseDown += OnButtonDown;
+			button.OnMouseUp += OnButtonUp;
+			button.OnMouseOver += OnMouseSelect;
+			button.OnMouseOut += OnMouseDeselect;
 
 			MainElement.Append(button);
 			Append(MainElement);
 		}
 
-		private void OnButtonDown(UIMouseEvent evt, UIElement listeningElement) => ETUDAllyInfoPanel.extended = true;
+		internal virtual void OnMouseSelect(UIMouseEvent evt, UIElement listeningElement) { if (ETUDUISystem.ETUDAllyStatScreen.CurrentState == null) { ETUDUISystem.OpenAllyStatScreen(); } ETUDAllyInfoPanel.GetLeft = Left.Pixels - ETUDAllyInfoPanel.width; ETUDAllyInfoPanel.GetTop = Top.Pixels; }
 
-		private void OnButtonUp(UIMouseEvent evt, UIElement listeningElement) => ETUDAllyInfoPanel.extended = false;
+		internal virtual void OnMouseDeselect(UIMouseEvent evt, UIElement listeningElement) { if (ETUDUISystem.ETUDAllyStatScreen.CurrentState != null) ETUDUISystem.CloseAllyStatScreen(); }
+
+		private void OnButtonDown(UIMouseEvent evt, UIElement listeningElement) { ETUDUISystem.CloseAllyStatScreen(); ETUDAllyInfoPanel.extended = true; ETUDUISystem.OpenAllyStatScreen(); }
+
+		private void OnButtonUp(UIMouseEvent evt, UIElement listeningElement) { ETUDUISystem.CloseAllyStatScreen(); ETUDAllyInfoPanel.extended = false; ETUDUISystem.OpenAllyStatScreen(); }
 	}
 
 	internal class AllyInfoButton1 : AllyInfoButton
 	{
+		internal override void OnMouseSelect(UIMouseEvent evt, UIElement listeningElement)
+		{
+			if (ETUDPanel1.Ally == null) return;
+			ETUDAllyInfoPanel.Ally = ETUDPanel1.Ally;
+			base.OnMouseSelect(evt, listeningElement);
+		}
+
 		public override void Draw(SpriteBatch spriteBatch)
 		{
 			if (ETUDPanel1.Ally == null) return;
 
 			base.Draw(spriteBatch);
-		}
-
-		protected override void DrawSelf(SpriteBatch spriteBatch)
-		{
-			base.DrawSelf(spriteBatch);
-
-			if (IsMouseHovering) { ETUDAllyInfoPanel.Ally = ETUDPanel1.Ally; if (ETUDUISystem.ETUDAllyStatScreen.CurrentState == null) ETUDUISystem.OpenAllyStatScreen(); ; ETUDAllyInfoPanel.GetLeft = Left.Pixels - ETUDAllyInfoPanel.width; ETUDAllyInfoPanel.GetTop = Top.Pixels; }
-			else { if (ETUDUISystem.ETUDAllyStatScreen.CurrentState != null) ETUDUISystem.CloseAllyStatScreen(); }
 		}
 
 		public override void Update(GameTime gameTime)
@@ -127,19 +132,18 @@ namespace EnhancedTeamUIDisplay
 
 	internal class AllyInfoButton2 : AllyInfoButton
 	{
+		internal override void OnMouseSelect(UIMouseEvent evt, UIElement listeningElement)
+		{
+			if (ETUDPanel2.Ally == null) return;
+			ETUDAllyInfoPanel.Ally = ETUDPanel2.Ally;
+			base.OnMouseSelect(evt, listeningElement);
+		}
+
 		public override void Draw(SpriteBatch spriteBatch)
 		{
 			if (ETUDPanel2.Ally == null || (ETUDConfig.Instanse.PanelAmount != "Two panels" && ETUDConfig.Instanse.PanelAmount != "Three panels")) return;
 
 			base.Draw(spriteBatch);
-		}
-
-		protected override void DrawSelf(SpriteBatch spriteBatch)
-		{
-			base.DrawSelf(spriteBatch);
-
-			if (IsMouseHovering) { ETUDAllyInfoPanel.Ally = ETUDPanel2.Ally; if (ETUDUISystem.ETUDAllyStatScreen.CurrentState == null) ETUDUISystem.OpenAllyStatScreen(); ETUDAllyInfoPanel.GetLeft = Left.Pixels - ETUDAllyInfoPanel.width; ETUDAllyInfoPanel.GetTop = Top.Pixels; }
-			else { if (ETUDUISystem.ETUDAllyStatScreen.CurrentState != null) ETUDUISystem.CloseAllyStatScreen(); }
 		}
 
 		public override void Update(GameTime gameTime)
@@ -153,19 +157,18 @@ namespace EnhancedTeamUIDisplay
 
 	internal class AllyInfoButton3 : AllyInfoButton
 	{
+		internal override void OnMouseSelect(UIMouseEvent evt, UIElement listeningElement)
+		{
+			if (ETUDPanel3.Ally == null) return;
+			ETUDAllyInfoPanel.Ally = ETUDPanel3.Ally;
+			base.OnMouseSelect(evt, listeningElement);
+		}
+
 		public override void Draw(SpriteBatch spriteBatch)
 		{
 			if (ETUDPanel3.Ally == null || ETUDConfig.Instanse.PanelAmount != "Three panels") return;
 
 			base.Draw(spriteBatch);
-		}
-
-		protected override void DrawSelf(SpriteBatch spriteBatch)
-		{
-			base.DrawSelf(spriteBatch);
-
-			if (IsMouseHovering) { ETUDAllyInfoPanel.Ally = ETUDPanel3.Ally; if (ETUDUISystem.ETUDAllyStatScreen.CurrentState == null) ETUDUISystem.OpenAllyStatScreen(); ; ETUDAllyInfoPanel.GetLeft = Left.Pixels - ETUDAllyInfoPanel.width; ETUDAllyInfoPanel.GetTop = Top.Pixels; }
-			else { if (ETUDUISystem.ETUDAllyStatScreen.CurrentState != null) ETUDUISystem.CloseAllyStatScreen(); }
 		}
 
 		public override void Update(GameTime gameTime)
