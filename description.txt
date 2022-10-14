@@ -5,8 +5,5 @@ Compatible with Calamity Mod
 Feel free to give your feedback on mod on Steam Workshop page.
 If you found a bug, please report it to RegularPhoenix#2044
 
-Update 1.1.0:
-	- Mod is now client-side (This means that this mod will not be disabled client-side if the server does not have it.)
-	- Added boss summary option
-	- Added extended ally info option
-	- Fixed (hopefully) UI position not saving on exit
+Update 1.x.x:
+	x> Removed Calamity Reference

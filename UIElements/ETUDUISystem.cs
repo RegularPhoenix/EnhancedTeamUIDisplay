@@ -15,7 +15,7 @@ namespace EnhancedTeamUIDisplay
 		public static bool updatedps; 
 		private static bool BossEvaded;
 
-		private string LastBossName = ""; // Actually, this string stores the name of the FIRST boss, so it should be FirstBossName, but :)
+		private string FirstBossName = "";
 		private List<string> BossNames = new();
 		private List<string> UnkilledBossNames = new();
 
@@ -36,8 +36,8 @@ namespace EnhancedTeamUIDisplay
 		internal static void OpenAllyStatScreen()
 		{
 			
-			ETUDAllyInfoPanel allyInfoPanel = new ETUDAllyInfoPanel();
-			UIState state = new UIState();
+			ETUDAllyInfoPanel allyInfoPanel = new();
+			UIState state = new();
 			state.Append(allyInfoPanel);
 			ETUDAllyStatScreen.SetState(state);
 		}
@@ -54,21 +54,21 @@ namespace EnhancedTeamUIDisplay
 
 		internal static void OpenETUDInterface()
 		{
-			ETUDUI1 ui = new ETUDUI1();
-			ETUDUI2 ui2 = new ETUDUI2();
-			ETUDUI3 ui3 = new ETUDUI3();
+			ETUDUI1 ui = new();
+			ETUDUI2 ui2 = new();
+			ETUDUI3 ui3 = new();
 			
-			ETUDPanel1 newui1 = new ETUDPanel1();
-			ETUDPanel2 newui2 = new ETUDPanel2();
-			ETUDPanel3 newui3 = new ETUDPanel3();
+			ETUDPanel1 newui1 = new();
+			ETUDPanel2 newui2 = new();
+			ETUDPanel3 newui3 = new();
 
-			AllyInfoButton1 statbutton1 = new AllyInfoButton1();
-			AllyInfoButton2 statbutton2 = new AllyInfoButton2();
-			AllyInfoButton3 statbutton3 = new AllyInfoButton3();
+			AllyInfoButton1 statbutton1 = new();
+			AllyInfoButton2 statbutton2 = new();
+			AllyInfoButton3 statbutton3 = new();
+			DamageCounter.DamageCounterUI damageCounterUI = new();
+			BuffCheckButton button1 = new();
 
-			BuffCheckButton button1 = new BuffCheckButton();
-
-			UIState state = new UIState();
+			UIState state = new();
 
 			if (!ETUDConfig.Instanse.EnableLegacyUI)
 			{
@@ -82,13 +82,13 @@ namespace EnhancedTeamUIDisplay
 				if (ETUDConfig.Instanse.PanelAmount == "Two panels" || ETUDConfig.Instanse.PanelAmount == "Three panels") state.Append(ui2);
 				if (ETUDConfig.Instanse.PanelAmount == "Three panels") state.Append(ui3);
 			}
-
+			state.Append(damageCounterUI);
 			state.Append(statbutton1);
 			state.Append(statbutton2);
 			state.Append(statbutton3);
 
 			if (ETUDConfig.Instanse.ShowBuffCheckButton) state.Append(button1);
-
+			
 			ETUDInterface.SetState(state);
 		}
 
@@ -117,7 +117,7 @@ namespace EnhancedTeamUIDisplay
 						if (ETUDConfig.Instanse.ShowBossSummary) ETUDAdditionalOptions.StartBossSummary();
 						AnyBossFound = true;
 						BossEvaded = false;
-						LastBossName = Main.npc[i].FullName;
+						FirstBossName = Main.npc[i].FullName;
 					}
 				}
 			}
@@ -144,7 +144,7 @@ namespace EnhancedTeamUIDisplay
 					if (Main.npc[j] != null && Main.npc[j].boss && !Main.npc[j].active)
 					{
 						if (!PlayersWiped && Main.npc[j].life > 0) if (!UnkilledBossNames.Contains(Main.npc[j].FullName)) UnkilledBossNames.Add(Main.npc[j].FullName);
-						if (Main.npc[j].FullName == LastBossName && Main.npc[j].life > 0) BossEvaded = true;
+						if (Main.npc[j].FullName == FirstBossName && Main.npc[j].life > 0) BossEvaded = true;
 					}
 				}
 
@@ -171,13 +171,13 @@ namespace EnhancedTeamUIDisplay
 
 						if (playeralive && !BossEvaded)
 						{
-							ETUDAdditionalOptions.EndBossSummary(LastBossName + (KilledBosses.Count > 1 ? (" and " + (KilledBosses.Count - 1) + " other bosses") : ""), "> You have killed this boss " + tempDictionary[LastBossName][0] + " time(s).");
+							ETUDAdditionalOptions.EndBossSummary(FirstBossName + (KilledBosses.Count > 1 ? (" and " + (KilledBosses.Count - 1) + " other bosses") : ""), "> You have killed this boss " + tempDictionary[FirstBossName][0] + " time(s).");
 						}
-						else if (playeralive && BossEvaded && KilledBosses.Count > 0) ETUDAdditionalOptions.EndBossSummary("First boss has escaped, but you killed " + KilledBosses.Count + " other bosses. ", "> You have wiped on this boss (" + LastBossName + ") " + tempDictionary[LastBossName][1] + " time(s).", true);
-						else ETUDAdditionalOptions.EndBossSummary("", "> You have wiped on this boss (" + LastBossName + ") " + tempDictionary[LastBossName][1] + " time(s).");	
+						else if (playeralive && BossEvaded && KilledBosses.Count > 0) ETUDAdditionalOptions.EndBossSummary("First boss has escaped, but you killed " + KilledBosses.Count + " other bosses. ", "> You have wiped on this boss (" + FirstBossName + ") " + tempDictionary[FirstBossName][1] + " time(s).", true);
+						else ETUDAdditionalOptions.EndBossSummary("", "> You have wiped on this boss (" + FirstBossName + ") " + tempDictionary[FirstBossName][1] + " time(s).");	
 					}
 					AnyBossFound = false;
-					LastBossName = "";
+					FirstBossName = "";
 				}
 			}
 			
@@ -219,6 +219,7 @@ namespace EnhancedTeamUIDisplay
 					InterfaceScaleType.UI)
 				);
 			}
+
 		}
 	}
 }

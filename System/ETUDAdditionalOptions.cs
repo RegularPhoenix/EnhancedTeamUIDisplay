@@ -6,9 +6,6 @@ using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using System.Text;
-using Terraria.Chat;
-using Terraria.GameInput;
 
 namespace EnhancedTeamUIDisplay
 {
@@ -95,9 +92,9 @@ namespace EnhancedTeamUIDisplay
 							MiscEventHandler.CountItemsInInventory(Ally, ItemID.SuperManaPotion) +
 							MiscEventHandler.CountItemsInInventory(Ally, ItemID.RestorationPotion);
 
-							if (ModLoader.TryGetMod("CalamityMod", out var mod1))
+							if (ETUD.CalamityMod != null)
 							{
-								if (mod1.TryFind<ModItem>("SupremeManaPotion", out var SupremeManaPotion))
+								if (ETUD.CalamityMod.TryFind<ModItem>("SupremeManaPotion", out var SupremeManaPotion))
 								{
 									ManaAmount += MiscEventHandler.CountItemsInInventory(Ally, SupremeManaPotion.Type);
 								}
@@ -138,9 +135,9 @@ namespace EnhancedTeamUIDisplay
 							{
 								output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.NoFlask")} ";
 							}
-							if (ModLoader.TryGetMod("CalamityMod", out var mod2))
+							if (ETUD.CalamityMod != null)
 							{
-								if (mod2.TryFind<ModItem>("ShadowPotion", out var ShadowPotion) && mod2.TryFind<ModBuff>("ShadowBuff", out var ShadowBuff))
+								if (ETUD.CalamityMod.TryFind<ModItem>("ShadowPotion", out var ShadowPotion) && ETUD.CalamityMod.TryFind<ModBuff>("ShadowBuff", out var ShadowBuff))
 								{
 									if (!(MiscEventHandler.HasItemInInventory(Ally, ItemID.InvisibilityPotion)
 									|| MiscEventHandler.HasItemInInventory(Ally, ShadowPotion.Type)
@@ -165,9 +162,9 @@ namespace EnhancedTeamUIDisplay
 						MiscEventHandler.CountItemsInInventory(Ally, ItemID.SuperHealingPotion) +
 						MiscEventHandler.CountItemsInInventory(Ally, ItemID.RestorationPotion);
 
-					if (ModLoader.TryGetMod("CalamityMod", out var mod))
+					if (ETUD.CalamityMod != null)
 					{
-						if (mod.TryFind<ModItem>("SupremeHealingPotion", out var SupremeHealingPotion) && mod.TryFind<ModItem>("OmegaHealingPotion", out var OmegaHealingPotion))
+						if (ETUD.CalamityMod.TryFind<ModItem>("SupremeHealingPotion", out var SupremeHealingPotion) && ETUD.CalamityMod.TryFind<ModItem>("OmegaHealingPotion", out var OmegaHealingPotion))
 						{
 							HealsAmount += MiscEventHandler.CountItemsInInventory(Ally, SupremeHealingPotion.Type) + MiscEventHandler.CountItemsInInventory(Ally, OmegaHealingPotion.Type);
 						}
@@ -247,5 +244,5 @@ namespace EnhancedTeamUIDisplay
 		}
 
 		public static void CreateErrorMessage(string className, Exception exception, int? num = null) => Main.NewText($"ETUD Error: [{Regex.Replace(className, "[^A-Z]", "")}-{Regex.Replace(exception.GetType().Name, "[^A-Z]", "")}-{Convert.ToString(num ?? 0, 2)}] If this error persists, please contact the mod creator.", Color.Red);
-	}
+	}	
 }

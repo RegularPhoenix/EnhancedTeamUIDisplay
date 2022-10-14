@@ -150,8 +150,8 @@ namespace EnhancedTeamUIDisplay
 
 					playerClassText.SetText((AllyClass == "None" || string.IsNullOrEmpty(AllyClass)) ? "No class" : AllyClass);
 
-					if (ModLoader.TryGetMod("CalamityMod", out var mod))
-						if (mod.TryFind<DamageClass>("RogueDamageClass", out var rogueclass))
+					if (ETUD.CalamityMod != null)
+						if (ETUD.CalamityMod.TryFind<DamageClass>("RogueDamageClass", out var rogueclass))
 						{
 							switch (AllyClass)
 							{
