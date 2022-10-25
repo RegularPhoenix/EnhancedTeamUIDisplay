@@ -3,6 +3,7 @@ using Terraria.ModLoader;
 
 using Terraria;
 using Terraria.ID;
+using EnhancedTeamUIDisplay.DamageCounter;
 
 namespace EnhancedTeamUIDisplay
 {
@@ -16,12 +17,15 @@ namespace EnhancedTeamUIDisplay
 
 		public override void Load()
 		{
-			ETUDHotkey = KeybindLoader.RegisterKeybind(this, "Show ETUD", "L");
+			ETUDHotkey = KeybindLoader.RegisterKeybind(this, "Show ETUD", "L");	
 
 			Instance = this;
 
 			DPSValues = new int[256];
-			for (int i = 0; i < 256; i++) DPSValues[i] = -1;
+			DeathValues = new int[256];
+			TakenDamageValues = new int[256];
+			DealtDamageValues = new int[256];
+			DamageCounterSystem.ResetVariables();
 		}
 
 		public override void Unload() => ETUDHotkey = null;
@@ -31,6 +35,9 @@ namespace EnhancedTeamUIDisplay
 		// DAMAGE COUNTER
 
 		internal static int[] DPSValues;
+		internal static int[] DeathValues;
+		internal static int[] TakenDamageValues;
+		internal static int[] DealtDamageValues;
 
 		public override void HandlePacket(BinaryReader reader, int whoAmI)
 		{

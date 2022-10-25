@@ -3,6 +3,7 @@ using Terraria.ModLoader;
 using Terraria.UI;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using EnhancedTeamUIDisplay.DamageCounter;
 
 namespace EnhancedTeamUIDisplay
 {
@@ -12,7 +13,6 @@ namespace EnhancedTeamUIDisplay
 		internal static UserInterface ETUDAllyStatScreen;
 		private GameTime LastUpdateUIGameTime;
 		private bool AnyBossFound; // Can be replaced with Main.CurrentFrameFlags.AnyActiveBossNPC ?
-		public static bool updatedps; 
 		private static bool BossEvaded;
 
 		private string FirstBossName = "";
@@ -24,7 +24,6 @@ namespace EnhancedTeamUIDisplay
 			if (!Main.dedServ) ETUDInterface = new UserInterface();
 			if (!Main.dedServ) ETUDAllyStatScreen = new UserInterface();
 			AnyBossFound = false;
-			updatedps = false;
 		}
 
 		public override void Unload()
@@ -65,10 +64,12 @@ namespace EnhancedTeamUIDisplay
 			AllyInfoButton1 statbutton1 = new();
 			AllyInfoButton2 statbutton2 = new();
 			AllyInfoButton3 statbutton3 = new();
-			DamageCounter.DamageCounterUI damageCounterUI = new();
+
 			BuffCheckButton button1 = new();
 
 			UIState state = new();
+
+			if (ETUDConfig.Instanse.EnableDamageCounter) { DamageCounterUI damageCounterUI = new(); state.Append(damageCounterUI); }
 
 			if (!ETUDConfig.Instanse.EnableLegacyUI)
 			{
@@ -82,7 +83,7 @@ namespace EnhancedTeamUIDisplay
 				if (ETUDConfig.Instanse.PanelAmount == "Two panels" || ETUDConfig.Instanse.PanelAmount == "Three panels") state.Append(ui2);
 				if (ETUDConfig.Instanse.PanelAmount == "Three panels") state.Append(ui3);
 			}
-			state.Append(damageCounterUI);
+
 			state.Append(statbutton1);
 			state.Append(statbutton2);
 			state.Append(statbutton3);
@@ -114,6 +115,7 @@ namespace EnhancedTeamUIDisplay
 					if (Main.npc[i] != null && Main.npc[i].active && Main.npc[i].boss)
 					{
 						if (ETUDConfig.Instanse.EnableAutoToggle && ETUDInterface.CurrentState == null) OpenETUDInterface();
+						if (ETUDConfig.Instanse.AutoResetDamageCounter) DamageCounterSystem.ResetVariables();
 						if (ETUDConfig.Instanse.ShowBossSummary) ETUDAdditionalOptions.StartBossSummary();
 						AnyBossFound = true;
 						BossEvaded = false;
@@ -121,8 +123,6 @@ namespace EnhancedTeamUIDisplay
 					}
 				}
 			}
-
-			if (updatedps) ETUDAdditionalOptions.UpdateBossSummary();
 
 			if (AnyBossFound)
 			{
@@ -154,7 +154,6 @@ namespace EnhancedTeamUIDisplay
 
 					if (ETUDConfig.Instanse.ShowBossSummary)
 					{
-						// Determine killed and not killed bosses
 						List<string> KilledBosses = new();
 						foreach (string boss in BossNames) if (!UnkilledBossNames.Contains(boss)) KilledBosses.Add(boss);
 

@@ -289,8 +289,6 @@ namespace EnhancedTeamUIDisplay
 					}
 				}
 
-				if (args[1] == "arraynum") Main.NewText(ETUDAdditionalOptions.arraynum);
-
 				if (args[1] == "BossFightAttempts")
 				{
 					if (ETUDPlayer.BossFightAttempts.Count == 0) caller.Reply("Empty");
