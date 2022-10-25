@@ -1,8 +1,5 @@
 using System.IO;
 using Terraria.ModLoader;
-
-using Terraria;
-using Terraria.ID;
 using EnhancedTeamUIDisplay.DamageCounter;
 
 namespace EnhancedTeamUIDisplay

@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace EnhancedTeamUIDisplay
 {
-	internal class ETUDPanel1 : UIElement
+	internal class ETUDPanel1 : UIElement // TODO: Rewrite panel code completely
 	{
 		internal const int width = 200;
 		internal const int height = 60;
@@ -1275,19 +1275,25 @@ namespace EnhancedTeamUIDisplay
 			return new Color[] {Color.White, Color.White, Color.White, Color.White};
 		}
 
-		public static bool HasItemInInventory(Player player, int itemtype) => player.HasItem(itemtype);
+		public static bool HasItemsInInventory(Player player, int[] itemtypes)
+		{
+			for (int i = 0; i < itemtypes.Length; i++) if (player.HasItem(itemtypes[i])) return true;
+			return false;
+		}
+
+		public static bool HasBuffs(Player player, int[] bufftypes)
+		{
+			for (int i = 0; i < bufftypes.Length; i++) if (player.HasBuff(bufftypes[i])) return true;
+			return false;
+		}
 
 		public static int CountItemsInInventory(Player player, int itemtype) => player.CountItem(itemtype);
 	}
 
-	//[JITWhenModsEnabled("CalamityMod")]
 	public class CalamityHelper
 	{
-		//public static float RogueStealth(Player player) => player.GetModPlayer<CalamityMod.CalPlayer.CalamityPlayer>().rogueStealth;
 		public static float RogueStealth(Player player) => (float)ETUD.CalamityMod.Call("GetCurrentStealth", player);
 
-		//public static float RogueStealthMax(Player player) => player.GetModPlayer<CalamityMod.CalPlayer.CalamityPlayer>().rogueStealthMax;
 		public static float RogueStealthMax(Player player) => (float)ETUD.CalamityMod.Call("GetMaxStealth", player);
-
 	}
 }

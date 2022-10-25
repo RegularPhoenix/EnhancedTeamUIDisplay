@@ -238,14 +238,14 @@ namespace EnhancedTeamUIDisplay
 			=> "Don't use this command. For development purposes. May crash the game";
 
 		public override string Usage
-			=> "/debugETUD <get/set/add> <variable(s)> <panel number>";
+			=> "/debugETUD <get/set/add> <variable(s)> <panel number (optional)>";
 
 		public override void Action(CommandCaller caller, string input, string[] args)
 		{
 
 			if (args[0] == "get")
 			{
-				if (args[1] == "offset")
+				if (args[1] == "paneloffset")
 				{
 					caller.Reply(ETUDPlayer.PanelLeftOffset + " " + ETUDPlayer.PanelTopOffset);
 				}
@@ -313,9 +313,14 @@ namespace EnhancedTeamUIDisplay
 					if (args[2] == "clear") ETUDPlayer.BossFightAttempts.Clear();
 				}
 			}
+			else if (args[0] == "throw")
+			{
+				ETUDAdditionalOptions.CreateErrorMessage("TEST", new NotImplementedException(""), 255);
+			}
 
 			// /debugETUD add BossFightAttempts bos 12 412
 			// /debugETUD get BossFightAttempts
+			// /debugETUD set BossFightAttempts clear
 		}
 	}
 }

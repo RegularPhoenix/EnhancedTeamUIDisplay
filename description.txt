@@ -1,9 +1,13 @@
-Enhanced Team UI Display (ETUD) allows you to see HP and some other stats of another players on your team (Up to 3 players, additional panels can be enabled in config). UI is toggled by pressing 'L' by default.
+Did you ever want to see what armour and accessories your allies are using, how many damage they deal? Maybe you want to compete with your friends? Or maybe you are a WoW player and like many useful(probably) info on your screen? If the answer is "Yes!" then Enhanced Team UI Display (ETUD) is what you need! ETUD adds fashionable UI that allows you to see your teammates' equipped items, overall and in-combat statictics.
+
+Note: dps meter will not track dps of players without DPS Meter accessory equipped. Taken damage shows only damage taken from enemies. Environmental damage (fall, lava, etc.) does not count.
+
+Default keybind - 'L'
 
 Compatible with Calamity Mod
 
 Feel free to give your feedback on mod on Steam Workshop page.
 If you found a bug, please report it to RegularPhoenix#2044
 
-Update 1.x.x:
-	x> Removed Calamity Reference
+Update 1.2.0:
+	- Added damage (and more) meter

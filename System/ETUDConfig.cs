@@ -74,6 +74,11 @@ namespace EnhancedTeamUIDisplay
 		[DefaultValue(true)]
 		public bool ShowBossSummary;
 
+		[Tooltip("$Mods.EnhancedTeamUIDisplay.Config.ShowErrorMessages.Tooltip")]
+		[Label("$Mods.EnhancedTeamUIDisplay.Config.ShowErrorMessages.Label")]
+		[DefaultValue(true)]
+		public bool ShowErrorMessages;
+
 		public override void OnChanged()
 		{
 			base.OnChanged();

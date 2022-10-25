@@ -44,7 +44,7 @@ namespace EnhancedTeamUIDisplay
 				List.Add(new TagCompound()
 				{
 					{"name", item.Key },
-					{ "wins", item.Value[0]},
+					{"wins", item.Value[0]},
 					{"losses",item.Value[1]},
 				});
 			}
