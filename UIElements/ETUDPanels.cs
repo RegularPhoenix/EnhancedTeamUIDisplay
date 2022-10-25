@@ -114,7 +114,10 @@ namespace EnhancedTeamUIDisplay
 			// HP Color
 			if (ETUDConfig.Instanse.EnableColorMatch)
 			{
-				switch (PlayerClass)
+				Color[] classColours = MiscEventHandler.GetClassColours(PlayerClass);
+				HPColor1 = classColours[0];
+				HPColor2 = classColours[1];
+				/*switch (PlayerClass) -- Obsolete
 				{
 					case "Melee":
 						HPColor1 = Color.SandyBrown;
@@ -144,7 +147,7 @@ namespace EnhancedTeamUIDisplay
 						HPColor1 = Color.Green;
 						HPColor2 = Color.LawnGreen;
 						break;
-				}
+				}*/
 			}
 			else
 			{
@@ -541,7 +544,10 @@ namespace EnhancedTeamUIDisplay
 			// HP Color
 			if (ETUDConfig.Instanse.EnableColorMatch)
 			{
-				switch (PlayerClass)
+				Color[] classColours = MiscEventHandler.GetClassColours(PlayerClass);
+				HPColor1 = classColours[0];
+				HPColor2 = classColours[1];
+				/*switch (PlayerClass) -- Obsolete
 				{
 					case "Melee":
 						HPColor1 = Color.SandyBrown;
@@ -571,7 +577,7 @@ namespace EnhancedTeamUIDisplay
 						HPColor1 = Color.Green;
 						HPColor2 = Color.LawnGreen;
 						break;
-				}
+				}*/
 			}
 			else
 			{
@@ -919,7 +925,10 @@ namespace EnhancedTeamUIDisplay
 			// HP Color
 			if (ETUDConfig.Instanse.EnableColorMatch)
 			{
-				switch (PlayerClass)
+				Color[] classColours = MiscEventHandler.GetClassColours(PlayerClass);
+				HPColor1 = classColours[0];
+				HPColor2 = classColours[1];
+				/*switch (PlayerClass) -- Obsolete
 				{
 					case "Melee":
 						HPColor1 = Color.SandyBrown;
@@ -949,7 +958,7 @@ namespace EnhancedTeamUIDisplay
 						HPColor1 = Color.Green;
 						HPColor2 = Color.LawnGreen;
 						break;
-				}
+				}*/
 			}
 			else
 			{
@@ -1205,9 +1214,9 @@ namespace EnhancedTeamUIDisplay
 		{
 			if (player == null) return "None";
 
-			if (ModLoader.TryGetMod("CalamityMod", out var mod))
+			if (ETUD.CalamityMod != null)
 			{
-				if (mod.TryFind<DamageClass>("RogueDamageClass", out var rogueclass))
+				if (ETUD.CalamityMod.TryFind<DamageClass>("RogueDamageClass", out var rogueclass))
 				{
 					float RogueCoeff = player.GetTotalDamage(rogueclass).Additive + (player.GetCritChance(rogueclass) / 100) + (player.GetAttackSpeed(rogueclass) / 2);
 					float MeleeCoeff = player.GetTotalDamage(DamageClass.Melee).Additive + (player.GetCritChance(DamageClass.Melee) / 100) + (player.GetAttackSpeed(DamageClass.Melee) / 2);
@@ -1243,22 +1252,42 @@ namespace EnhancedTeamUIDisplay
 			}
 		}
 
+		public static Color[] GetClassColours(string playerClass)
+		{
+			switch (playerClass)
+			{
+				case "Melee":
+					return new Color[] { Color.SandyBrown, Color.Brown, Color.IndianRed, Color.DarkRed };
+				case "Ranged":
+					return new Color[] { Color.Lime, Color.LightGreen, Color.OrangeRed, Color.Orange };
+				case "Magic":
+					return new Color[] { Color.LightSkyBlue, Color.LightBlue, Color.Blue, Color.DeepSkyBlue };
+				case "Summon":
+					return new Color[] { Color.MediumPurple, Color.Purple, Color.Blue, Color.DeepSkyBlue };
+				case "Rogue":
+					return new Color[] { Color.LightGoldenrodYellow, Color.LightGoldenrodYellow, Color.Yellow, Color.Yellow };
+				case "None":
+					return new Color[] { Color.Green, Color.LawnGreen, Color.White, Color.White };
+				default:
+					ETUDAdditionalOptions.CreateErrorMessage("GetClassColours", new System.NotImplementedException("Incorrect class"));
+					break;
+			}
+			return new Color[] {Color.White, Color.White, Color.White, Color.White};
+		}
+
 		public static bool HasItemInInventory(Player player, int itemtype) => player.HasItem(itemtype);
 
 		public static int CountItemsInInventory(Player player, int itemtype) => player.CountItem(itemtype);
 	}
 
-	[JITWhenModsEnabled("CalamityMod")]
+	//[JITWhenModsEnabled("CalamityMod")]
 	public class CalamityHelper
 	{
-		public static float RogueStealth(Player player)
-		{
-			return player.GetModPlayer<CalamityMod.CalPlayer.CalamityPlayer>().rogueStealth;
-		}
+		//public static float RogueStealth(Player player) => player.GetModPlayer<CalamityMod.CalPlayer.CalamityPlayer>().rogueStealth;
+		public static float RogueStealth(Player player) => (float)ETUD.CalamityMod.Call("GetCurrentStealth", player);
 
-		public static float RogueStealthMax(Player player)
-		{
-			return player.GetModPlayer<CalamityMod.CalPlayer.CalamityPlayer>().rogueStealthMax;
-		}
+		//public static float RogueStealthMax(Player player) => player.GetModPlayer<CalamityMod.CalPlayer.CalamityPlayer>().rogueStealthMax;
+		public static float RogueStealthMax(Player player) => (float)ETUD.CalamityMod.Call("GetMaxStealth", player);
+
 	}
 }

@@ -6,9 +6,6 @@ using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using System.Text;
-using Terraria.Chat;
-using Terraria.GameInput;
 
 namespace EnhancedTeamUIDisplay
 {
@@ -95,9 +92,9 @@ namespace EnhancedTeamUIDisplay
 							MiscEventHandler.CountItemsInInventory(Ally, ItemID.SuperManaPotion) +
 							MiscEventHandler.CountItemsInInventory(Ally, ItemID.RestorationPotion);
 
-							if (ModLoader.TryGetMod("CalamityMod", out var mod1))
+							if (ETUD.CalamityMod != null)
 							{
-								if (mod1.TryFind<ModItem>("SupremeManaPotion", out var SupremeManaPotion))
+								if (ETUD.CalamityMod.TryFind<ModItem>("SupremeManaPotion", out var SupremeManaPotion))
 								{
 									ManaAmount += MiscEventHandler.CountItemsInInventory(Ally, SupremeManaPotion.Type);
 								}
@@ -138,9 +135,9 @@ namespace EnhancedTeamUIDisplay
 							{
 								output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.NoFlask")} ";
 							}
-							if (ModLoader.TryGetMod("CalamityMod", out var mod2))
+							if (ETUD.CalamityMod != null)
 							{
-								if (mod2.TryFind<ModItem>("ShadowPotion", out var ShadowPotion) && mod2.TryFind<ModBuff>("ShadowBuff", out var ShadowBuff))
+								if (ETUD.CalamityMod.TryFind<ModItem>("ShadowPotion", out var ShadowPotion) && ETUD.CalamityMod.TryFind<ModBuff>("ShadowBuff", out var ShadowBuff))
 								{
 									if (!(MiscEventHandler.HasItemInInventory(Ally, ItemID.InvisibilityPotion)
 									|| MiscEventHandler.HasItemInInventory(Ally, ShadowPotion.Type)
@@ -165,9 +162,9 @@ namespace EnhancedTeamUIDisplay
 						MiscEventHandler.CountItemsInInventory(Ally, ItemID.SuperHealingPotion) +
 						MiscEventHandler.CountItemsInInventory(Ally, ItemID.RestorationPotion);
 
-					if (ModLoader.TryGetMod("CalamityMod", out var mod))
+					if (ETUD.CalamityMod != null)
 					{
-						if (mod.TryFind<ModItem>("SupremeHealingPotion", out var SupremeHealingPotion) && mod.TryFind<ModItem>("OmegaHealingPotion", out var OmegaHealingPotion))
+						if (ETUD.CalamityMod.TryFind<ModItem>("SupremeHealingPotion", out var SupremeHealingPotion) && ETUD.CalamityMod.TryFind<ModItem>("OmegaHealingPotion", out var OmegaHealingPotion))
 						{
 							HealsAmount += MiscEventHandler.CountItemsInInventory(Ally, SupremeHealingPotion.Type) + MiscEventHandler.CountItemsInInventory(Ally, OmegaHealingPotion.Type);
 						}
@@ -182,8 +179,6 @@ namespace EnhancedTeamUIDisplay
 			}
 		}
 
-		private static int[][] playersdps;
-		public static int arraynum;
 		private static bool started;
 		private static DateTime FightStartTime;
 		private static DateTime FightEndTime;
@@ -191,53 +186,23 @@ namespace EnhancedTeamUIDisplay
 
 		public static void StartBossSummary()
 		{
-			playersdps = new int[Main.maxPlayers][];
-			for (int i = 0; i < Main.maxPlayers; i++) playersdps[i] = new int[] { -1, -1 };
-			ETUDUISystem.updatedps = true;
-			arraynum = 0;
 			FightStartTime = DateTime.Now;
 			started = true;
-		}
-
-		// NOT WORKING
-		public static void UpdateBossSummary()
-		{		
-			for (int i = 0; i < Main.maxPlayers; i++)
-			{
-				if (Main.player[i] != null && Main.player[i].active && Main.player[i].team == Main.LocalPlayer.team)
-				{
-					bool exists = false;
-					for (int j = 0; j <= arraynum; j++) if (playersdps[j][0] == i)
-					{
-							exists = true;
-							int dps = Main.player[i].getDPS();
-							playersdps[j][1] = dps > playersdps[j][1] ? dps : playersdps[j][1];
-					}
-
-					if (!exists)
-					{
-						int dps = Main.player[i].getDPS();
-						playersdps[arraynum] = new int[] { i, (dps > playersdps[arraynum][1]) ? dps : 0 };
-						arraynum++;
-					}
-				}
-			}
 		}
 
 		public static void EndBossSummary(string arg, string addarg = "", bool special = false)
 		{
 			if (!started) return;
-
 			started = false;
+
 			FightEndTime = DateTime.Now;
 			FightDuration = FightEndTime - FightStartTime;
-			ETUDUISystem.updatedps = false;
-			Array.Sort(playersdps, (x, y) => Comparer<int>.Default.Compare(y[1], x[1]));
 
 			string output = Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.ETUDInfoDPS").Value + "\n";
 			if (!special) output += (arg == "" ? "> Team wiped in " : "> " + arg + " killed in ") + FightDuration.ToString(@"hh\:mm\:ss") + "\n";
 			else output += arg + "Fight time: " + FightDuration.ToString(@"hh\:mm\:ss") + "\n";
 			output += addarg + "\n";
+
 			/*output += "> Top DPS:" + "\n";
 			output += " 1: " + Main.player[playersdps[0][0]].name + (playersdps[0][1] != 0 ? ( " - Peak DPS: " + playersdps[0][1]) : " - No damage") + "\n";
 			if (playersdps[1][0] != -1) output += " 2: " + Main.player[playersdps[1][0]].name + (playersdps[1][1] != 0 ? (" - Peak DPS: " + playersdps[1][1]) : " - No damage") + "\n";
@@ -246,6 +211,6 @@ namespace EnhancedTeamUIDisplay
 			Main.NewText(output, ETUDTextColor);
 		}
 
-		public static void CreateErrorMessage(string className, Exception exception, int? num = null) => Main.NewText($"ETUD Error: [{Regex.Replace(className, "[^A-Z]", "")}-{Regex.Replace(exception.GetType().Name, "[^A-Z]", "")}-{Convert.ToString(num ?? 0, 2)}] If this error persists, please contact the mod creator.", Color.Red);
-	}
+		public static void CreateErrorMessage(string className, Exception exception, int? num = null) => Main.NewText($"ETUD Error: [{Regex.Replace(className, "[^A-Z]", "")}-{Regex.Replace(exception.GetType().Name, "[^A-Z]", "")}-{Convert.ToString(num ?? 0, 16)}] If this error persists, please contact the mod creator.", Color.Red);
+	}	
 }

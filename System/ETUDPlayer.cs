@@ -2,11 +2,8 @@
 using Terraria.ModLoader;
 using Terraria;
 using Terraria.ID;
-using Terraria.UI;
 using Terraria.ModLoader.IO;
-using Microsoft.Xna.Framework;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace EnhancedTeamUIDisplay
 {
@@ -14,6 +11,9 @@ namespace EnhancedTeamUIDisplay
 	{
 		public static int PanelTopOffset;
 		public static int PanelLeftOffset;
+
+		public static int DCTopOffset;
+		public static int DCLeftOffset;
 
 		// Key - Boss name, Value - { times killed, times wiped }
 		public static Dictionary<string, int[]> BossFightAttempts;
@@ -34,6 +34,9 @@ namespace EnhancedTeamUIDisplay
 			tag["PanelTopOffset"] = PanelTopOffset;
 			tag["PanelLeftOffset"] = PanelLeftOffset;
 
+			tag["DCTopOffset"] = DCTopOffset;
+			tag["DCLeftOffset"] = DCLeftOffset;
+
 			if (BossFightAttempts == null) BossFightAttempts = new();
 			var List = new List<TagCompound>();
 			foreach (var item in BossFightAttempts)
@@ -53,7 +56,10 @@ namespace EnhancedTeamUIDisplay
 		{
 			if (tag.ContainsKey("PanelTopOffset")) PanelTopOffset = (int)tag["PanelTopOffset"];
 			if (tag.ContainsKey("PanelLeftOffset")) PanelLeftOffset = (int)tag["PanelLeftOffset"];
-			
+
+			if (tag.ContainsKey("DCTopOffset")) DCTopOffset = (int)tag["DCTopOffset"];
+			if (tag.ContainsKey("DCLeftOffset")) DCLeftOffset = (int)tag["DCLeftOffset"];
+
 			if (BossFightAttempts == null) BossFightAttempts = new();
 			var List = tag.GetList<TagCompound>("BFA");
 			foreach (var item in List)
