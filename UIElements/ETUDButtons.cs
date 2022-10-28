@@ -32,7 +32,7 @@ namespace EnhancedTeamUIDisplay
 			button.Top.Set(0, 0f);
 			button.Width.Set(46, 0f);
 			button.Height.Set(46, 0f);
-			button.OnClick += new MouseEvent(OnBuffCheckButtonClick);
+			button.OnClick += (e, l) => ETUDAdditionalOptions.CheckForBuffs();
 
 			MainElement.Append(button);
 			Append(MainElement);
@@ -42,10 +42,7 @@ namespace EnhancedTeamUIDisplay
 		{
 			base.DrawSelf(spriteBatch);
 
-			if (IsMouseHovering)
-			{
-				if (Main.LocalPlayer.team == 0) Main.instance.MouseText("First off, enter a team"); else Main.instance.MouseText("Buff check");
-			}		
+			if (IsMouseHovering) Main.instance.MouseText(Main.LocalPlayer.team == 0 ? "First off, enter a team" : "Buff check");
 		}
 
 		public override void Update(GameTime gameTime)
@@ -54,11 +51,6 @@ namespace EnhancedTeamUIDisplay
 
 			Left.Pixels = ETUDPanel1.MainLeft.Pixels - width - 10;
 			Top.Pixels = ETUDPanel1.MainTop.Pixels;
-		}
-
-		private void OnBuffCheckButtonClick(UIMouseEvent evt, UIElement listeningElement)
-		{
-			ETUDAdditionalOptions.CheckForBuffs();
 		}
 	}
 
@@ -87,10 +79,10 @@ namespace EnhancedTeamUIDisplay
 			button.Top.Set(0, 0f);
 			button.Width.Set(20, 0f);
 			button.Height.Set(24, 0f);
-			button.OnMouseDown += OnButtonDown;
-			button.OnMouseUp += OnButtonUp;
-			button.OnMouseOver += OnMouseSelect;
-			button.OnMouseOut += OnMouseDeselect;
+			button.OnMouseDown += (e, l) => { ETUDUISystem.CloseAllyStatScreen(); ETUDAllyInfoPanel.extended = true; ETUDUISystem.OpenAllyStatScreen(); };
+			button.OnMouseUp += (e, l) => { ETUDUISystem.CloseAllyStatScreen(); ETUDAllyInfoPanel.extended = false; ETUDUISystem.OpenAllyStatScreen(); };
+			button.OnMouseOver += (e, l) => OnMouseSelect(e, l);
+			button.OnMouseOut += (e, l) => OnMouseDeselect(e, l);
 
 			MainElement.Append(button);
 			Append(MainElement);
@@ -99,10 +91,6 @@ namespace EnhancedTeamUIDisplay
 		internal virtual void OnMouseSelect(UIMouseEvent evt, UIElement listeningElement) { if (ETUDUISystem.ETUDAllyStatScreen.CurrentState == null) { ETUDUISystem.OpenAllyStatScreen(); } ETUDAllyInfoPanel.GetLeft = Left.Pixels - ETUDAllyInfoPanel.width; ETUDAllyInfoPanel.GetTop = Top.Pixels; }
 
 		internal virtual void OnMouseDeselect(UIMouseEvent evt, UIElement listeningElement) { if (ETUDUISystem.ETUDAllyStatScreen.CurrentState != null) ETUDUISystem.CloseAllyStatScreen(); }
-
-		private void OnButtonDown(UIMouseEvent evt, UIElement listeningElement) { ETUDUISystem.CloseAllyStatScreen(); ETUDAllyInfoPanel.extended = true; ETUDUISystem.OpenAllyStatScreen(); }
-
-		private void OnButtonUp(UIMouseEvent evt, UIElement listeningElement) { ETUDUISystem.CloseAllyStatScreen(); ETUDAllyInfoPanel.extended = false; ETUDUISystem.OpenAllyStatScreen(); }
 	}
 
 	internal class AllyInfoButton1 : AllyInfoButton
@@ -123,6 +111,8 @@ namespace EnhancedTeamUIDisplay
 
 		public override void Update(GameTime gameTime)
 		{
+			if (ETUDPanel1.Ally == null) IgnoresMouseInteraction = true;
+
 			base.Update(gameTime);
 
 			Left.Pixels = ETUDPanel1.MainLeft.Pixels - width - 10;
@@ -148,6 +138,8 @@ namespace EnhancedTeamUIDisplay
 
 		public override void Update(GameTime gameTime)
 		{
+			if (ETUDPanel2.Ally == null) IgnoresMouseInteraction = true;
+
 			base.Update(gameTime);
 
 			Left.Pixels = ETUDPanel1.MainLeft.Pixels - width - 10;
@@ -173,6 +165,8 @@ namespace EnhancedTeamUIDisplay
 
 		public override void Update(GameTime gameTime)
 		{
+			if (ETUDPanel3.Ally == null) IgnoresMouseInteraction = true;
+
 			base.Update(gameTime);
 
 			Left.Pixels = ETUDPanel1.MainLeft.Pixels - width - 10;

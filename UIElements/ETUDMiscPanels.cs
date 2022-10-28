@@ -150,34 +150,31 @@ namespace EnhancedTeamUIDisplay
 
 					playerClassText.SetText((AllyClass == "None" || string.IsNullOrEmpty(AllyClass)) ? "No class" : AllyClass);
 
-					if (ETUD.CalamityMod != null)
-						if (ETUD.CalamityMod.TryFind<DamageClass>("RogueDamageClass", out var rogueclass))
-						{
-							switch (AllyClass)
-							{
-								case "Melee":
-									statClassText.SetText($"[i:{ItemID.IronBroadsword}] Damage: {GetClassDamage(DamageClass.Melee, Ally)}\nCrit. Chance: {(int)Ally.GetTotalCritChance(DamageClass.Melee)}\n[i:{ItemID.IronBroadsword}] Attack Speed: {1f / Ally.GetTotalAttackSpeed(DamageClass.Melee) * 100}%\n[i:{ItemID.FleshKnuckles}] Aggro: {Ally.aggro}");
-									break;
-								case "Ranged":
-									statClassText.SetText($"[i:{ItemID.IronBow}] Damage: {GetClassDamage(DamageClass.Ranged, Ally)}\nCrit. Chance: {(int)Ally.GetTotalCritChance(DamageClass.Ranged)}\n[i:{ItemID.SharkToothNecklace}] Armor Penetr.:{Ally.GetArmorPenetration(DamageClass.Generic)}");
-									break;
-								case "Magic":
-									statClassText.SetText($"[i:{ItemID.MagicalHarp}] Damage: {GetClassDamage(DamageClass.Magic, Ally)}\nCrit. Chance: {(int)Ally.GetTotalCritChance(DamageClass.Magic)}\n[i:{ItemID.CrystalBall}] MP Cost Reduct.: {Math.Round((1.0 - Ally.manaCost) * 100)}%");
-									break;
-								case "Summon":
-									statClassText.SetText($"[i:{ItemID.ImpStaff}] Damage: {GetClassDamage(DamageClass.Summon, Ally)}\nCrit. Chance: {(int)Ally.GetTotalCritChance(DamageClass.Summon)}\n[i:{ItemID.ImpStaff}] Max Minions: {Ally.maxMinions}\n[i:{ItemID.DD2BallistraTowerT1Popper}] Max Centries: {Ally.maxTurrets}");
-									break;
-								case "Rogue":
-									statClassText.SetText($"[i:{ItemID.IronBroadsword}] Damage: {GetClassDamage(rogueclass, Ally)}\nCrit. Chance: {(int)Ally.GetTotalCritChance(rogueclass)}");
-									break;
-								case "None":
-									statClassText.SetText($"");
-									break;
-								default:
-									statClassText.SetText($"");
-									break;
-							}
-						}
+					switch (AllyClass)
+					{
+						case "Melee":
+							statClassText.SetText($"[i:{ItemID.IronBroadsword}] Damage: {GetClassDamage(DamageClass.Melee, Ally)}\nCrit. Chance: {(int)Ally.GetTotalCritChance(DamageClass.Melee)}\n[i:{ItemID.IronBroadsword}] Attack Speed: {1f / Ally.GetTotalAttackSpeed(DamageClass.Melee) * 100}%\n[i:{ItemID.FleshKnuckles}] Aggro: {Ally.aggro}");
+							break;
+						case "Ranged":
+							statClassText.SetText($"[i:{ItemID.IronBow}] Damage: {GetClassDamage(DamageClass.Ranged, Ally)}\nCrit. Chance: {(int)Ally.GetTotalCritChance(DamageClass.Ranged)}\n[i:{ItemID.SharkToothNecklace}] Armor Penetr.:{Ally.GetArmorPenetration(DamageClass.Generic)}");
+							break;
+						case "Magic":
+							statClassText.SetText($"[i:{ItemID.MagicalHarp}] Damage: {GetClassDamage(DamageClass.Magic, Ally)}\nCrit. Chance: {(int)Ally.GetTotalCritChance(DamageClass.Magic)}\n[i:{ItemID.CrystalBall}] MP Cost Reduct.: {Math.Round((1.0 - Ally.manaCost) * 100)}%");
+							break;
+						case "Summon":
+							statClassText.SetText($"[i:{ItemID.ImpStaff}] Damage: {GetClassDamage(DamageClass.Summon, Ally)}\nCrit. Chance: {(int)Ally.GetTotalCritChance(DamageClass.Summon)}\n[i:{ItemID.ImpStaff}] Max Minions: {Ally.maxMinions}\n[i:{ItemID.DD2BallistraTowerT1Popper}] Max Centries: {Ally.maxTurrets}");
+							break;
+						case "Rogue":
+							if (ETUD.CalamityMod.TryFind<DamageClass>("RogueDamageClass", out var rogueclass))
+								statClassText.SetText($"[i:{ItemID.IronBroadsword}] Damage: {GetClassDamage(rogueclass, Ally)}\nCrit. Chance: {(int)Ally.GetTotalCritChance(rogueclass)}");
+							break;
+						case "None":
+							statClassText.SetText($"");
+							break;
+						default:
+							statClassText.SetText($"");
+							break;
+					}	
 				}
 			}
 			catch(Exception e)

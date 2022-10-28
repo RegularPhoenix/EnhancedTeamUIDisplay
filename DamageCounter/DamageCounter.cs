@@ -148,15 +148,23 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 
 		private UIImageButton[] buttons;
 
+		private UIImageButton b1;
+		private UIImageButton b2;
+		private UIImageButton b3;
+
+		private ETUDPlayer player;
+
 		internal static byte StatNum = 0;		
 
 		public override void OnInitialize()
 		{
 			Width.Pixels = width;
 			Height.Pixels = height;
-			
-			Left.Set(ETUDPlayer.DCLeftOffset == 0 ? ETUDPlayer.PanelLeftOffset - 300 : ETUDPlayer.DCLeftOffset, 0f);
-			Top.Set(ETUDPlayer.DCTopOffset == 0 ? ETUDPlayer.PanelTopOffset : ETUDPlayer.DCTopOffset, 0f);
+
+			player = Main.LocalPlayer.GetModPlayer<ETUDPlayer>();
+
+			Left.Set(player.DCLeftOffset == 0 ? player.PanelLeftOffset - 300 : player.DCLeftOffset, 0f);
+			Top.Set(player.DCTopOffset == 0 ? player.PanelTopOffset : player.DCTopOffset, 0f);
 
 			image = new(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/DamageCounter/DamageCounterPanelTop"));
 			Append(image);
@@ -177,6 +185,7 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 			for(int i = 0; i < 4; i++)
 			{			
 				UITexts[i].Height.Set(BarHeight, 0f);
+				UITexts[i].Width.Set(BarWidth, 0f);
 				UITexts[i].Top.Set(32 + ((BarHeight + 4) * i), 0f);
 				UITexts[i].HAlign = .875f;
 				Append(UITexts[i]);
@@ -189,12 +198,14 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 				new UIImageButton(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/DamageCounter/X"))
 			};
 
-			buttons[0].OnClick += OnButtonClick1;
-			buttons[1].OnClick += OnButtonClick2;
-			buttons[2].OnClick += OnButtonClick3;
+			buttons[0].OnClick += (e, l) => { if (StatNum == 0) StatNum = 3; else StatNum--; };
+			buttons[1].OnClick += (e, l) => { if (StatNum == 3) StatNum = 0; else StatNum++; };
+			buttons[2].OnClick += (e, l) => DamageCounterSystem.ResetVariables();
 			
 			for (int i = 0; i < 3; i++)
 			{
+				buttons[i].Width.Set(18, 0f);
+				buttons[i].Height.Set(22, 0f);
 				buttons[i].HAlign = .75f + .1f * i;
 				buttons[i].Top.Set(i == 2 ? 3 : 4, 0f);
 				Append(buttons[i]);
@@ -254,11 +265,11 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 			int HighestValue = StatValues[0][1];
 
 			Player HighestStatPlayer = Main.player[StatValues[0][0]];
-			spriteBatch.Draw(TextureAssets.MagicPixel.Value, Bar, MiscEventHandler.GetClassColours(MiscEventHandler.DeterminePlayerClass(HighestStatPlayer))[0]);
+			spriteBatch.Draw(TextureAssets.MagicPixel.Value, Bar, MiscEventHandler.GetClassColours(MiscEventHandler.DeterminePlayerClass(HighestStatPlayer)).Item1);
 
 			UITexts[0].SetText($"{HighestStatPlayer.name}({HighestValue})");
 
-			int PlayerCountToDraw = new int[2] { 4, PlayersCount }.Min();
+			int PlayerCountToDraw = new int[2] { ETUDConfig.Instanse.DCPlayersToShowAmount, PlayersCount }.Min();
 
 			if (PlayerCountToDraw > 1)
 				for (int i = 1; i < PlayerCountToDraw; i++)
@@ -266,7 +277,7 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 					Bar.Y += Bar.Height + 4;
 					float currentValue = StatValues[i][1];
 					Player currentPlayer = Main.player[StatValues[i][0]];
-					spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle(Bar.X, Bar.Y, currentValue != 0 ? (int)(Bar.Width * (currentValue / HighestValue)) : 1, Bar.Height), MiscEventHandler.GetClassColours(MiscEventHandler.DeterminePlayerClass(currentPlayer))[0]);
+					spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle(Bar.X, Bar.Y, currentValue != 0 ? (int)(Bar.Width * (currentValue / HighestValue)) : 1, Bar.Height), MiscEventHandler.GetClassColours(MiscEventHandler.DeterminePlayerClass(currentPlayer)).Item1);
 
 					UITexts[i].SetText($"{currentPlayer.name}({currentValue})");
 
@@ -275,20 +286,6 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 
 			spriteBatch.Draw(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/DamageCounter/DamageCounterPanelBottom").Value, new Rectangle(Bar.X - 6, Bar.Y + 20, 200, 10), Color.White);
 		}
-
-		// Buttons
-
-		private void OnButtonClick1(UIMouseEvent evt, UIElement listeningElement)
-		{
-			if (StatNum == 0) StatNum = 3; else StatNum--;
-		}
-
-		private void OnButtonClick2(UIMouseEvent evt, UIElement listeningElement)
-		{
-			if (StatNum == 3) StatNum = 0; else StatNum++;
-		}
-
-		private void OnButtonClick3(UIMouseEvent evt, UIElement listeningElement) => DamageCounterSystem.ResetVariables();
 
 		// Dragging
 
@@ -299,8 +296,8 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 		{
 			base.Update(gameTime);
 
-			ETUDPlayer.DCLeftOffset = (int)Left.Pixels;
-			ETUDPlayer.DCTopOffset = (int)Top.Pixels;
+			player.DCLeftOffset = (int)Left.Pixels;
+			player.DCTopOffset = (int)Top.Pixels;
 
 			if (ContainsPoint(Main.MouseScreen))
 			{
@@ -349,8 +346,8 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 			Left.Set(end.X - offset.X, 0f);
 			Top.Set(end.Y - offset.Y, 0f);
 
-			ETUDPlayer.DCLeftOffset = (int)Left.Pixels;
-			ETUDPlayer.DCTopOffset = (int)Top.Pixels;
+			player.DCLeftOffset = (int)Left.Pixels;
+			player.DCTopOffset = (int)Top.Pixels;
 
 			Recalculate();
 		}

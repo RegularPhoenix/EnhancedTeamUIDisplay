@@ -9,20 +9,17 @@ namespace EnhancedTeamUIDisplay
 {
 	internal class ETUDUISystem : ModSystem
 	{
-		internal static UserInterface ETUDInterface;
-		internal static UserInterface ETUDAllyStatScreen;
+		internal static UserInterface ETUDInterface, ETUDAllyStatScreen;
 		private GameTime LastUpdateUIGameTime;
 		private bool AnyBossFound; // Can be replaced with Main.CurrentFrameFlags.AnyActiveBossNPC ?
 		private static bool BossEvaded;
 
 		private string FirstBossName = "";
-		private List<string> BossNames = new();
-		private List<string> UnkilledBossNames = new();
+		private List<string> BossNames = new(), UnkilledBossNames = new();
 
 		public override void OnModLoad()
 		{
-			if (!Main.dedServ) ETUDInterface = new UserInterface();
-			if (!Main.dedServ) ETUDAllyStatScreen = new UserInterface();
+			if (!Main.dedServ) ETUDInterface = new UserInterface(); ETUDAllyStatScreen = new UserInterface();
 			AnyBossFound = false;
 		}
 
@@ -52,11 +49,7 @@ namespace EnhancedTeamUIDisplay
 		}
 
 		internal static void OpenETUDInterface()
-		{
-			ETUDUI1 ui = new();
-			ETUDUI2 ui2 = new();
-			ETUDUI3 ui3 = new();
-			
+		{			
 			ETUDPanel1 newui1 = new();
 			ETUDPanel2 newui2 = new();
 			ETUDPanel3 newui3 = new();
@@ -71,18 +64,9 @@ namespace EnhancedTeamUIDisplay
 
 			if (ETUDConfig.Instanse.EnableDamageCounter) { DamageCounterUI damageCounterUI = new(); state.Append(damageCounterUI); }
 
-			if (!ETUDConfig.Instanse.EnableLegacyUI)
-			{
-				state.Append(newui1);
-				if (ETUDConfig.Instanse.PanelAmount == "Two panels" || ETUDConfig.Instanse.PanelAmount == "Three panels") state.Append(newui2);
-				if (ETUDConfig.Instanse.PanelAmount == "Three panels") state.Append(newui3);
-			}
-			else
-			{
-				state.Append(ui);
-				if (ETUDConfig.Instanse.PanelAmount == "Two panels" || ETUDConfig.Instanse.PanelAmount == "Three panels") state.Append(ui2);
-				if (ETUDConfig.Instanse.PanelAmount == "Three panels") state.Append(ui3);
-			}
+			state.Append(newui1);
+			if (ETUDConfig.Instanse.PanelAmount == "Two panels" || ETUDConfig.Instanse.PanelAmount == "Three panels") state.Append(newui2);
+			if (ETUDConfig.Instanse.PanelAmount == "Three panels") state.Append(newui3);
 
 			state.Append(statbutton1);
 			state.Append(statbutton2);
@@ -105,7 +89,9 @@ namespace EnhancedTeamUIDisplay
 		}
 
 		public override void UpdateUI(GameTime gameTime)
-		{			
+		{
+			if (ETUDInterface?.CurrentState?.GetElementAt(Main.MouseScreen) is not null and not UIState) Main.LocalPlayer.mouseInterface = true;
+
 			if (!AnyBossFound)
 			{
 				BossNames.Clear();
@@ -157,10 +143,10 @@ namespace EnhancedTeamUIDisplay
 						List<string> KilledBosses = new();
 						foreach (string boss in BossNames) if (!UnkilledBossNames.Contains(boss)) KilledBosses.Add(boss);
 
-						Dictionary<string, int[]> tempDictionary = ETUDPlayer.BossFightAttempts;
+						Dictionary<string, int[]> tempDictionary = Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts ?? new();
 						foreach (string boss in KilledBosses) if (tempDictionary.ContainsKey(boss)) tempDictionary[boss][0]++; else tempDictionary.Add(boss, new int[] { 1, 0 });
 						foreach (string boss in UnkilledBossNames) if (tempDictionary.ContainsKey(boss)) tempDictionary[boss][1]++; else tempDictionary.Add(boss, new int[] { 0, 1 });
-						ETUDPlayer.BossFightAttempts = tempDictionary;
+						Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts = tempDictionary;
 
 						bool playeralive = false;
 						for (int i = 0; i < Main.maxPlayers; i++)

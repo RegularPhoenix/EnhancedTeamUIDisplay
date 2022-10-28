@@ -45,10 +45,10 @@ namespace EnhancedTeamUIDisplay
 		[DefaultValue(true)]
 		public bool EnableColorMatch;
 
-		[Tooltip("$Mods.EnhancedTeamUIDisplay.Config.EnableLegacyUI.Tooltip")]
+		/*[Tooltip("$Mods.EnhancedTeamUIDisplay.Config.EnableLegacyUI.Tooltip")]
 		[Label("$Mods.EnhancedTeamUIDisplay.Config.EnableLegacyUI.Label")]
 		[DefaultValue(false)]
-		public bool EnableLegacyUI;
+		public bool EnableLegacyUI;*/ // TODO: Remove old ui completely
 
 		[Header("$Mods.EnhancedTeamUIDisplay.Config.DCOptionsHeader")]
 
@@ -56,6 +56,14 @@ namespace EnhancedTeamUIDisplay
 		[Label("$Mods.EnhancedTeamUIDisplay.Config.EnableDamageCounter.Label")]
 		[DefaultValue(true)]
 		public bool EnableDamageCounter;
+
+		[DrawTicks]
+		[Label("$Mods.EnhancedTeamUIDisplay.Config.DCPlayersToShowAmount.Label")]
+		[Increment(1)]
+		[Range(1,4)]
+		[DefaultValue(4)]
+		[Slider]
+		public int DCPlayersToShowAmount;
 
 		[Tooltip("$Mods.EnhancedTeamUIDisplay.Config.AutoResetDamageCounter.Tooltip")]
 		[Label("$Mods.EnhancedTeamUIDisplay.Config.AutoResetDamageCounter.Label")]

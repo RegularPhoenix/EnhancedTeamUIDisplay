@@ -247,7 +247,7 @@ namespace EnhancedTeamUIDisplay
 			{
 				if (args[1] == "paneloffset")
 				{
-					caller.Reply(ETUDPlayer.PanelLeftOffset + " " + ETUDPlayer.PanelTopOffset);
+					caller.Reply(Main.LocalPlayer.GetModPlayer<ETUDPlayer>().PanelLeftOffset + " " + Main.LocalPlayer.GetModPlayer<ETUDPlayer>().PanelTopOffset);
 				}
 				if (args[1] == "allyFound")
 				{
@@ -291,18 +291,23 @@ namespace EnhancedTeamUIDisplay
 
 				if (args[1] == "BossFightAttempts")
 				{
-					if (ETUDPlayer.BossFightAttempts.Count == 0) caller.Reply("Empty");
-					foreach (System.Collections.Generic.KeyValuePair<string, int[]> pair in ETUDPlayer.BossFightAttempts)
+					if (Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts == null) caller.Reply("Empty");
+					else
 					{
-						Main.NewText(pair.Key + " " + pair.Value[0].ToString() + " " + pair.Value[1].ToString());
-					}
+						if (Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts.Count == 0) caller.Reply("Empty");
+						foreach (System.Collections.Generic.KeyValuePair<string, int[]> pair in Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts)
+						{
+							Main.NewText(pair.Key + " " + pair.Value[0].ToString() + " " + pair.Value[1].ToString());
+						}
+					}				
 				}
 			}
 			else if (args[0] == "add")
 			{
 				if (args[1] == "BossFightAttempts")
 				{
-					ETUDPlayer.BossFightAttempts.Add(args[2], new int[] { int.Parse(args[3]), int.Parse(args[4]) });
+					if (Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts == null) Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts = new();
+					Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts.Add(args[2], new int[] { int.Parse(args[3]), int.Parse(args[4]) });
 					caller.Reply("Success");
 				}
 			}
@@ -310,7 +315,7 @@ namespace EnhancedTeamUIDisplay
 			{
 				if (args[1] == "BossFightAttempts")
 				{
-					if (args[2] == "clear") ETUDPlayer.BossFightAttempts.Clear();
+					if (args[2] == "clear" && Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts != null) Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts.Clear();
 				}
 			}
 			else if (args[0] == "throw")

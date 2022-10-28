@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
 using Terraria.GameContent;
 using System.Linq;
+using System;
 
 namespace EnhancedTeamUIDisplay
 {
@@ -95,8 +96,8 @@ namespace EnhancedTeamUIDisplay
 			MainElement.Append(Ammolabel);
 			Append(MainElement);
 
-			Left.Set(ETUDPlayer.PanelLeftOffset, 0f);
-			Top.Set(ETUDPlayer.PanelTopOffset, 0f);
+			Left.Set(Main.LocalPlayer.GetModPlayer<ETUDPlayer>().PanelLeftOffset, 0f);
+			Top.Set(Main.LocalPlayer.GetModPlayer<ETUDPlayer>().PanelTopOffset, 0f);
 		}
 
 		protected override void DrawSelf(SpriteBatch spriteBatch)
@@ -114,9 +115,9 @@ namespace EnhancedTeamUIDisplay
 			// HP Color
 			if (ETUDConfig.Instanse.EnableColorMatch)
 			{
-				Color[] classColours = MiscEventHandler.GetClassColours(PlayerClass);
-				HPColor1 = classColours[0];
-				HPColor2 = classColours[1];
+				Tuple<Color, Color, Color, Color> classColours = MiscEventHandler.GetClassColours(PlayerClass);
+				HPColor1 = classColours.Item1;
+				HPColor2 = classColours.Item2;
 				/*switch (PlayerClass) -- Obsolete
 				{
 					case "Melee":
@@ -439,8 +440,8 @@ namespace EnhancedTeamUIDisplay
 			Left.Set(end.X - offset.X, 0f);
 			Top.Set(end.Y - offset.Y, 0f);
 
-			ETUDPlayer.PanelLeftOffset = (int)Left.Pixels;
-			ETUDPlayer.PanelTopOffset = (int)Top.Pixels;
+			Main.LocalPlayer.GetModPlayer<ETUDPlayer>().PanelLeftOffset = (int)Left.Pixels;
+			Main.LocalPlayer.GetModPlayer<ETUDPlayer>().PanelTopOffset = (int)Top.Pixels;
 
 			Recalculate();
 		}
@@ -544,9 +545,9 @@ namespace EnhancedTeamUIDisplay
 			// HP Color
 			if (ETUDConfig.Instanse.EnableColorMatch)
 			{
-				Color[] classColours = MiscEventHandler.GetClassColours(PlayerClass);
-				HPColor1 = classColours[0];
-				HPColor2 = classColours[1];
+				Tuple<Color, Color, Color, Color> classColours = MiscEventHandler.GetClassColours(PlayerClass);
+				HPColor1 = classColours.Item1;
+				HPColor2 = classColours.Item2;
 				/*switch (PlayerClass) -- Obsolete
 				{
 					case "Melee":
@@ -925,9 +926,9 @@ namespace EnhancedTeamUIDisplay
 			// HP Color
 			if (ETUDConfig.Instanse.EnableColorMatch)
 			{
-				Color[] classColours = MiscEventHandler.GetClassColours(PlayerClass);
-				HPColor1 = classColours[0];
-				HPColor2 = classColours[1];
+				Tuple<Color, Color, Color, Color> classColours = MiscEventHandler.GetClassColours(PlayerClass);
+				HPColor1 = classColours.Item1;
+				HPColor2 = classColours.Item2;
 				/*switch (PlayerClass) -- Obsolete
 				{
 					case "Melee":
@@ -1210,6 +1211,7 @@ namespace EnhancedTeamUIDisplay
 
 	public class MiscEventHandler
 	{
+		// TODO: Rewrite completely
 		public static string DeterminePlayerClass(Player player)
 		{
 			if (player == null) return "None";
@@ -1252,27 +1254,27 @@ namespace EnhancedTeamUIDisplay
 			}
 		}
 
-		public static Color[] GetClassColours(string playerClass)
+		public static Tuple<Color,Color,Color,Color> GetClassColours(string playerClass)
 		{
 			switch (playerClass)
 			{
 				case "Melee":
-					return new Color[] { Color.SandyBrown, Color.Brown, Color.IndianRed, Color.DarkRed };
+					return new(Color.SandyBrown, Color.Brown, Color.IndianRed, Color.DarkRed);
 				case "Ranged":
-					return new Color[] { Color.Lime, Color.LightGreen, Color.OrangeRed, Color.Orange };
+					return new(Color.Lime, Color.LightGreen, Color.OrangeRed, Color.Orange);
 				case "Magic":
-					return new Color[] { Color.LightSkyBlue, Color.LightBlue, Color.Blue, Color.DeepSkyBlue };
+					return new(Color.LightSkyBlue, Color.LightBlue, Color.Blue, Color.DeepSkyBlue);
 				case "Summon":
-					return new Color[] { Color.MediumPurple, Color.Purple, Color.Blue, Color.DeepSkyBlue };
+					return new(Color.MediumPurple, Color.Purple, Color.Blue, Color.DeepSkyBlue);
 				case "Rogue":
-					return new Color[] { Color.LightGoldenrodYellow, Color.LightGoldenrodYellow, Color.Yellow, Color.Yellow };
+					return new(Color.LightGoldenrodYellow, Color.LightGoldenrodYellow, Color.Yellow, Color.Yellow);
 				case "None":
-					return new Color[] { Color.Green, Color.LawnGreen, Color.White, Color.White };
+					return new(Color.Green, Color.LawnGreen, Color.White, Color.White);
 				default:
-					ETUDAdditionalOptions.CreateErrorMessage("GetClassColours", new System.NotImplementedException("Incorrect class"));
+					ETUDAdditionalOptions.CreateErrorMessage("GetClassColours", new NotImplementedException("Incorrect class"));
 					break;
 			}
-			return new Color[] {Color.White, Color.White, Color.White, Color.White};
+			return new(Color.White, Color.White, Color.White, Color.White);
 		}
 
 		public static bool HasItemsInInventory(Player player, int[] itemtypes)
@@ -1287,7 +1289,12 @@ namespace EnhancedTeamUIDisplay
 			return false;
 		}
 
-		public static int CountItemsInInventory(Player player, int itemtype) => player.CountItem(itemtype);
+		public static int CountItemsInInventory(Player player, int[] itemtypes)
+		{
+			int count = 0;
+			for (int i = 0; i < itemtypes.Length; i++) count += player.CountItem(itemtypes[i]);
+			return count;
+		}
 	}
 
 	public class CalamityHelper

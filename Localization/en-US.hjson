@@ -32,29 +32,9 @@ Mods: {
 								}
 								Config: {
 										PanelHeader: Panels
-										AddOptionsHeader: Additional options
 
 										PanelAmount: {
 												Label: Amount of panels
-										}
-
-										EnableAutoToggle: {
-												Label: Enable auto toggle
-												Tooltip: Automatically enables ETUD when any boss appears and disables it when all bosses die or despawn
-										}
-
-										EnableColorMatch: {
-												Label: Advanced colour system
-												Tooltip:
-													'''		
-													New UI: ETUD will try to determine your allies' classes and show corresponding stats and use different colours: 
-													> Warrior - Brown HP - Healing potion cooldown 
-													> Ranger - Green HP - Ammo count 
-													> Mage - Blue HP - Mana 
-													> Summoner - Purple HP - Mana 
-													> [Calamity Mod] Rogue - Yellow HP - Stealth
-													Legacy UI: When enabled, ETUD background color will match your team color
-													'''
 										}
 
 										LockUIPosition: {
@@ -67,9 +47,9 @@ Mods: {
 												Tooltip: When enabled, click on panel to teleport to the corresponding player (You still need the wormhole potion; Option will not work if "Lock UI position" option is disabled)
 										}
 
-										EnableLegacyUI: {
-												Label: Use legacy design
-												Tooltip: ETUD will use old design (Before version 1.0.0)
+										EnableAutoToggle: {
+												Label: Enable auto toggle
+												Tooltip: Automatically enables ETUD when any boss appears and disables it when all bosses die or despawn
 										}
 
 										ShowOfflinePlayers: {
@@ -77,18 +57,54 @@ Mods: {
 												Tooltip: Offline players will not be removed from UI
 										}
 
+										EnableColorMatch: {
+												Label: Advanced colour system
+												Tooltip:
+													'''		
+													ETUD will try to determine your allies' classes and show corresponding stats and use different colours: 
+													> Warrior - Brown HP - Healing potion cooldown 
+													> Ranger - Green HP - Ammo count 
+													> Mage - Blue HP - Mana 
+													> Summoner - Purple HP - Mana 
+													> [Calamity Mod] Rogue - Yellow HP - Stealth
+													'''
+										}
+
+										DCOptionsHeader: Stat meter options
+
+										EnableDamageCounter: {
+												Label: Enable stat meter
+												Tooltip: Adds an additional panel to ETUD that shows various in-combat stats like DPS, taken and dealt damage etc.
+										}
+
+										DCPlayersToShowAmount: {
+												Label: Amount of players to show
+										}
+
+										AutoResetDamageCounter: {
+												Label: Auto reset stat meter
+												Tooltip: When any boss appears, automatically resets values of stat meter
+										}
+
+										AddOptionsHeader: Additional options
+
 										ShowBuffCheckButton: {
 												Label: Show buff check button
 												Tooltip: 
 													'''
-													Shows button that allows to check your team players' for required buffs.
-													You will still be able to check buffs using /buffcheck command if this options is disabled.
+													Shows button that allows to check your teammates for required buffs.
+													You will still be able to check buffs using /buffcheck command if this option is disabled.
 													'''
 										}
 
 										ShowBossSummary: {
 												Label: Show boss fight summary
 												Tooltip: After boss fight ends shows short dps summary in chat
+										}
+
+										ShowErrorMessages: {
+												Label: Show error messages
+												Tooltip: If ETUD throws an error, its code will be shown in chat. This code will make it easier for mod developer to determine cause of error. Automatically disables if too many errors are thrown.
 										}
 								}
 								ETUDAddOptions: {

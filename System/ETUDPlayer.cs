@@ -9,14 +9,14 @@ namespace EnhancedTeamUIDisplay
 {
 	internal class ETUDPlayer : ModPlayer
 	{
-		public static int PanelTopOffset;
-		public static int PanelLeftOffset;
+		public int PanelTopOffset;
+		public int PanelLeftOffset;
 
-		public static int DCTopOffset;
-		public static int DCLeftOffset;
+		public int DCTopOffset;
+		public int DCLeftOffset;
 
 		// Key - Boss name, Value - { times killed, times wiped }
-		public static Dictionary<string, int[]> BossFightAttempts;
+		public Dictionary<string, int[]> BossFightAttempts;
 
 		public override void ProcessTriggers(TriggersSet triggersSet)
 		{
@@ -62,13 +62,17 @@ namespace EnhancedTeamUIDisplay
 
 			if (BossFightAttempts == null) BossFightAttempts = new();
 			var List = tag.GetList<TagCompound>("BFA");
-			foreach (var item in List)
+			if (List != null || List.Count == 0)
 			{
-				string name = item.GetString("name");
-				int wins = item.GetInt("wins");
-				int losses = item.GetInt("losses");
-				BossFightAttempts[name] = new int[] { wins, losses };
+				foreach (var item in List)
+				{
+					string name = item.GetString("name");
+					int wins = item.GetInt("wins");
+					int losses = item.GetInt("losses");
+					BossFightAttempts[name] = new int[] { wins, losses };
+				}
 			}
+			else BossFightAttempts = new();
 		}
 	}
 }

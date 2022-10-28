@@ -31,10 +31,7 @@ namespace EnhancedTeamUIDisplay
 
 		// DAMAGE COUNTER
 
-		internal static int[] DPSValues;
-		internal static int[] DeathValues;
-		internal static int[] TakenDamageValues;
-		internal static int[] DealtDamageValues;
+		internal static int[] DPSValues, DeathValues, TakenDamageValues, DealtDamageValues;
 
 		public override void HandlePacket(BinaryReader reader, int whoAmI)
 		{
