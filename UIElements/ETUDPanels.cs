@@ -12,7 +12,7 @@ using System;
 
 namespace EnhancedTeamUIDisplay
 {
-	internal class ETUDPanel1 : UIElement // TODO: Rewrite panel code completely
+	internal class ETUDPanel1 : UIElement // TODO - LP: Tried to change it, all in vain, needs complete rewrite
 	{
 		internal const int width = 200;
 		internal const int height = 60;
@@ -113,48 +113,9 @@ namespace EnhancedTeamUIDisplay
 			string PlayerClass = MiscEventHandler.DeterminePlayerClass(Ally);
 
 			// HP Color
-			if (ETUDConfig.Instanse.EnableColorMatch)
-			{
-				Tuple<Color, Color, Color, Color> classColours = MiscEventHandler.GetClassColours(PlayerClass);
-				HPColor1 = classColours.Item1;
-				HPColor2 = classColours.Item2;
-				/*switch (PlayerClass) -- Obsolete
-				{
-					case "Melee":
-						HPColor1 = Color.SandyBrown;
-						HPColor2 = Color.Brown;
-						break;
-					case "Ranged":
-						HPColor1 = Color.Lime;
-						HPColor2 = Color.LightGreen;
-						break;
-					case "Magic":
-						HPColor1 = Color.LightSkyBlue;
-						HPColor2 = Color.LightBlue;
-						break;
-					case "Summon":
-						HPColor1 = Color.MediumPurple;
-						HPColor2 = Color.Purple;
-						break;
-					case "Rogue":
-						HPColor1 = Color.LightYellow;
-						HPColor2 = Color.LightYellow;
-						break;
-					case "None":
-						HPColor1 = Color.Green;
-						HPColor2 = Color.LawnGreen;
-						break;
-					default:
-						HPColor1 = Color.Green;
-						HPColor2 = Color.LawnGreen;
-						break;
-				}*/
-			}
-			else
-			{
-				HPColor1 = Color.Green;
-				HPColor2 = Color.LawnGreen;
-			}
+			Tuple<Color, Color, Color, Color> classColours = MiscEventHandler.GetClassColours(ETUDConfig.Instanse.EnableColorMatch ? PlayerClass : "None");
+			HPColor1 = classColours.Item1;
+			HPColor2 = classColours.Item2;
 
 			// HPBar
 			Rectangle HPBar = Frame.GetInnerDimensions().ToRectangle();
@@ -543,48 +504,9 @@ namespace EnhancedTeamUIDisplay
 			string PlayerClass = MiscEventHandler.DeterminePlayerClass(Ally);
 
 			// HP Color
-			if (ETUDConfig.Instanse.EnableColorMatch)
-			{
-				Tuple<Color, Color, Color, Color> classColours = MiscEventHandler.GetClassColours(PlayerClass);
-				HPColor1 = classColours.Item1;
-				HPColor2 = classColours.Item2;
-				/*switch (PlayerClass) -- Obsolete
-				{
-					case "Melee":
-						HPColor1 = Color.SandyBrown;
-						HPColor2 = Color.Brown;
-						break;
-					case "Ranged":
-						HPColor1 = Color.Lime;
-						HPColor2 = Color.LightGreen;
-						break;
-					case "Magic":
-						HPColor1 = Color.LightSkyBlue;
-						HPColor2 = Color.LightBlue;
-						break;
-					case "Summon":
-						HPColor1 = Color.MediumPurple;
-						HPColor2 = Color.Purple;
-						break;
-					case "Rogue":
-						HPColor1 = Color.LightYellow;
-						HPColor2 = Color.LightYellow;
-						break;
-					case "None":
-						HPColor1 = Color.Green;
-						HPColor2 = Color.LawnGreen;
-						break;
-					default:
-						HPColor1 = Color.Green;
-						HPColor2 = Color.LawnGreen;
-						break;
-				}*/
-			}
-			else
-			{
-				HPColor1 = Color.Green;
-				HPColor2 = Color.LawnGreen;
-			}
+			Tuple<Color, Color, Color, Color> classColours = MiscEventHandler.GetClassColours(ETUDConfig.Instanse.EnableColorMatch ? PlayerClass : "None");
+			HPColor1 = classColours.Item1;
+			HPColor2 = classColours.Item2;
 
 			// HPBar
 			Rectangle HPBar = Frame.GetInnerDimensions().ToRectangle();
@@ -924,48 +846,9 @@ namespace EnhancedTeamUIDisplay
 			string PlayerClass = MiscEventHandler.DeterminePlayerClass(Ally);
 
 			// HP Color
-			if (ETUDConfig.Instanse.EnableColorMatch)
-			{
-				Tuple<Color, Color, Color, Color> classColours = MiscEventHandler.GetClassColours(PlayerClass);
-				HPColor1 = classColours.Item1;
-				HPColor2 = classColours.Item2;
-				/*switch (PlayerClass) -- Obsolete
-				{
-					case "Melee":
-						HPColor1 = Color.SandyBrown;
-						HPColor2 = Color.Brown;
-						break;
-					case "Ranged":
-						HPColor1 = Color.Lime;
-						HPColor2 = Color.LightGreen;
-						break;
-					case "Magic":
-						HPColor1 = Color.LightSkyBlue;
-						HPColor2 = Color.LightBlue;
-						break;
-					case "Summon":
-						HPColor1 = Color.MediumPurple;
-						HPColor2 = Color.Purple;
-						break;
-					case "Rogue":
-						HPColor1 = Color.LightYellow;
-						HPColor2 = Color.LightYellow;
-						break;
-					case "None":
-						HPColor1 = Color.Green;
-						HPColor2 = Color.LawnGreen;
-						break;
-					default:
-						HPColor1 = Color.Green;
-						HPColor2 = Color.LawnGreen;
-						break;
-				}*/
-			}
-			else
-			{
-				HPColor1 = Color.Green;
-				HPColor2 = Color.LawnGreen;
-			}
+			Tuple<Color, Color, Color, Color> classColours = MiscEventHandler.GetClassColours(ETUDConfig.Instanse.EnableColorMatch ? PlayerClass : "None");
+			HPColor1 = classColours.Item1;
+			HPColor2 = classColours.Item2;
 
 			// HPBar
 			Rectangle HPBar = Frame.GetInnerDimensions().ToRectangle();
@@ -1208,73 +1091,48 @@ namespace EnhancedTeamUIDisplay
 			}
 		}
 	}
-
+	
 	public class MiscEventHandler
 	{
-		// TODO: Rewrite completely
 		public static string DeterminePlayerClass(Player player)
 		{
 			if (player is null) return "None";
 
+			float MeleeCoeff = player.GetTotalDamage(DamageClass.Melee).Additive + (player.GetCritChance(DamageClass.Melee) / 100) + (player.GetAttackSpeed(DamageClass.Melee) / 2);
+			float RangedCoeff = player.GetTotalDamage(DamageClass.Ranged).Additive + (player.GetCritChance(DamageClass.Ranged) / 100) + (player.GetAttackSpeed(DamageClass.Ranged) / 2);
+			float MagicCoeff = player.GetTotalDamage(DamageClass.Magic).Additive + (player.GetCritChance(DamageClass.Magic) / 100) + (player.GetAttackSpeed(DamageClass.Magic) / 2);
+			float SummonCoeff = player.GetTotalDamage(DamageClass.Summon).Additive + (player.GetCritChance(DamageClass.Summon) / 100) + (player.GetAttackSpeed(DamageClass.Summon) / 2 + (player.maxMinions - 1));
+			float RogueCoeff = 0;
 			if (ETUD.CalamityMod is not null)
-			{
 				if (ETUD.CalamityMod.TryFind<DamageClass>("RogueDamageClass", out var rogueclass))
-				{
-					float RogueCoeff = player.GetTotalDamage(rogueclass).Additive + (player.GetCritChance(rogueclass) / 100) + (player.GetAttackSpeed(rogueclass) / 2);
-					float MeleeCoeff = player.GetTotalDamage(DamageClass.Melee).Additive + (player.GetCritChance(DamageClass.Melee) / 100) + (player.GetAttackSpeed(DamageClass.Melee) / 2);
-					float RangedCoeff = player.GetTotalDamage(DamageClass.Ranged).Additive + (player.GetCritChance(DamageClass.Ranged) / 100) + (player.GetAttackSpeed(DamageClass.Ranged) / 2);
-					float MagicCoeff = player.GetTotalDamage(DamageClass.Magic).Additive + (player.GetCritChance(DamageClass.Magic) / 100) + (player.GetAttackSpeed(DamageClass.Magic) / 2);
-					float SummonCoeff = player.GetTotalDamage(DamageClass.Summon).Additive + (player.GetCritChance(DamageClass.Summon) / 100) + (player.GetAttackSpeed(DamageClass.Summon) / 2 + (player.maxMinions - 1));
+					RogueCoeff = player.GetTotalDamage(rogueclass).Additive + (player.GetCritChance(rogueclass) / 100) + (player.GetAttackSpeed(rogueclass) / 2);
 
-					if (MeleeCoeff == RangedCoeff && RangedCoeff == MagicCoeff && MagicCoeff == SummonCoeff && SummonCoeff == RogueCoeff) return "None";
-					else if (new float[] { MeleeCoeff, RangedCoeff, MagicCoeff, SummonCoeff, RogueCoeff }.Max() == MeleeCoeff) return "Melee";
-					else if (new float[] { MeleeCoeff, RangedCoeff, MagicCoeff, SummonCoeff, RogueCoeff }.Max() == RangedCoeff) return "Ranged";
-					else if (new float[] { MeleeCoeff, RangedCoeff, MagicCoeff, SummonCoeff, RogueCoeff }.Max() == MagicCoeff) return "Magic";
-					else if (new float[] { MeleeCoeff, RangedCoeff, MagicCoeff, SummonCoeff, RogueCoeff }.Max() == SummonCoeff) return "Summon";
-					else if (new float[] { MeleeCoeff, RangedCoeff, MagicCoeff, SummonCoeff, RogueCoeff }.Max() == RogueCoeff) return "Rogue";
-					else return "None";
-				}
-				else return "None";
-			}
-			else
+			float[] CoeffArray = new float[] { MeleeCoeff, RangedCoeff, MagicCoeff, SummonCoeff, RogueCoeff };
+			int StatNum = Array.IndexOf(CoeffArray, CoeffArray.Max());
+
+			return StatNum switch
 			{
-
-				float MeleeCoeff = player.GetTotalDamage(DamageClass.Melee).Additive + (player.GetCritChance(DamageClass.Melee) / 100) + (player.GetAttackSpeed(DamageClass.Melee) / 2);
-				float RangedCoeff = player.GetTotalDamage(DamageClass.Ranged).Additive + (player.GetCritChance(DamageClass.Ranged) / 100) + (player.GetAttackSpeed(DamageClass.Ranged) / 2);
-				float MagicCoeff = player.GetTotalDamage(DamageClass.Magic).Additive + (player.GetCritChance(DamageClass.Magic) / 100) + (player.GetAttackSpeed(DamageClass.Magic) / 2 + ((1 - player.manaCost) * 12));
-				float SummonCoeff = player.GetTotalDamage(DamageClass.Summon).Additive + (player.GetCritChance(DamageClass.Summon) / 100) + (player.GetAttackSpeed(DamageClass.Summon) / 2 + (player.maxMinions - 1));
-
-
-				if (MeleeCoeff == RangedCoeff && RangedCoeff == MagicCoeff && MagicCoeff == SummonCoeff) return "None";
-				else if (new float[] { MeleeCoeff, RangedCoeff, MagicCoeff, SummonCoeff }.Max() == MeleeCoeff) return "Melee";
-				else if (new float[] { MeleeCoeff, RangedCoeff, MagicCoeff, SummonCoeff }.Max() == RangedCoeff) return "Ranged";
-				else if (new float[] { MeleeCoeff, RangedCoeff, MagicCoeff, SummonCoeff }.Max() == MagicCoeff) return "Magic";
-				else if (new float[] { MeleeCoeff, RangedCoeff, MagicCoeff, SummonCoeff }.Max() == SummonCoeff) return "Summon";
-				else return "None";
-			}
+				0 => "Melee",
+				1 => "Ranged",
+				2 => "Magic",
+				3 => "Summon",
+				4 => "Rogue",
+				_ => "None",
+			};
 		}
 
-		public static Tuple<Color,Color,Color,Color> GetClassColours(string playerClass)
+		public static Tuple<Color, Color, Color, Color> GetClassColours(string playerClass)
 		{
-			switch (playerClass)
+			return playerClass switch
 			{
-				case "Melee":
-					return new(Color.SandyBrown, Color.Brown, Color.IndianRed, Color.DarkRed);
-				case "Ranged":
-					return new(Color.Lime, Color.LightGreen, Color.OrangeRed, Color.Orange);
-				case "Magic":
-					return new(Color.LightSkyBlue, Color.LightBlue, Color.Blue, Color.DeepSkyBlue);
-				case "Summon":
-					return new(Color.MediumPurple, Color.Purple, Color.Blue, Color.DeepSkyBlue);
-				case "Rogue":
-					return new(Color.LightGoldenrodYellow, Color.LightGoldenrodYellow, Color.Yellow, Color.Yellow);
-				case "None":
-					return new(Color.Green, Color.LawnGreen, Color.White, Color.White);
-				default:
-					ETUDAdditionalOptions.CreateErrorMessage("GetClassColours", new NotImplementedException("Incorrect class"));
-					break;
-			}
-			return new(Color.White, Color.White, Color.White, Color.White);
+				"Melee" => new(Color.SandyBrown, Color.Brown, Color.IndianRed, Color.DarkRed),
+				"Ranged" => new(Color.Lime, Color.LightGreen, Color.OrangeRed, Color.Orange),
+				"Magic" => new(Color.LightSkyBlue, Color.LightBlue, Color.Blue, Color.DeepSkyBlue),
+				"Summon" => new(Color.MediumPurple, Color.Purple, Color.Blue, Color.DeepSkyBlue),
+				"Rogue" => new(Color.LightGoldenrodYellow, Color.LightGoldenrodYellow, Color.Yellow, Color.Yellow),
+				"None" => new(Color.Green, Color.LawnGreen, Color.White, Color.White),
+				_ => new(Color.White, Color.White, Color.White, Color.White),
+			};
 		}
 
 		public static bool HasItemsInInventory(Player player, int[] itemtypes)

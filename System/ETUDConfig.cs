@@ -45,11 +45,6 @@ namespace EnhancedTeamUIDisplay
 		[DefaultValue(true)]
 		public bool EnableColorMatch;
 
-		/*[Tooltip("$Mods.EnhancedTeamUIDisplay.Config.EnableLegacyUI.Tooltip")]
-		[Label("$Mods.EnhancedTeamUIDisplay.Config.EnableLegacyUI.Label")]
-		[DefaultValue(false)]
-		public bool EnableLegacyUI;*/ // TODO: Remove old ui completely
-
 		[Header("$Mods.EnhancedTeamUIDisplay.Config.DCOptionsHeader")]
 
 		[Tooltip("$Mods.EnhancedTeamUIDisplay.Config.EnableDamageCounter.Tooltip")]
