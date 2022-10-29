@@ -16,7 +16,7 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 {
 	internal class DamageCounterSystem : ModSystem
 	{
-		/*internal enum DamageCounterPacketType : byte
+		internal enum DamageCounterPacketType : byte
 		{
 			InformClientsOfValues,
 			InformServerOfDPS,		
@@ -47,90 +47,91 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 					netMessage.Write(ETUD.DeathValues[i]);
 				}
 			}
-
 			netMessage.Send();
-		}*/
+		}
+
+		internal static bool AwaitsReset = false;
+		internal static bool NoPlayersInCombat = true;
+
+		public override void PostUpdatePlayers()
+		{		
+			base.PostUpdatePlayers();
+
+			NoPlayersInCombat = true;
+			for (int i = 0; i < 256; i++) if (Main.player[i].active) if (Main.player[i].GetModPlayer<DamageCounterPlayer>().InCombat) NoPlayersInCombat = false;
+			if (!NoPlayersInCombat) AwaitsReset = true;
+			if (NoPlayersInCombat && AwaitsReset) ETUD.Instance.ResetVariables();
+		}
 	}
 
 	internal class DamageCounterPlayer : ModPlayer
 	{
-		/*// DPS - Working
+		internal bool InCombat = false;
+		private DateTime lastCombatTime;
+
+		// DPS - Working
 		public override void PostUpdate()
 		{
-			if (Main.netMode == NetmodeID.MultiplayerClient && Player.whoAmI == Main.myPlayer)
+			if (Player.accDreamCatcher)
 			{
-				if (Player.accDreamCatcher)
-				{
-					int DPS = Player.dpsStarted ? Player.getDPS() : 0;
+				int DPS = Player.dpsStarted ? Player.getDPS() : 0;
+				SendInfoToServer(DamageCounterSystem.DamageCounterPacketType.InformServerOfDPS, DPS);
+			}
 
-					ModPacket packet = Mod.GetPacket();
-					packet.Write((byte)DamageCounterSystem.DamageCounterPacketType.InformServerOfDPS);
-					packet.Write(DPS);
-					packet.Send();
-				}
-			}	
+			if (!Main.CurrentFrameFlags.AnyActiveBossNPC)
+			{
+				if (InCombat && (DateTime.Now - lastCombatTime).TotalSeconds >= 10) InCombat = false;
+			}
+			else InCombat = true;
 		}
 
 		// Taken damage
 		public override void OnHitByNPC(NPC npc, int damage, bool crit)
 		{
-			if (Main.netMode == NetmodeID.MultiplayerClient && Player.whoAmI == Main.myPlayer)
-			{
-				ModPacket packet = Mod.GetPacket();
-				packet.Write((byte)DamageCounterSystem.DamageCounterPacketType.InformServerOfTakenDamage);
-				packet.Write(damage);
-				packet.Send();
-			}
+			SendInfoToServer(DamageCounterSystem.DamageCounterPacketType.InformServerOfTakenDamage, damage);
+			UpdateCombat();
 		}
 
 		public override void OnHitByProjectile(Projectile proj, int damage, bool crit)
 		{
-			if (Main.netMode == NetmodeID.MultiplayerClient && Player.whoAmI == Main.myPlayer)
-			{
-				ModPacket packet = Mod.GetPacket();
-				packet.Write((byte)DamageCounterSystem.DamageCounterPacketType.InformServerOfTakenDamage);
-				packet.Write(damage);
-				packet.Send();
-			}
+			SendInfoToServer(DamageCounterSystem.DamageCounterPacketType.InformServerOfTakenDamage, damage);
+			UpdateCombat();
 		}
 
 		// Dealt damage
 		public override void ModifyHitNPC(Item item, NPC target, ref int damage, ref float knockback, ref bool crit)
 		{
-			base.ModifyHitNPC(item, target, ref damage, ref knockback, ref crit);
-
-			if (Main.netMode == NetmodeID.MultiplayerClient && Player.whoAmI == Main.myPlayer)
-			{
-				ModPacket packet = Mod.GetPacket();
-				packet.Write((byte)DamageCounterSystem.DamageCounterPacketType.InformServerOfDealtDamage);
-				packet.Write(damage);
-				packet.Send();
-			}
+			SendInfoToServer(DamageCounterSystem.DamageCounterPacketType.InformServerOfDealtDamage, damage);
+			UpdateCombat();
 		}
 
 		public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
 		{
-			base.ModifyHitNPCWithProj(proj, target, ref damage, ref knockback, ref crit, ref hitDirection);
-
-			if (Main.netMode == NetmodeID.MultiplayerClient && Player.whoAmI == Main.myPlayer)
-			{
-				ModPacket packet = Mod.GetPacket();
-				packet.Write((byte)DamageCounterSystem.DamageCounterPacketType.InformServerOfDealtDamage);
-				packet.Write(damage);
-				packet.Send();
-			}
+			SendInfoToServer(DamageCounterSystem.DamageCounterPacketType.InformServerOfDealtDamage, damage);
+			UpdateCombat();
 		}
 
 		// Deaths
-		public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
+		public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource) => SendInfoToServer(DamageCounterSystem.DamageCounterPacketType.InformServerOfDeaths);
+
+		//Sending changes
+		private void SendInfoToServer(DamageCounterSystem.DamageCounterPacketType pt, int? info = null)
 		{
 			if (Main.netMode == NetmodeID.MultiplayerClient && Player.whoAmI == Main.myPlayer)
 			{
 				ModPacket packet = Mod.GetPacket();
-				packet.Write((byte)DamageCounterSystem.DamageCounterPacketType.InformServerOfDeaths);
+				packet.Write((byte)pt);
+				if (info is not null) packet.Write((int)info);
 				packet.Send();
 			}
-		}*/
+		}
+
+		//UpdateCombat
+		private void UpdateCombat()
+		{
+			lastCombatTime = DateTime.Now;
+			InCombat = true;
+		}
 	}
 
 	internal class DamageCounterUI : UIElement
@@ -190,18 +191,18 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 			{
 				new UIImageButton(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/DamageCounter/ArrowLeft")),
 				new UIImageButton(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/DamageCounter/ArrowRight")),
-				new UIImageButton(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/DamageCounter/X"))
+				//new UIImageButton(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/DamageCounter/X"))
 			};
 
 			buttons[0].OnClick += (e, l) => { if (StatNum == 0) StatNum = 3; else StatNum--; };
 			buttons[1].OnClick += (e, l) => { if (StatNum == 3) StatNum = 0; else StatNum++; };
-			buttons[2].OnClick += (e, l) => ETUD.Instance.ResetVariables(Main.LocalPlayer.whoAmI);
+			//buttons[2].OnClick += (e, l) => ETUD.Instance.ResetVariables();
 			
-			for (int i = 0; i < 3; i++)
+			for (int i = 0; i < 2; i++)
 			{
 				buttons[i].Width.Set(18, 0f);
 				buttons[i].Height.Set(22, 0f);
-				buttons[i].HAlign = .75f + .1f * i;
+				buttons[i].HAlign = .85f + .1f * i;
 				buttons[i].Top.Set(i == 2 ? 3 : 4, 0f);
 				Append(buttons[i]);
 			}

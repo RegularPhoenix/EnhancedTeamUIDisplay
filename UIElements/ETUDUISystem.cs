@@ -100,12 +100,12 @@ namespace EnhancedTeamUIDisplay
 				{
 					if (Main.npc[i] is not null && Main.npc[i].active && Main.npc[i].boss)
 					{
-						if (ETUDConfig.Instanse.EnableAutoToggle && ETUDInterface.CurrentState is null) OpenETUDInterface();
-						if (ETUDConfig.Instanse.AutoResetDamageCounter) ETUD.Instance.ResetVariables();
+						if (ETUDConfig.Instanse.EnableAutoToggle && ETUDInterface.CurrentState is null) OpenETUDInterface();					
 						if (ETUDConfig.Instanse.ShowBossSummary) ETUDAdditionalOptions.StartBossSummary();
 						AnyBossFound = true;
 						BossEvaded = false;
 						FirstBossName = Main.npc[i].FullName;
+						ETUD.Instance.ResetVariables();
 					}
 				}
 			}

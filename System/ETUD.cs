@@ -20,7 +20,7 @@ namespace EnhancedTeamUIDisplay
 
 			Instance = this;
 
-			/*DPSValues = new int[256];
+			DPSValues = new int[256];
 			DeathValues = new int[256];
 			TakenDamageValues = new int[256];
 			DealtDamageValues = new int[256];
@@ -31,10 +31,10 @@ namespace EnhancedTeamUIDisplay
 				DeathValues[i] = -1;
 				TakenDamageValues[i] = -1;
 				DealtDamageValues[i] = -1;
-			}*/
+			}
 		}
 
-		/*internal void ResetVariables(int? clientNum = null) // TODO: It should reset values only on client not on server
+		internal void ResetVariables()
 		{
 			var netMessage = GetPacket();
 			netMessage.Write((byte)DamageCounterSystem.DamageCounterPacketType.InformClientsOfValues);
@@ -54,9 +54,10 @@ namespace EnhancedTeamUIDisplay
 					netMessage.Write(-1);
 				}
 			}
-			Logger.Info(Main.player[(int)clientNum].name);
-			netMessage.Send(clientNum ?? -1);			
-		}*/
+			netMessage.Send();
+
+			DamageCounterSystem.AwaitsReset = false;
+		}
 
 		public override void Unload() => ETUDHotkey = null;
 
@@ -64,7 +65,7 @@ namespace EnhancedTeamUIDisplay
 
 		// DAMAGE COUNTER
 
-		/*internal static int[] DPSValues, DeathValues, TakenDamageValues, DealtDamageValues;
+		internal static int[] DPSValues, DeathValues, TakenDamageValues, DealtDamageValues;
 
 		public override void HandlePacket(BinaryReader reader, int whoAmI)
 		{
@@ -74,23 +75,15 @@ namespace EnhancedTeamUIDisplay
 				case 0:
 					byte count = reader.ReadByte();
 
-					for (int i = 0; i < 256; i++)
-					{
-						DPSValues[i] = -1;
-						DealtDamageValues[i] = -1;
-					}
+					for (int i = 0; i < 256; i++) DPSValues[i] = -1;
 
 					for (int i = 0; i < count; i++)
 					{
 						byte playerIndex = reader.ReadByte();
-						int playerdps = reader.ReadInt32();
-						int dealtdamage = reader.ReadInt32();
-						int takendamage = reader.ReadInt32();
-						int deaths = reader.ReadInt32();
-						DPSValues[playerIndex] = playerdps;
-						DealtDamageValues[playerIndex] = dealtdamage;
-						TakenDamageValues[playerIndex] = takendamage;
-						DeathValues[playerIndex] = deaths;
+						DPSValues[playerIndex] =  reader.ReadInt32();
+						DealtDamageValues[playerIndex] = reader.ReadInt32();
+						TakenDamageValues[playerIndex] = reader.ReadInt32();
+						DeathValues[playerIndex] = reader.ReadInt32();
 					}
 					break;
 				case 1:
@@ -106,12 +99,12 @@ namespace EnhancedTeamUIDisplay
 					TakenDamageValues[whoAmI] += takendmg;
 					break;
 				case 4:
-					DeathValues[whoAmI]++;
+					if(DeathValues[whoAmI] is not -1) DeathValues[whoAmI]++; else DeathValues[whoAmI] = 1;
 					break;
 				default:
 					ETUDAdditionalOptions.CreateErrorMessage(Name, new System.NotImplementedException("Invalid Packet ID"), id);
 					break;
 			}
-		}*/
+		}
 	}
 }
