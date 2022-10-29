@@ -56,11 +56,11 @@ namespace EnhancedTeamUIDisplay
 			switch (panelnum)
 			{
 				case 1:
-					if (ETUDPanel1.Ally != null) if (ETUDPanel1.Ally.name == args[0]) { caller.Reply("Requested player is already on that panel"); return; }
+					if (ETUDPanel1.Ally is not null) if (ETUDPanel1.Ally.name == args[0]) { caller.Reply("Requested player is already on that panel"); return; }
 						
 					bool done = false;
 
-					if (ETUDPanel2.Ally != null)
+					if (ETUDPanel2.Ally is not null)
 					{
 						if (ETUDPanel2.Ally.name == args[0])
 						{
@@ -75,7 +75,7 @@ namespace EnhancedTeamUIDisplay
 							caller.Reply("Player set.");
 						}
 					}
-					else if (ETUDPanel3.Ally != null)
+					else if (ETUDPanel3.Ally is not null)
 					{
 						if (ETUDPanel3.Ally.name == args[0])
 						{
@@ -95,7 +95,7 @@ namespace EnhancedTeamUIDisplay
 					{
 						for (int i = 0; i < Main.maxPlayers; i++)
 						{
-							if (Main.player[i] != null && Main.player[i].team == caller.Player.team && Main.player[i].name == args[0])
+							if (Main.player[i] is not null && Main.player[i].team == caller.Player.team && Main.player[i].name == args[0])
 							{
 								ETUDPanel1.Ally = Main.player[i];
 								ETUDPanel1.allyFound = true;
@@ -111,11 +111,11 @@ namespace EnhancedTeamUIDisplay
 						
 					break;
 				case 2:
-					if (ETUDPanel2.Ally != null) if (ETUDPanel2.Ally.name == args[0]) { caller.Reply("Requested player is already on that panel"); return; }
+					if (ETUDPanel2.Ally is not null) if (ETUDPanel2.Ally.name == args[0]) { caller.Reply("Requested player is already on that panel"); return; }
 
 					bool done2 = false;
 
-					if (ETUDPanel1.Ally != null)
+					if (ETUDPanel1.Ally is not null)
 					{
 						if (ETUDPanel1.Ally.name == args[0])
 						{
@@ -130,7 +130,7 @@ namespace EnhancedTeamUIDisplay
 							caller.Reply("Player set.");
 						}
 					}
-					else if (ETUDPanel3.Ally != null)
+					else if (ETUDPanel3.Ally is not null)
 					{
 						if (ETUDPanel3.Ally.name == args[0])
 						{
@@ -150,7 +150,7 @@ namespace EnhancedTeamUIDisplay
 					{
 						for (int i = 0; i < Main.maxPlayers; i++)
 						{
-							if (Main.player[i] != null && Main.player[i].team == caller.Player.team && Main.player[i].name == args[0])
+							if (Main.player[i] is not null && Main.player[i].team == caller.Player.team && Main.player[i].name == args[0])
 							{
 								ETUDPanel2.Ally = Main.player[i];
 								ETUDPanel2.allyFound = true;
@@ -166,11 +166,11 @@ namespace EnhancedTeamUIDisplay
 
 					break;
 				case 3:
-					if (ETUDPanel3.Ally != null) if (ETUDPanel3.Ally.name == args[0]) { caller.Reply("Requested player is already on that panel"); return; }
+					if (ETUDPanel3.Ally is not null) if (ETUDPanel3.Ally.name == args[0]) { caller.Reply("Requested player is already on that panel"); return; }
 
 					bool done3 = false;
 
-					if (ETUDPanel2.Ally != null)
+					if (ETUDPanel2.Ally is not null)
 					{
 						if (ETUDPanel2.Ally.name == args[0])
 						{
@@ -185,7 +185,7 @@ namespace EnhancedTeamUIDisplay
 							caller.Reply("Player set.");
 						}
 					}
-					else if (ETUDPanel1.Ally != null)
+					else if (ETUDPanel1.Ally is not null)
 					{
 						if (ETUDPanel1.Ally.name == args[0])
 						{
@@ -205,7 +205,7 @@ namespace EnhancedTeamUIDisplay
 					{
 						for (int i = 0; i < Main.maxPlayers; i++)
 						{
-							if (Main.player[i] != null && Main.player[i].team == caller.Player.team && Main.player[i].name == args[0])
+							if (Main.player[i] is not null && Main.player[i].team == caller.Player.team && Main.player[i].name == args[0])
 							{
 								ETUDPanel1.Ally = Main.player[i];
 								ETUDPanel1.allyFound = true;
@@ -291,7 +291,7 @@ namespace EnhancedTeamUIDisplay
 
 				if (args[1] == "BossFightAttempts")
 				{
-					if (Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts == null) caller.Reply("Empty");
+					if (Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts is null) caller.Reply("Empty");
 					else
 					{
 						if (Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts.Count == 0) caller.Reply("Empty");
@@ -306,7 +306,7 @@ namespace EnhancedTeamUIDisplay
 			{
 				if (args[1] == "BossFightAttempts")
 				{
-					if (Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts == null) Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts = new();
+					if (Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts is null) Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts = new();
 					Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts.Add(args[2], new int[] { int.Parse(args[3]), int.Parse(args[4]) });
 					caller.Reply("Success");
 				}
@@ -315,7 +315,7 @@ namespace EnhancedTeamUIDisplay
 			{
 				if (args[1] == "BossFightAttempts")
 				{
-					if (args[2] == "clear" && Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts != null) Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts.Clear();
+					if (args[2] == "clear" && Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts is not null) Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts.Clear();
 				}
 			}
 			else if (args[0] == "throw")

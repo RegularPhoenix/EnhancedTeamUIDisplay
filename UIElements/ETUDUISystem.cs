@@ -45,7 +45,7 @@ namespace EnhancedTeamUIDisplay
 
 		internal static void ToggleETUD()
 		{
-			if (ETUDInterface.CurrentState != null) CloseETUDInterface(); else OpenETUDInterface();
+			if (ETUDInterface.CurrentState is not null) CloseETUDInterface(); else OpenETUDInterface();
 		}
 
 		internal static void OpenETUDInterface()
@@ -84,8 +84,8 @@ namespace EnhancedTeamUIDisplay
 
 		public override void PreSaveAndQuit()
 		{
-			if (ETUDInterface.CurrentState != null) ETUDInterface.SetState(null);
-			if (ETUDAllyStatScreen.CurrentState != null) ETUDAllyStatScreen.SetState(null);
+			if (ETUDInterface.CurrentState is not null) ETUDInterface.SetState(null);
+			if (ETUDAllyStatScreen.CurrentState is not null) ETUDAllyStatScreen.SetState(null);
 		}
 
 		public override void UpdateUI(GameTime gameTime)
@@ -98,10 +98,10 @@ namespace EnhancedTeamUIDisplay
 				UnkilledBossNames.Clear();
 				for (int i = 0; i < Main.maxNPCs; i++)
 				{
-					if (Main.npc[i] != null && Main.npc[i].active && Main.npc[i].boss)
+					if (Main.npc[i] is not null && Main.npc[i].active && Main.npc[i].boss)
 					{
-						if (ETUDConfig.Instanse.EnableAutoToggle && ETUDInterface.CurrentState == null) OpenETUDInterface();
-						if (ETUDConfig.Instanse.AutoResetDamageCounter) DamageCounterSystem.ResetVariables();
+						if (ETUDConfig.Instanse.EnableAutoToggle && ETUDInterface.CurrentState is null) OpenETUDInterface();
+						if (ETUDConfig.Instanse.AutoResetDamageCounter) ETUD.Instance.ResetVariables();
 						if (ETUDConfig.Instanse.ShowBossSummary) ETUDAdditionalOptions.StartBossSummary();
 						AnyBossFound = true;
 						BossEvaded = false;
@@ -115,11 +115,11 @@ namespace EnhancedTeamUIDisplay
 				bool FoundBoss = false;
 				bool PlayersWiped = true;
 
-				for (int j = 0; j < Main.maxPlayers; j++) if (Main.player[j] != null && Main.player[j].active && !Main.player[j].dead) { PlayersWiped = false; break; }
+				for (int j = 0; j < Main.maxPlayers; j++) if (Main.player[j] is not null && Main.player[j].active && !Main.player[j].dead) { PlayersWiped = false; break; }
 
 				for (int j = 0; j < Main.maxNPCs; j++)
 				{
-					if (Main.npc[j] != null && Main.npc[j].boss && Main.npc[j].active)
+					if (Main.npc[j] is not null && Main.npc[j].boss && Main.npc[j].active)
 					{
 						FoundBoss = true;
 						if (!BossNames.Contains(Main.npc[j].FullName)) BossNames.Add(Main.npc[j].FullName);
@@ -127,7 +127,7 @@ namespace EnhancedTeamUIDisplay
 						if (PlayersWiped && !UnkilledBossNames.Contains(Main.npc[j].FullName)) UnkilledBossNames.Add(Main.npc[j].FullName);
 					}
 
-					if (Main.npc[j] != null && Main.npc[j].boss && !Main.npc[j].active)
+					if (Main.npc[j] is not null && Main.npc[j].boss && !Main.npc[j].active)
 					{
 						if (!PlayersWiped && Main.npc[j].life > 0) if (!UnkilledBossNames.Contains(Main.npc[j].FullName)) UnkilledBossNames.Add(Main.npc[j].FullName);
 						if (Main.npc[j].FullName == FirstBossName && Main.npc[j].life > 0) BossEvaded = true;
@@ -167,8 +167,8 @@ namespace EnhancedTeamUIDisplay
 			}
 			
 			LastUpdateUIGameTime = gameTime;
-			if (ETUDInterface?.CurrentState != null) ETUDInterface.Update(gameTime);
-			if (ETUDAllyStatScreen?.CurrentState != null) ETUDAllyStatScreen.Update(gameTime);
+			if (ETUDInterface?.CurrentState is not null) ETUDInterface.Update(gameTime);
+			if (ETUDAllyStatScreen?.CurrentState is not null) ETUDAllyStatScreen.Update(gameTime);
 		}
 
 		public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
@@ -181,7 +181,7 @@ namespace EnhancedTeamUIDisplay
 					"ETUD: ETUDUI",
 					delegate
 					{
-						if (LastUpdateUIGameTime != null && ETUDInterface?.CurrentState != null)
+						if (LastUpdateUIGameTime is not null && ETUDInterface?.CurrentState is not null)
 						{
 							ETUDInterface.Draw(Main.spriteBatch, LastUpdateUIGameTime);
 						}
@@ -195,7 +195,7 @@ namespace EnhancedTeamUIDisplay
 					"ETUD: ETUDAllyStatScreen",
 					delegate
 					{
-						if (LastUpdateUIGameTime != null && ETUDAllyStatScreen?.CurrentState != null)
+						if (LastUpdateUIGameTime is not null && ETUDAllyStatScreen?.CurrentState is not null)
 						{
 							ETUDAllyStatScreen.Draw(Main.spriteBatch, LastUpdateUIGameTime);
 						}

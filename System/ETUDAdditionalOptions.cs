@@ -23,9 +23,9 @@ namespace EnhancedTeamUIDisplay
 				Player Ally = null;
 				
 				if (i == -1) Ally = Main.LocalPlayer;
-				else if (Main.player[i] != null && Main.player[i].active && Main.player[i].team == Main.LocalPlayer.team && Main.player[i] != Main.LocalPlayer) Ally = Main.player[i];
+				else if (Main.player[i] is not null && Main.player[i].active && Main.player[i].team == Main.LocalPlayer.team && Main.player[i] != Main.LocalPlayer) Ally = Main.player[i];
 				
-				if(Ally != null)
+				if(Ally is not null)
 				{
 					Color textColor = Color.Yellow;
 					string PlayerClass = MiscEventHandler.DeterminePlayerClass(Ally);
@@ -68,7 +68,7 @@ namespace EnhancedTeamUIDisplay
 							if (!Ally.HasBuff(BuffID.Clairvoyance)) output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.CrystalBuff")} ";
 
 							int ManaAmount = MiscEventHandler.CountItemsInInventory(Ally, new int[] { ItemID.ManaPotion, ItemID.GreaterManaPotion, ItemID.LesserManaPotion, ItemID.SuperManaPotion, ItemID.RestorationPotion });
-							if (ETUD.CalamityMod != null) if (ETUD.CalamityMod.TryFind<ModItem>("SupremeManaPotion", out var SupremeManaPotion)) ManaAmount += Ally.CountItem(SupremeManaPotion.Type);
+							if (ETUD.CalamityMod is not null) if (ETUD.CalamityMod.TryFind<ModItem>("SupremeManaPotion", out var SupremeManaPotion)) ManaAmount += Ally.CountItem(SupremeManaPotion.Type);
 
 							if (ManaAmount == 0) output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.OutOfManaPotions")} ";
 							else if (ManaAmount <= 5) output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.IsLowOnManaPotions")} ";
@@ -90,7 +90,7 @@ namespace EnhancedTeamUIDisplay
 								|| MiscEventHandler.HasBuffs(Ally, new int[] { BuffID.WeaponImbueCursedFlames, BuffID.WeaponImbueFire, BuffID.WeaponImbueIchor, BuffID.WeaponImbueNanites, BuffID.WeaponImbueConfetti, BuffID.WeaponImbuePoison, BuffID.WeaponImbueVenom })))
 								output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.NoFlask")} ";
 
-							if (ETUD.CalamityMod != null)
+							if (ETUD.CalamityMod is not null)
 							{
 								if (ETUD.CalamityMod.TryFind<ModItem>("ShadowPotion", out var ShadowPotion) && ETUD.CalamityMod.TryFind<ModBuff>("ShadowBuff", out var ShadowBuff))
 								{
@@ -108,7 +108,7 @@ namespace EnhancedTeamUIDisplay
 
 					int HealsAmount = MiscEventHandler.CountItemsInInventory(Ally, new int[] { ItemID.HealingPotion, ItemID.GreaterHealingPotion, ItemID.LesserHealingPotion, ItemID.SuperHealingPotion, ItemID.RestorationPotion });
 
-					if (ETUD.CalamityMod != null) if (ETUD.CalamityMod.TryFind<ModItem>("SupremeHealingPotion", out var SupremeHealingPotion) && ETUD.CalamityMod.TryFind<ModItem>("OmegaHealingPotion", out var OmegaHealingPotion)) HealsAmount += Ally.CountItem(SupremeHealingPotion.Type) + Ally.CountItem(OmegaHealingPotion.Type);
+					if (ETUD.CalamityMod is not null) if (ETUD.CalamityMod.TryFind<ModItem>("SupremeHealingPotion", out var SupremeHealingPotion) && ETUD.CalamityMod.TryFind<ModItem>("OmegaHealingPotion", out var OmegaHealingPotion)) HealsAmount += Ally.CountItem(SupremeHealingPotion.Type) + Ally.CountItem(OmegaHealingPotion.Type);
 
 					if (HealsAmount == 0) { output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.OutOfHPPotions")} "; textColor = Color.Red; }
 					else if (HealsAmount <= 5) output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.IsLowOnHPPotions")} ";

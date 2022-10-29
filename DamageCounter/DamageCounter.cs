@@ -16,21 +16,13 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 {
 	internal class DamageCounterSystem : ModSystem
 	{
-		internal enum DamageCounterPacketType : byte
+		/*internal enum DamageCounterPacketType : byte
 		{
-			InformServerOfDPS,
-			InformClientsOfDPS,
-		}
-
-		internal static void ResetVariables()
-		{
-			for (int i = 0; i < 256; i++)
-			{
-				ETUD.DPSValues[i] = -1;
-				ETUD.DeathValues[i] = -1;
-				ETUD.TakenDamageValues[i] = -1;
-				ETUD.DealtDamageValues[i] = -1;
-			}
+			InformClientsOfValues,
+			InformServerOfDPS,		
+			InformServerOfDealtDamage,
+			InformServerOfTakenDamage,
+			InformServerOfDeaths,
 		}
 
 		public override void PostUpdateWorld()
@@ -38,34 +30,35 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 			if (Main.netMode == NetmodeID.SinglePlayer) return;
 
 			var netMessage = Mod.GetPacket();
-			netMessage.Write((byte)DamageCounterPacketType.InformClientsOfDPS);
+			netMessage.Write((byte)DamageCounterPacketType.InformClientsOfValues);
 
-			byte count = 0;
-			for (int i = 0; i < 256; i++) if (Main.player[i].active && Main.player[i].accDreamCatcher) count++;
+			byte count = (byte)Main.CurrentFrameFlags.ActivePlayersCount;
 			netMessage.Write(count);
 
 			for (int i = 0; i < 256; i++)
 			{
-				if (Main.player[i].active && Main.player[i].accDreamCatcher)
+				Player p = Main.player[i];
+				if (p.active)
 				{
 					netMessage.Write((byte)i);
-					netMessage.Write(ETUD.DPSValues[i]);
+					netMessage.Write(p.accDreamCatcher ? ETUD.DPSValues[i] : -1);
+					netMessage.Write(ETUD.DealtDamageValues[i]);
+					netMessage.Write(ETUD.TakenDamageValues[i]);
+					netMessage.Write(ETUD.DeathValues[i]);
 				}
 			}
 
 			netMessage.Send();
-		}
+		}*/
 	}
 
 	internal class DamageCounterPlayer : ModPlayer
 	{
-		// DPS
+		/*// DPS - Working
 		public override void PostUpdate()
 		{
 			if (Main.netMode == NetmodeID.MultiplayerClient && Player.whoAmI == Main.myPlayer)
 			{
-				if (ETUD.DeathValues[Player.whoAmI] == -1) ETUD.DeathValues[Player.whoAmI] = 0;
-
 				if (Player.accDreamCatcher)
 				{
 					int DPS = Player.dpsStarted ? Player.getDPS() : 0;
@@ -83,8 +76,10 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 		{
 			if (Main.netMode == NetmodeID.MultiplayerClient && Player.whoAmI == Main.myPlayer)
 			{
-				if (ETUD.TakenDamageValues[Player.whoAmI] == -1) ETUD.TakenDamageValues[Player.whoAmI] = 0;
-				ETUD.TakenDamageValues[Player.whoAmI] += damage;
+				ModPacket packet = Mod.GetPacket();
+				packet.Write((byte)DamageCounterSystem.DamageCounterPacketType.InformServerOfTakenDamage);
+				packet.Write(damage);
+				packet.Send();
 			}
 		}
 
@@ -92,8 +87,10 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 		{
 			if (Main.netMode == NetmodeID.MultiplayerClient && Player.whoAmI == Main.myPlayer)
 			{
-				if (ETUD.TakenDamageValues[Player.whoAmI] == -1) ETUD.TakenDamageValues[Player.whoAmI] = 0;
-				ETUD.TakenDamageValues[Player.whoAmI] += damage;
+				ModPacket packet = Mod.GetPacket();
+				packet.Write((byte)DamageCounterSystem.DamageCounterPacketType.InformServerOfTakenDamage);
+				packet.Write(damage);
+				packet.Send();
 			}
 		}
 
@@ -101,18 +98,13 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 		public override void ModifyHitNPC(Item item, NPC target, ref int damage, ref float knockback, ref bool crit)
 		{
 			base.ModifyHitNPC(item, target, ref damage, ref knockback, ref crit);
-			try
+
+			if (Main.netMode == NetmodeID.MultiplayerClient && Player.whoAmI == Main.myPlayer)
 			{
-				if (Main.netMode == NetmodeID.MultiplayerClient && Player.whoAmI == Main.myPlayer)
-				{
-					if (ETUD.DealtDamageValues[Player.whoAmI] == -1) ETUD.DealtDamageValues[Player.whoAmI] = 0;
-					ETUD.DealtDamageValues[Player.whoAmI] += damage;
-				}
-			}
-			catch (Exception e)
-			{
-				DamageCounterSystem.ResetVariables();
-				ETUDAdditionalOptions.CreateErrorMessage(Name, e, ETUD.DealtDamageValues[Player.whoAmI]);
+				ModPacket packet = Mod.GetPacket();
+				packet.Write((byte)DamageCounterSystem.DamageCounterPacketType.InformServerOfDealtDamage);
+				packet.Write(damage);
+				packet.Send();
 			}
 		}
 
@@ -122,16 +114,23 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 
 			if (Main.netMode == NetmodeID.MultiplayerClient && Player.whoAmI == Main.myPlayer)
 			{
-				if (ETUD.DealtDamageValues[Player.whoAmI] == -1) ETUD.DealtDamageValues[Player.whoAmI] = 0;
-				ETUD.DealtDamageValues[Player.whoAmI] += damage;
+				ModPacket packet = Mod.GetPacket();
+				packet.Write((byte)DamageCounterSystem.DamageCounterPacketType.InformServerOfDealtDamage);
+				packet.Write(damage);
+				packet.Send();
 			}
 		}
 
 		// Deaths
 		public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
 		{
-			if (Main.netMode == NetmodeID.MultiplayerClient && Player.whoAmI == Main.myPlayer) ETUD.DeathValues[Player.whoAmI]++;
-		}
+			if (Main.netMode == NetmodeID.MultiplayerClient && Player.whoAmI == Main.myPlayer)
+			{
+				ModPacket packet = Mod.GetPacket();
+				packet.Write((byte)DamageCounterSystem.DamageCounterPacketType.InformServerOfDeaths);
+				packet.Send();
+			}
+		}*/
 	}
 
 	internal class DamageCounterUI : UIElement
@@ -147,10 +146,6 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 		private UIImage image;
 
 		private UIImageButton[] buttons;
-
-		private UIImageButton b1;
-		private UIImageButton b2;
-		private UIImageButton b3;
 
 		private ETUDPlayer player;
 
@@ -169,23 +164,23 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 			image = new(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/DamageCounter/DamageCounterPanelTop"));
 			Append(image);
 
-			StatNameText = new UIText("XXXXXXXXXXXXX", .8f);
+			StatNameText = new UIText("", .8f);
 			StatNameText.Top.Set(8, 0f);
 			StatNameText.Left.Set(11, 0f);
 			Append(StatNameText);
 
 			UITexts = new UIText[]
 			{ 
-				new UIText("XXXXXXXXXXXXX", .8f),
-				new UIText("XXXXXXXXXXXXX", .8f),
-				new UIText("XXXXXXXXXXXXX", .8f),
-				new UIText("XXXXXXXXXXXXX", .8f)
+				new UIText("", .8f),
+				new UIText("", .8f),
+				new UIText("", .8f),
+				new UIText("", .8f)
 			};
 
 			for(int i = 0; i < 4; i++)
 			{			
 				UITexts[i].Height.Set(BarHeight, 0f);
-				UITexts[i].Width.Set(BarWidth, 0f);
+				UITexts[i].Width.Set(BarWidth - 20, 0f);
 				UITexts[i].Top.Set(32 + ((BarHeight + 4) * i), 0f);
 				UITexts[i].HAlign = .875f;
 				Append(UITexts[i]);
@@ -200,7 +195,7 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 
 			buttons[0].OnClick += (e, l) => { if (StatNum == 0) StatNum = 3; else StatNum--; };
 			buttons[1].OnClick += (e, l) => { if (StatNum == 3) StatNum = 0; else StatNum++; };
-			buttons[2].OnClick += (e, l) => DamageCounterSystem.ResetVariables();
+			buttons[2].OnClick += (e, l) => ETUD.Instance.ResetVariables(Main.LocalPlayer.whoAmI);
 			
 			for (int i = 0; i < 3; i++)
 			{
@@ -223,7 +218,7 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 			Bar.Height = BarHeight;
 
 			for (int i = 0; i < 4; i++) UITexts[i].SetText("");
-			StatNameText.SetText("             ");
+			StatNameText.SetText("");
 
 			int[] SourceStatArray = new int[256];
 

@@ -92,7 +92,7 @@ namespace EnhancedTeamUIDisplay
 			base.OnChanged();
 			if (!LockUIPosition && AllowOnClickTeleport) AllowOnClickTeleport = false;
 
-			if (ETUDUISystem.ETUDInterface != null && Main.netMode != NetmodeID.SinglePlayer) {
+			if (ETUDUISystem.ETUDInterface is not null && Main.netMode != NetmodeID.SinglePlayer) {
 				ETUDUISystem.CloseETUDInterface();
 				if (!EnableAutoToggle) ETUDUISystem.OpenETUDInterface();
 			}

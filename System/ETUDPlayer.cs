@@ -37,7 +37,7 @@ namespace EnhancedTeamUIDisplay
 			tag["DCTopOffset"] = DCTopOffset;
 			tag["DCLeftOffset"] = DCLeftOffset;
 
-			if (BossFightAttempts == null) BossFightAttempts = new();
+			if (BossFightAttempts is null) BossFightAttempts = new();
 			var List = new List<TagCompound>();
 			foreach (var item in BossFightAttempts)
 			{
@@ -60,9 +60,9 @@ namespace EnhancedTeamUIDisplay
 			if (tag.ContainsKey("DCTopOffset")) DCTopOffset = (int)tag["DCTopOffset"];
 			if (tag.ContainsKey("DCLeftOffset")) DCLeftOffset = (int)tag["DCLeftOffset"];
 
-			if (BossFightAttempts == null) BossFightAttempts = new();
+			if (BossFightAttempts is null) BossFightAttempts = new();
 			var List = tag.GetList<TagCompound>("BFA");
-			if (List != null || List.Count == 0)
+			if (List is not null || List.Count == 0)
 			{
 				foreach (var item in List)
 				{

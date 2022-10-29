@@ -88,30 +88,30 @@ namespace EnhancedTeamUIDisplay
 			Append(MainElement);
 		}
 
-		internal virtual void OnMouseSelect(UIMouseEvent evt, UIElement listeningElement) { if (ETUDUISystem.ETUDAllyStatScreen.CurrentState == null) { ETUDUISystem.OpenAllyStatScreen(); } ETUDAllyInfoPanel.GetLeft = Left.Pixels - ETUDAllyInfoPanel.width; ETUDAllyInfoPanel.GetTop = Top.Pixels; }
+		internal virtual void OnMouseSelect(UIMouseEvent evt, UIElement listeningElement) { if (ETUDUISystem.ETUDAllyStatScreen.CurrentState is null) { ETUDUISystem.OpenAllyStatScreen(); } ETUDAllyInfoPanel.GetLeft = Left.Pixels - ETUDAllyInfoPanel.width; ETUDAllyInfoPanel.GetTop = Top.Pixels; }
 
-		internal virtual void OnMouseDeselect(UIMouseEvent evt, UIElement listeningElement) { if (ETUDUISystem.ETUDAllyStatScreen.CurrentState != null) ETUDUISystem.CloseAllyStatScreen(); }
+		internal virtual void OnMouseDeselect(UIMouseEvent evt, UIElement listeningElement) { if (ETUDUISystem.ETUDAllyStatScreen.CurrentState is not null) ETUDUISystem.CloseAllyStatScreen(); }
 	}
 
 	internal class AllyInfoButton1 : AllyInfoButton
 	{
 		internal override void OnMouseSelect(UIMouseEvent evt, UIElement listeningElement)
 		{
-			if (ETUDPanel1.Ally == null) return;
+			if (ETUDPanel1.Ally is null) return;
 			ETUDAllyInfoPanel.Ally = ETUDPanel1.Ally;
 			base.OnMouseSelect(evt, listeningElement);
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
-			if (ETUDPanel1.Ally == null) return;
+			if (ETUDPanel1.Ally is null) return;
 
 			base.Draw(spriteBatch);
 		}
 
 		public override void Update(GameTime gameTime)
 		{
-			if (ETUDPanel1.Ally == null) IgnoresMouseInteraction = true;
+			if (ETUDPanel1.Ally is null) IgnoresMouseInteraction = true;
 
 			base.Update(gameTime);
 
@@ -124,21 +124,21 @@ namespace EnhancedTeamUIDisplay
 	{
 		internal override void OnMouseSelect(UIMouseEvent evt, UIElement listeningElement)
 		{
-			if (ETUDPanel2.Ally == null) return;
+			if (ETUDPanel2.Ally is null) return;
 			ETUDAllyInfoPanel.Ally = ETUDPanel2.Ally;
 			base.OnMouseSelect(evt, listeningElement);
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
-			if (ETUDPanel2.Ally == null || (ETUDConfig.Instanse.PanelAmount != "Two panels" && ETUDConfig.Instanse.PanelAmount != "Three panels")) return;
+			if (ETUDPanel2.Ally is null || (ETUDConfig.Instanse.PanelAmount != "Two panels" && ETUDConfig.Instanse.PanelAmount != "Three panels")) return;
 
 			base.Draw(spriteBatch);
 		}
 
 		public override void Update(GameTime gameTime)
 		{
-			if (ETUDPanel2.Ally == null) IgnoresMouseInteraction = true;
+			if (ETUDPanel2.Ally is null) IgnoresMouseInteraction = true;
 
 			base.Update(gameTime);
 
@@ -151,21 +151,21 @@ namespace EnhancedTeamUIDisplay
 	{
 		internal override void OnMouseSelect(UIMouseEvent evt, UIElement listeningElement)
 		{
-			if (ETUDPanel3.Ally == null) return;
+			if (ETUDPanel3.Ally is null) return;
 			ETUDAllyInfoPanel.Ally = ETUDPanel3.Ally;
 			base.OnMouseSelect(evt, listeningElement);
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
-			if (ETUDPanel3.Ally == null || ETUDConfig.Instanse.PanelAmount != "Three panels") return;
+			if (ETUDPanel3.Ally is null || ETUDConfig.Instanse.PanelAmount != "Three panels") return;
 
 			base.Draw(spriteBatch);
 		}
 
 		public override void Update(GameTime gameTime)
 		{
-			if (ETUDPanel3.Ally == null) IgnoresMouseInteraction = true;
+			if (ETUDPanel3.Ally is null) IgnoresMouseInteraction = true;
 
 			base.Update(gameTime);
 

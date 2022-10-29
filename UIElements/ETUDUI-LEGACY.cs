@@ -82,7 +82,7 @@ namespace EnhancedTeamUIDisplay
 				PlayerNameText.SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDUI.PlayersNotFoundLine1")); PlayerRespawnTime.SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDUI.PlayersNotFoundLine2")); PlayerHPText.SetText(""); PlayerMPText.SetText("");
 				for (int i = 0; i < Main.maxPlayers; i++)
 				{
-					if (Main.player[i] != null && Main.player[i].team == Main.LocalPlayer.team && Main.player[i] != Main.LocalPlayer && Main.player[i] != ETUDUI3.Ally && Main.player[i] != ETUDUI2.Ally)
+					if (Main.player[i] is not null && Main.player[i].team == Main.LocalPlayer.team && Main.player[i] != Main.LocalPlayer && Main.player[i] != ETUDUI3.Ally && Main.player[i] != ETUDUI2.Ally)
 					{
 						Ally = Main.player[i];
 						allyFound = true;
@@ -91,9 +91,9 @@ namespace EnhancedTeamUIDisplay
 				}
 			}
 
-			if (Ally != null && Ally.team != Main.LocalPlayer.team) { Ally = null; allyFound = false; }			
+			if (Ally is not null && Ally.team != Main.LocalPlayer.team) { Ally = null; allyFound = false; }			
 
-			if (Ally != null)
+			if (Ally is not null)
 			{
 				PlayerNameText.SetText(Ally.name);
 				if (!Ally.dead)
@@ -158,7 +158,7 @@ namespace EnhancedTeamUIDisplay
 				base.MouseUp(evt);
 				DragEnd(evt);
 			}
-			else if (ETUDConfig.Instanse.LockUIPosition && ETUDConfig.Instanse.AllowOnClickTeleport && Main.LocalPlayer.HasUnityPotion() && Ally != null && !Ally.dead && !Main.LocalPlayer.dead)
+			else if (ETUDConfig.Instanse.LockUIPosition && ETUDConfig.Instanse.AllowOnClickTeleport && Main.LocalPlayer.HasUnityPotion() && Ally is not null && !Ally.dead && !Main.LocalPlayer.dead)
 			{
 				Main.LocalPlayer.UnityTeleport(Ally.TopLeft);
 				Main.LocalPlayer.TakeUnityPotion();
@@ -185,7 +185,7 @@ namespace EnhancedTeamUIDisplay
 		protected override void DrawSelf(SpriteBatch spriteBatch)
 		{
 			base.DrawSelf(spriteBatch);
-			if (IsMouseHovering && Ally != null) Main.instance.MouseText("Teleport to " + Ally.name, 0, 0);
+			if (IsMouseHovering && Ally is not null) Main.instance.MouseText("Teleport to " + Ally.name, 0, 0);
 		}
 	}
 
@@ -262,7 +262,7 @@ namespace EnhancedTeamUIDisplay
 				PlayerNameText.SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDUI.PlayersNotFoundLine1")); PlayerRespawnTime.SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDUI.PlayersNotFoundLine2")); PlayerHPText.SetText(""); PlayerMPText.SetText("");
 				for (int i = 0; i < Main.maxPlayers; i++)
 				{
-					if (Main.player[i] != null && Main.player[i].team == Main.LocalPlayer.team && Main.player[i] != Main.LocalPlayer && Main.player[i] != ETUDUI1.Ally && Main.player[i] != ETUDUI3.Ally)
+					if (Main.player[i] is not null && Main.player[i].team == Main.LocalPlayer.team && Main.player[i] != Main.LocalPlayer && Main.player[i] != ETUDUI1.Ally && Main.player[i] != ETUDUI3.Ally)
 					{
 						Ally = Main.player[i];
 						allyFound = true;
@@ -271,7 +271,7 @@ namespace EnhancedTeamUIDisplay
 				}
 			}
 
-			if(Ally != null && allyFound == true && ETUDUI1.Ally == null && ETUDUI1.allyFound == false)
+			if(Ally is not null && allyFound == true && ETUDUI1.Ally is null && ETUDUI1.allyFound == false)
 			{
 				ETUDUI1.Ally = Ally;
 				ETUDUI1.allyFound = true;
@@ -280,9 +280,9 @@ namespace EnhancedTeamUIDisplay
 				allyFound = false;
 			}
 
-			if (Ally != null && Ally.team != Main.LocalPlayer.team) { Ally = null; allyFound = false; }			
+			if (Ally is not null && Ally.team != Main.LocalPlayer.team) { Ally = null; allyFound = false; }			
 
-			if (Ally != null)
+			if (Ally is not null)
 			{
 				PlayerNameText.SetText(Ally.name);
 				if (!Ally.dead)
@@ -306,7 +306,7 @@ namespace EnhancedTeamUIDisplay
 
 		public override void MouseUp(UIMouseEvent evt)
 		{
-			if (ETUDConfig.Instanse.LockUIPosition && ETUDConfig.Instanse.AllowOnClickTeleport && Main.LocalPlayer.HasUnityPotion() && Ally != null && !Ally.dead && !Main.LocalPlayer.dead)
+			if (ETUDConfig.Instanse.LockUIPosition && ETUDConfig.Instanse.AllowOnClickTeleport && Main.LocalPlayer.HasUnityPotion() && Ally is not null && !Ally.dead && !Main.LocalPlayer.dead)
 			{
 				Main.LocalPlayer.UnityTeleport(Ally.TopLeft);
 				Main.LocalPlayer.TakeUnityPotion();
@@ -316,7 +316,7 @@ namespace EnhancedTeamUIDisplay
 		protected override void DrawSelf(SpriteBatch spriteBatch)
 		{
 			base.DrawSelf(spriteBatch);
-			if (IsMouseHovering && Ally != null) Main.instance.MouseText("Teleport to " + Ally.name, 0, 0);
+			if (IsMouseHovering && Ally is not null) Main.instance.MouseText("Teleport to " + Ally.name, 0, 0);
 		}
 	}
 
@@ -393,7 +393,7 @@ namespace EnhancedTeamUIDisplay
 				PlayerNameText.SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDUI.PlayersNotFoundLine1")); PlayerRespawnTime.SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDUI.PlayersNotFoundLine2")); PlayerHPText.SetText(""); PlayerMPText.SetText("");
 				for (int i = 0; i < Main.maxPlayers; i++)
 				{
-					if (Main.player[i] != null && Main.player[i].team == Main.LocalPlayer.team && Main.player[i] != Main.LocalPlayer && Main.player[i] != ETUDUI1.Ally && Main.player[i] != ETUDUI2.Ally)
+					if (Main.player[i] is not null && Main.player[i].team == Main.LocalPlayer.team && Main.player[i] != Main.LocalPlayer && Main.player[i] != ETUDUI1.Ally && Main.player[i] != ETUDUI2.Ally)
 					{
 						Ally = Main.player[i];
 						allyFound = true;
@@ -402,7 +402,7 @@ namespace EnhancedTeamUIDisplay
 				}
 			}
 
-			if (Ally != null && allyFound == true && ETUDUI2.Ally == null && ETUDUI2.allyFound == false)
+			if (Ally is not null && allyFound == true && ETUDUI2.Ally is null && ETUDUI2.allyFound == false)
 			{
 				ETUDUI2.Ally = Ally;
 				ETUDUI2.allyFound = true;
@@ -411,9 +411,9 @@ namespace EnhancedTeamUIDisplay
 				allyFound = false;
 			}
 
-			if (Ally != null && Ally.team != Main.LocalPlayer.team) { Ally = null; allyFound = false; }
+			if (Ally is not null && Ally.team != Main.LocalPlayer.team) { Ally = null; allyFound = false; }
 
-			if (Ally != null)
+			if (Ally is not null)
 			{
 				PlayerNameText.SetText(Ally.name);
 				if (!Ally.dead)
@@ -437,7 +437,7 @@ namespace EnhancedTeamUIDisplay
 
 		public override void MouseUp(UIMouseEvent evt)
 		{
-			if (ETUDConfig.Instanse.LockUIPosition && ETUDConfig.Instanse.AllowOnClickTeleport && Main.LocalPlayer.HasUnityPotion() && Ally != null && !Ally.dead && !Main.LocalPlayer.dead)
+			if (ETUDConfig.Instanse.LockUIPosition && ETUDConfig.Instanse.AllowOnClickTeleport && Main.LocalPlayer.HasUnityPotion() && Ally is not null && !Ally.dead && !Main.LocalPlayer.dead)
 			{
 				Main.LocalPlayer.UnityTeleport(Ally.TopLeft);
 				Main.LocalPlayer.TakeUnityPotion();
@@ -447,7 +447,7 @@ namespace EnhancedTeamUIDisplay
 		protected override void DrawSelf(SpriteBatch spriteBatch)
 		{
 			base.DrawSelf(spriteBatch);
-			if (IsMouseHovering && Ally != null) Main.instance.MouseText("Teleport to " + Ally.name, 0, 0);
+			if (IsMouseHovering && Ally is not null) Main.instance.MouseText("Teleport to " + Ally.name, 0, 0);
 		}
 	}
 

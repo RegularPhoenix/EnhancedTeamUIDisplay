@@ -104,7 +104,7 @@ namespace EnhancedTeamUIDisplay
 		{
 			base.DrawSelf(spriteBatch);
 
-			if (IsMouseHovering && Ally != null && ETUDConfig.Instanse.AllowOnClickTeleport) Main.instance.MouseText($"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.AllowTPLabel")} {Ally.name}");
+			if (IsMouseHovering && Ally is not null && ETUDConfig.Instanse.AllowOnClickTeleport) Main.instance.MouseText($"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.AllowTPLabel")} {Ally.name}");
 			if (IsMouseHovering && !ETUDConfig.Instanse.LockUIPosition) Main.instance.MouseText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.UIUnfrozen").Value);
 
 			Rectangle frame = Frame.GetInnerDimensions().ToRectangle();
@@ -164,14 +164,14 @@ namespace EnhancedTeamUIDisplay
 			HPBar.Height = (HPBar.Height - 12) / 2;
 
 			float HPQ;
-			if (Ally != null)
+			if (Ally is not null)
 			{
 				HPQ = (float)Ally.statLife / Ally.statLifeMax2;
 				HPQ = Utils.Clamp(HPQ, 0f, 1f);
 			}
 			else HPQ = 1;
 
-			if (Ally != null && ETUDConfig.Instanse.ShowOfflinePlayers)
+			if (Ally is not null && ETUDConfig.Instanse.ShowOfflinePlayers)
 			{
 				if (!Ally.active)
 				{
@@ -210,7 +210,7 @@ namespace EnhancedTeamUIDisplay
 					case "Magic":
 						RColor1 = Color.Blue;
 						RColor2 = Color.DeepSkyBlue;
-						if (Ally != null)
+						if (Ally is not null)
 						{
 							RQ = (float)Ally.statMana / Ally.statManaMax2;
 							RQ = Utils.Clamp(RQ, 0f, 1f);
@@ -220,7 +220,7 @@ namespace EnhancedTeamUIDisplay
 					case "Summon":
 						RColor1 = Color.Blue;
 						RColor2 = Color.DeepSkyBlue;
-						if (Ally != null)
+						if (Ally is not null)
 						{
 							RQ = (float)Ally.statMana / Ally.statManaMax2;
 							RQ = Utils.Clamp(RQ, 0f, 1f);
@@ -230,7 +230,7 @@ namespace EnhancedTeamUIDisplay
 					case "Rogue":
 						RColor1 = Color.Yellow;
 						RColor2 = Color.Yellow;
-						if(Ally != null)
+						if(Ally is not null)
 						{							
 							RQ = CalamityHelper.RogueStealth(Ally) / CalamityHelper.RogueStealthMax(Ally);
 							RQ = Utils.Clamp(RQ, 0f, 1f);
@@ -240,7 +240,7 @@ namespace EnhancedTeamUIDisplay
 					case "None":
 						RColor1 = Color.Blue;
 						RColor2 = Color.DeepSkyBlue;
-						if (Ally != null)
+						if (Ally is not null)
 						{
 							RQ = (float)Ally.statMana / Ally.statManaMax2;
 							RQ = Utils.Clamp(RQ, 0f, 1f);
@@ -250,7 +250,7 @@ namespace EnhancedTeamUIDisplay
 					default:
 						RColor1 = Color.Blue;
 						RColor2 = Color.DeepSkyBlue;
-						if (Ally != null)
+						if (Ally is not null)
 						{
 							RQ = (float)Ally.statMana / Ally.statManaMax2;
 							RQ = Utils.Clamp(RQ, 0f, 1f);
@@ -263,7 +263,7 @@ namespace EnhancedTeamUIDisplay
 			{
 				RColor1 = Color.Blue;
 				RColor2 = Color.DeepSkyBlue;
-				if (Ally != null)
+				if (Ally is not null)
 				{
 					RQ = (float)Ally.statMana / Ally.statManaMax2;
 					RQ = Utils.Clamp(RQ, 0f, 1f);
@@ -278,7 +278,7 @@ namespace EnhancedTeamUIDisplay
 			RBar.Y += 30;
 			RBar.Height = (RBar.Height - 12) / 2;
 
-			if (Ally != null && ETUDConfig.Instanse.ShowOfflinePlayers)
+			if (Ally is not null && ETUDConfig.Instanse.ShowOfflinePlayers)
 			{
 				if (!Ally.active)
 				{
@@ -306,7 +306,7 @@ namespace EnhancedTeamUIDisplay
 			
 			if (allyFound && Main.LocalPlayer.team != Ally.team) allyFound = false;
 
-			if ((allyFound || Ally != null) && !Ally.active && !ETUDConfig.Instanse.ShowOfflinePlayers)
+			if ((allyFound || Ally is not null) && !Ally.active && !ETUDConfig.Instanse.ShowOfflinePlayers)
 			{
 				Ally = null;
 				allyFound = false;
@@ -320,7 +320,7 @@ namespace EnhancedTeamUIDisplay
 				Name.SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.NoPlayersLabel")); HPlabel.SetText(""); Rlabel.SetText(""); Ammolabel.SetText("");
 				for (int i = 0; i < Main.maxPlayers; i++)
 				{
-					if (Main.player[i] != null && Main.player[i].team == Main.LocalPlayer.team && Main.player[i] != Main.LocalPlayer && Main.player[i] != ETUDPanel3.Ally && Main.player[i] != ETUDPanel2.Ally && (ETUDConfig.Instanse.ShowOfflinePlayers || Main.player[i].active)) // && Main.player[i].active
+					if (Main.player[i] is not null && Main.player[i].team == Main.LocalPlayer.team && Main.player[i] != Main.LocalPlayer && Main.player[i] != ETUDPanel3.Ally && Main.player[i] != ETUDPanel2.Ally && (ETUDConfig.Instanse.ShowOfflinePlayers || Main.player[i].active)) // && Main.player[i].active
 					{
 						Ally = Main.player[i];
 						allyFound = true;
@@ -329,9 +329,9 @@ namespace EnhancedTeamUIDisplay
 				}
 			}
 
-			if (Ally != null && Ally.team != Main.LocalPlayer.team) { Ally = null; allyFound = false; }
+			if (Ally is not null && Ally.team != Main.LocalPlayer.team) { Ally = null; allyFound = false; }
 
-			if (Ally != null)
+			if (Ally is not null)
 			{
 				if (!Ally.dead)
 				{
@@ -419,7 +419,7 @@ namespace EnhancedTeamUIDisplay
 				base.MouseUp(evt);
 				DragEnd(evt);
 			}
-			else if (ETUDConfig.Instanse.LockUIPosition && ETUDConfig.Instanse.AllowOnClickTeleport && Main.LocalPlayer.HasUnityPotion() && Ally != null && !Ally.dead && !Main.LocalPlayer.dead)
+			else if (ETUDConfig.Instanse.LockUIPosition && ETUDConfig.Instanse.AllowOnClickTeleport && Main.LocalPlayer.HasUnityPotion() && Ally is not null && !Ally.dead && !Main.LocalPlayer.dead)
 			{
 				Main.LocalPlayer.UnityTeleport(Ally.TopLeft);
 				Main.LocalPlayer.TakeUnityPotion();
@@ -534,7 +534,7 @@ namespace EnhancedTeamUIDisplay
 		{
 			base.DrawSelf(spriteBatch);
 
-			if (IsMouseHovering && Ally != null && ETUDConfig.Instanse.AllowOnClickTeleport) Main.instance.MouseText($"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.AllowTPLabel")} {Ally.name}");
+			if (IsMouseHovering && Ally is not null && ETUDConfig.Instanse.AllowOnClickTeleport) Main.instance.MouseText($"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.AllowTPLabel")} {Ally.name}");
 			if (IsMouseHovering && !ETUDConfig.Instanse.LockUIPosition) Main.instance.MouseText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.UIUnfrozen").Value);
 
 			Rectangle frame = Frame.GetInnerDimensions().ToRectangle();
@@ -594,14 +594,14 @@ namespace EnhancedTeamUIDisplay
 			HPBar.Height = (HPBar.Height - 12) / 2;
 
 			float HPQ;
-			if (Ally != null)
+			if (Ally is not null)
 			{
 				HPQ = (float)Ally.statLife / Ally.statLifeMax2;
 				HPQ = Utils.Clamp(HPQ, 0f, 1f);
 			}
 			else HPQ = 1;
 
-			if (Ally != null && ETUDConfig.Instanse.ShowOfflinePlayers)
+			if (Ally is not null && ETUDConfig.Instanse.ShowOfflinePlayers)
 			{
 				if (!Ally.active)
 				{
@@ -640,7 +640,7 @@ namespace EnhancedTeamUIDisplay
 					case "Magic":
 						RColor1 = Color.Blue;
 						RColor2 = Color.DeepSkyBlue;
-						if (Ally != null)
+						if (Ally is not null)
 						{
 							RQ = (float)Ally.statMana / Ally.statManaMax2;
 							RQ = Utils.Clamp(RQ, 0f, 1f);
@@ -650,7 +650,7 @@ namespace EnhancedTeamUIDisplay
 					case "Summon":
 						RColor1 = Color.Blue;
 						RColor2 = Color.DeepSkyBlue;
-						if (Ally != null)
+						if (Ally is not null)
 						{
 							RQ = (float)Ally.statMana / Ally.statManaMax2;
 							RQ = Utils.Clamp(RQ, 0f, 1f);
@@ -660,7 +660,7 @@ namespace EnhancedTeamUIDisplay
 					case "Rogue":
 						RColor1 = Color.Yellow;
 						RColor2 = Color.Yellow;
-						if (Ally != null)
+						if (Ally is not null)
 						{
 							RQ = CalamityHelper.RogueStealth(Ally) / CalamityHelper.RogueStealthMax(Ally);
 							RQ = Utils.Clamp(RQ, 0f, 1f);
@@ -670,7 +670,7 @@ namespace EnhancedTeamUIDisplay
 					case "None":
 						RColor1 = Color.Blue;
 						RColor2 = Color.DeepSkyBlue;
-						if (Ally != null)
+						if (Ally is not null)
 						{
 							RQ = (float)Ally.statMana / Ally.statManaMax2;
 							RQ = Utils.Clamp(RQ, 0f, 1f);
@@ -680,7 +680,7 @@ namespace EnhancedTeamUIDisplay
 					default:
 						RColor1 = Color.Blue;
 						RColor2 = Color.DeepSkyBlue;
-						if (Ally != null)
+						if (Ally is not null)
 						{
 							RQ = (float)Ally.statMana / Ally.statManaMax2;
 							RQ = Utils.Clamp(RQ, 0f, 1f);
@@ -693,7 +693,7 @@ namespace EnhancedTeamUIDisplay
 			{
 				RColor1 = Color.Blue;
 				RColor2 = Color.DeepSkyBlue;
-				if (Ally != null)
+				if (Ally is not null)
 				{
 					RQ = (float)Ally.statMana / Ally.statManaMax2;
 					RQ = Utils.Clamp(RQ, 0f, 1f);
@@ -708,7 +708,7 @@ namespace EnhancedTeamUIDisplay
 			RBar.Y += 30;
 			RBar.Height = (RBar.Height - 12) / 2;
 
-			if (Ally != null && ETUDConfig.Instanse.ShowOfflinePlayers)
+			if (Ally is not null && ETUDConfig.Instanse.ShowOfflinePlayers)
 			{
 				if (!Ally.active)
 				{
@@ -751,7 +751,7 @@ namespace EnhancedTeamUIDisplay
 				Name.SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.NoPlayersLabel2")); HPlabel.SetText(""); Rlabel.SetText(""); Ammolabel.SetText("");
 				for (int i = 0; i < Main.maxPlayers; i++)
 				{
-					if (Main.player[i] != null && Main.player[i].team == Main.LocalPlayer.team && Main.player[i] != Main.LocalPlayer && Main.player[i] != ETUDPanel3.Ally && Main.player[i] != ETUDPanel1.Ally && (ETUDConfig.Instanse.ShowOfflinePlayers || Main.player[i].active)) // && Main.player[i].active
+					if (Main.player[i] is not null && Main.player[i].team == Main.LocalPlayer.team && Main.player[i] != Main.LocalPlayer && Main.player[i] != ETUDPanel3.Ally && Main.player[i] != ETUDPanel1.Ally && (ETUDConfig.Instanse.ShowOfflinePlayers || Main.player[i].active)) // && Main.player[i].active
 					{
 						Ally = Main.player[i];
 						allyFound = true;
@@ -760,7 +760,7 @@ namespace EnhancedTeamUIDisplay
 				}
 			}
 
-			if (Ally != null && allyFound == true && ETUDPanel1.Ally == null && ETUDPanel1.allyFound == false)
+			if (Ally is not null && allyFound == true && ETUDPanel1.Ally is null && ETUDPanel1.allyFound == false)
 			{
 				ETUDPanel1.Ally = Ally;
 				ETUDPanel1.allyFound = true;
@@ -769,9 +769,9 @@ namespace EnhancedTeamUIDisplay
 				allyFound = false;
 			}
 
-			if (Ally != null && Ally.team != Main.LocalPlayer.team) { Ally = null; allyFound = false; }
+			if (Ally is not null && Ally.team != Main.LocalPlayer.team) { Ally = null; allyFound = false; }
 
-			if (Ally != null)
+			if (Ally is not null)
 			{
 				if (!Ally.dead)
 				{
@@ -820,7 +820,7 @@ namespace EnhancedTeamUIDisplay
 
 		public override void MouseUp(UIMouseEvent evt)
 		{
-			if (ETUDConfig.Instanse.LockUIPosition && ETUDConfig.Instanse.AllowOnClickTeleport && Main.LocalPlayer.HasUnityPotion() && Ally != null && !Ally.dead && !Main.LocalPlayer.dead)
+			if (ETUDConfig.Instanse.LockUIPosition && ETUDConfig.Instanse.AllowOnClickTeleport && Main.LocalPlayer.HasUnityPotion() && Ally is not null && !Ally.dead && !Main.LocalPlayer.dead)
 			{
 				Main.LocalPlayer.UnityTeleport(Ally.TopLeft);
 				Main.LocalPlayer.TakeUnityPotion();
@@ -915,7 +915,7 @@ namespace EnhancedTeamUIDisplay
 		{
 			base.DrawSelf(spriteBatch);
 
-			if (IsMouseHovering && Ally != null && ETUDConfig.Instanse.AllowOnClickTeleport) Main.instance.MouseText($"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.AllowTPLabel")} {Ally.name}");
+			if (IsMouseHovering && Ally is not null && ETUDConfig.Instanse.AllowOnClickTeleport) Main.instance.MouseText($"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.AllowTPLabel")} {Ally.name}");
 			if (IsMouseHovering && !ETUDConfig.Instanse.LockUIPosition) Main.instance.MouseText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.UIUnfrozen").Value);
 
 			Rectangle frame = Frame.GetInnerDimensions().ToRectangle();
@@ -975,14 +975,14 @@ namespace EnhancedTeamUIDisplay
 			HPBar.Height = (HPBar.Height - 12) / 2;
 
 			float HPQ;
-			if (Ally != null)
+			if (Ally is not null)
 			{
 				HPQ = (float)Ally.statLife / Ally.statLifeMax2;
 				HPQ = Utils.Clamp(HPQ, 0f, 1f);
 			}
 			else HPQ = 1;
 
-			if (Ally != null && ETUDConfig.Instanse.ShowOfflinePlayers)
+			if (Ally is not null && ETUDConfig.Instanse.ShowOfflinePlayers)
 			{
 				if (!Ally.active)
 				{
@@ -1021,7 +1021,7 @@ namespace EnhancedTeamUIDisplay
 					case "Magic":
 						RColor1 = Color.Blue;
 						RColor2 = Color.DeepSkyBlue;
-						if (Ally != null)
+						if (Ally is not null)
 						{
 							RQ = (float)Ally.statMana / Ally.statManaMax2;
 							RQ = Utils.Clamp(RQ, 0f, 1f);
@@ -1031,7 +1031,7 @@ namespace EnhancedTeamUIDisplay
 					case "Summon":
 						RColor1 = Color.Blue;
 						RColor2 = Color.DeepSkyBlue;
-						if (Ally != null)
+						if (Ally is not null)
 						{
 							RQ = (float)Ally.statMana / Ally.statManaMax2;
 							RQ = Utils.Clamp(RQ, 0f, 1f);
@@ -1041,7 +1041,7 @@ namespace EnhancedTeamUIDisplay
 					case "Rogue":
 						RColor1 = Color.Yellow;
 						RColor2 = Color.Yellow;
-						if (Ally != null)
+						if (Ally is not null)
 						{
 							RQ = CalamityHelper.RogueStealth(Ally) / CalamityHelper.RogueStealthMax(Ally);
 							RQ = Utils.Clamp(RQ, 0f, 1f);
@@ -1051,7 +1051,7 @@ namespace EnhancedTeamUIDisplay
 					case "None":
 						RColor1 = Color.Blue;
 						RColor2 = Color.DeepSkyBlue;
-						if (Ally != null)
+						if (Ally is not null)
 						{
 							RQ = (float)Ally.statMana / Ally.statManaMax2;
 							RQ = Utils.Clamp(RQ, 0f, 1f);
@@ -1061,7 +1061,7 @@ namespace EnhancedTeamUIDisplay
 					default:
 						RColor1 = Color.Blue;
 						RColor2 = Color.DeepSkyBlue;
-						if (Ally != null)
+						if (Ally is not null)
 						{
 							RQ = (float)Ally.statMana / Ally.statManaMax2;
 							RQ = Utils.Clamp(RQ, 0f, 1f);
@@ -1074,7 +1074,7 @@ namespace EnhancedTeamUIDisplay
 			{
 				RColor1 = Color.Blue;
 				RColor2 = Color.DeepSkyBlue;
-				if (Ally != null)
+				if (Ally is not null)
 				{
 					RQ = (float)Ally.statMana / Ally.statManaMax2;
 					RQ = Utils.Clamp(RQ, 0f, 1f);
@@ -1089,7 +1089,7 @@ namespace EnhancedTeamUIDisplay
 			RBar.Y += 30;
 			RBar.Height = (RBar.Height - 12) / 2;
 
-			if (Ally != null && ETUDConfig.Instanse.ShowOfflinePlayers)
+			if (Ally is not null && ETUDConfig.Instanse.ShowOfflinePlayers)
 			{
 				if (!Ally.active)
 				{
@@ -1132,7 +1132,7 @@ namespace EnhancedTeamUIDisplay
 				Name.SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.NoPlayersLabel2")); HPlabel.SetText(""); Rlabel.SetText(""); Ammolabel.SetText("");
 				for (int i = 0; i < Main.maxPlayers; i++)
 				{
-					if (Main.player[i] != null && Main.player[i].team == Main.LocalPlayer.team && Main.player[i] != Main.LocalPlayer && Main.player[i] != ETUDPanel1.Ally && Main.player[i] != ETUDPanel2.Ally && (ETUDConfig.Instanse.ShowOfflinePlayers || Main.player[i].active)) // && Main.player[i].active
+					if (Main.player[i] is not null && Main.player[i].team == Main.LocalPlayer.team && Main.player[i] != Main.LocalPlayer && Main.player[i] != ETUDPanel1.Ally && Main.player[i] != ETUDPanel2.Ally && (ETUDConfig.Instanse.ShowOfflinePlayers || Main.player[i].active)) // && Main.player[i].active
 					{
 						Ally = Main.player[i];
 						allyFound = true;
@@ -1141,7 +1141,7 @@ namespace EnhancedTeamUIDisplay
 				}
 			}
 
-			if (Ally != null && allyFound == true && ETUDPanel1.Ally == null && ETUDPanel1.allyFound == false)
+			if (Ally is not null && allyFound == true && ETUDPanel1.Ally is null && ETUDPanel1.allyFound == false)
 			{
 				ETUDPanel1.Ally = Ally;
 				ETUDPanel1.allyFound = true;
@@ -1150,9 +1150,9 @@ namespace EnhancedTeamUIDisplay
 				allyFound = false;
 			}
 
-			if (Ally != null && Ally.team != Main.LocalPlayer.team) { Ally = null; allyFound = false; }
+			if (Ally is not null && Ally.team != Main.LocalPlayer.team) { Ally = null; allyFound = false; }
 
-			if (Ally != null)
+			if (Ally is not null)
 			{
 				if (!Ally.dead)
 				{
@@ -1201,7 +1201,7 @@ namespace EnhancedTeamUIDisplay
 
 		public override void MouseUp(UIMouseEvent evt)
 		{
-			if (ETUDConfig.Instanse.LockUIPosition && ETUDConfig.Instanse.AllowOnClickTeleport && Main.LocalPlayer.HasUnityPotion() && Ally != null && !Ally.dead && !Main.LocalPlayer.dead)
+			if (ETUDConfig.Instanse.LockUIPosition && ETUDConfig.Instanse.AllowOnClickTeleport && Main.LocalPlayer.HasUnityPotion() && Ally is not null && !Ally.dead && !Main.LocalPlayer.dead)
 			{
 				Main.LocalPlayer.UnityTeleport(Ally.TopLeft);
 				Main.LocalPlayer.TakeUnityPotion();
@@ -1214,9 +1214,9 @@ namespace EnhancedTeamUIDisplay
 		// TODO: Rewrite completely
 		public static string DeterminePlayerClass(Player player)
 		{
-			if (player == null) return "None";
+			if (player is null) return "None";
 
-			if (ETUD.CalamityMod != null)
+			if (ETUD.CalamityMod is not null)
 			{
 				if (ETUD.CalamityMod.TryFind<DamageClass>("RogueDamageClass", out var rogueclass))
 				{
