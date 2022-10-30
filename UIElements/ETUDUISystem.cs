@@ -101,11 +101,10 @@ namespace EnhancedTeamUIDisplay
 					if (Main.npc[i] is not null && Main.npc[i].active && Main.npc[i].boss)
 					{
 						if (ETUDConfig.Instanse.EnableAutoToggle && ETUDInterface.CurrentState is null) OpenETUDInterface();					
-						if (ETUDConfig.Instanse.ShowBossSummary) ETUDAdditionalOptions.StartBossSummary();
+						ETUDAdditionalOptions.OnBossFightStart();
 						AnyBossFound = true;
 						BossEvaded = false;
-						FirstBossName = Main.npc[i].FullName;
-						ETUD.Instance.ResetVariables();
+						FirstBossName = Main.npc[i].FullName;						
 					}
 				}
 			}
@@ -156,10 +155,10 @@ namespace EnhancedTeamUIDisplay
 
 						if (playeralive && !BossEvaded)
 						{
-							ETUDAdditionalOptions.EndBossSummary(FirstBossName + (KilledBosses.Count > 1 ? (" and " + (KilledBosses.Count - 1) + " other bosses") : ""), "> You have killed this boss " + tempDictionary[FirstBossName][0] + " time(s).");
+							ETUDAdditionalOptions.OnBossFightEnd(FirstBossName + (KilledBosses.Count > 1 ? (" and " + (KilledBosses.Count - 1) + " other bosses") : ""), "> You have killed this boss " + tempDictionary[FirstBossName][0] + " time(s).");
 						}
-						else if (playeralive && BossEvaded && KilledBosses.Count > 0) ETUDAdditionalOptions.EndBossSummary("First boss has escaped, but you killed " + KilledBosses.Count + " other bosses. ", "> You have wiped on this boss (" + FirstBossName + ") " + tempDictionary[FirstBossName][1] + " time(s).", true);
-						else ETUDAdditionalOptions.EndBossSummary("", "> You have wiped on this boss (" + FirstBossName + ") " + tempDictionary[FirstBossName][1] + " time(s).");	
+						else if (playeralive && BossEvaded && KilledBosses.Count > 0) ETUDAdditionalOptions.OnBossFightEnd("First boss has escaped, but you killed " + KilledBosses.Count + " other bosses. ", "> You have wiped on this boss (" + FirstBossName + ") " + tempDictionary[FirstBossName][1] + " time(s).", true);
+						else ETUDAdditionalOptions.OnBossFightEnd("", "> You have wiped on this boss (" + FirstBossName + ") " + tempDictionary[FirstBossName][1] + " time(s).");	
 					}
 					AnyBossFound = false;
 					FirstBossName = "";

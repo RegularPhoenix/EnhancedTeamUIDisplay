@@ -52,15 +52,30 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 
 		internal static bool AwaitsReset = false;
 		internal static bool NoPlayersInCombat = true;
+		internal static bool BossFightEndedRecently = false;
 
 		public override void PostUpdatePlayers()
 		{		
 			base.PostUpdatePlayers();
 
+			if ((DateTime.Now - ETUDAdditionalOptions.BossFightEndTime).Seconds > 20) BossFightEndedRecently = true;
+
 			NoPlayersInCombat = true;
+
 			for (int i = 0; i < 256; i++) if (Main.player[i].active) if (Main.player[i].GetModPlayer<DamageCounterPlayer>().InCombat) NoPlayersInCombat = false;
-			if (!NoPlayersInCombat) AwaitsReset = true;
-			if (NoPlayersInCombat && AwaitsReset) ETUD.Instance.ResetVariables();
+
+			if (!BossFightEndedRecently)
+			{
+				if (!NoPlayersInCombat) AwaitsReset = true;
+				if (NoPlayersInCombat && AwaitsReset) ETUD.Instance.ResetVariables();
+				if (NoPlayersInCombat && AwaitsReset) Main.NewText("Reset after 10 sec of no combat");
+			}
+			else if (!NoPlayersInCombat)
+			{
+				ETUD.Instance.ResetVariables();
+				BossFightEndedRecently = false;
+				Main.NewText("Ready to reset after 20 sec of last boss death");
+			}
 		}
 	}
 
@@ -167,7 +182,9 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 
 			StatNameText = new UIText("", .8f);
 			StatNameText.Top.Set(8, 0f);
-			StatNameText.Left.Set(11, 0f);
+			StatNameText.Width.Set(120, 0);
+			StatNameText.HAlign = .13f;
+			StatNameText.TextOriginX = 0;
 			Append(StatNameText);
 
 			UITexts = new UIText[]
@@ -180,10 +197,10 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 
 			for(int i = 0; i < 4; i++)
 			{			
-				UITexts[i].Height.Set(BarHeight, 0f);
-				UITexts[i].Width.Set(BarWidth - 20, 0f);
 				UITexts[i].Top.Set(32 + ((BarHeight + 4) * i), 0f);
-				UITexts[i].HAlign = .875f;
+				UITexts[i].Width.Set(140, 0);
+				UITexts[i].HAlign = .86f;
+				UITexts[i].TextOriginX = 1;
 				Append(UITexts[i]);
 			}
 
@@ -191,12 +208,10 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 			{
 				new UIImageButton(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/DamageCounter/ArrowLeft")),
 				new UIImageButton(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/DamageCounter/ArrowRight")),
-				//new UIImageButton(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/DamageCounter/X"))
 			};
 
 			buttons[0].OnClick += (e, l) => { if (StatNum == 0) StatNum = 3; else StatNum--; };
 			buttons[1].OnClick += (e, l) => { if (StatNum == 3) StatNum = 0; else StatNum++; };
-			//buttons[2].OnClick += (e, l) => ETUD.Instance.ResetVariables();
 			
 			for (int i = 0; i < 2; i++)
 			{

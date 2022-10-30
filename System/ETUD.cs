@@ -59,7 +59,12 @@ namespace EnhancedTeamUIDisplay
 			DamageCounterSystem.AwaitsReset = false;
 		}
 
-		public override void Unload() => ETUDHotkey = null;
+		public override void Unload()
+		{
+			ETUDHotkey = null;
+			Instance = null;
+			CalamityMod = null;
+		}
 
 		public override void PostSetupContent() => CalamityMod = ModLoader.TryGetMod("CalamityMod", out var mod) ? mod : null;	
 

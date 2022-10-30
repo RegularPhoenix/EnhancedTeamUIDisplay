@@ -20,16 +20,10 @@ namespace EnhancedTeamUIDisplay
 		public static bool extended;
 
 		private UIElement MainElement;
-		private UIImage panel;
-		private UIImage BG;
-		private UIText NameText;
-		private UIText ArmorText;
-		private UIText AccessoryText;
-		private UIText StatTextR;
-		private UIText StatTextL;
+		private UIImage panel, BG;
+		private UIText NameText, ArmorText, AccessoryText, StatTextR, StatTextL;
 
-		private UIText playerClassText;
-		private UIText statClassText;
+		private UIText playerClassText, statClassText;
 
 		public override void OnInitialize()
 		{
@@ -49,54 +43,49 @@ namespace EnhancedTeamUIDisplay
 			BG.Height.Set(264, 0f);
 
 			panel = new UIImage(extended ? ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/AllyStatPanelExtended") : ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/AllyStatPanel"));
-			panel.Left.Set(0, 0f);
-			panel.Top.Set(0, 0f);
 			panel.Width.Set(232, 0f);
 			panel.Height.Set(264, 0f);
 
 			ArmorText = new UIText("");
-			ArmorText.Left.Set(10, 0f);
 			ArmorText.Top.Set(35, 0f);
-			ArmorText.Width.Set(20, 0f);
-			ArmorText.Height.Set(50, 0f);
+			ArmorText.Width.Set(50, 0f);
+			ArmorText.HAlign = .15f;
+			ArmorText.TextOriginX = 0;
 
 			AccessoryText = new UIText("");
-			AccessoryText.Left.Set(14, 0f);
 			AccessoryText.Top.Set(72, 0f);
 			AccessoryText.Width.Set(50, 0f);
-			AccessoryText.Height.Set(50, 0f);
+			AccessoryText.HAlign = .10f;
+			AccessoryText.TextOriginX = 0;
 
 			NameText = new UIText("");
-			NameText.Left.Set(0, 0f);
 			NameText.Top.Set(8, 0f);
-			NameText.Width.Set(50, 0f);
-			NameText.Height.Set(50, 0f);
+			NameText.Width.Set(160, 0f);
 			NameText.HAlign = .5f;
 
 			StatTextR = new UIText("");
-			StatTextR.Left.Set(122, 0f);
 			StatTextR.Top.Set(37, 0f);
-			StatTextR.Width.Set(232, 0f);
 			StatTextR.Height.Set(50, 0f);
+			StatTextR.HAlign = .92f;
+			StatTextR.TextOriginX = 1;
 
 			StatTextL = new UIText("");
-			StatTextL.Left.Set(175, 0f);
 			StatTextL.Top.Set(37, 0f);
-			StatTextL.Width.Set(50, 0f);
 			StatTextL.Height.Set(50, 0f);
+			StatTextL.HAlign = .67f;
+			StatTextL.TextOriginX = 0;
 
 			playerClassText = new UIText("");
-			playerClassText.Left.Set(0, 0f);
 			playerClassText.Top.Set(136, 0f);
-			playerClassText.Width.Set(232, 0f);
-			playerClassText.Height.Set(50, 0f);
+			playerClassText.Width.Set(160, 0f);
 			playerClassText.HAlign = .5f;
 
-			statClassText = new UIText("");
-			statClassText.Left.Set(10, 0f);
+			statClassText = new UIText("", .8f);
 			statClassText.Top.Set(167, 0f);
-			statClassText.Width.Set(50, 0f);
-			statClassText.Height.Set(50, 0f);
+			statClassText.Width.Set(160, 0f);
+			statClassText.HAlign = .2f;
+			statClassText.TextOriginX = 0;
+			statClassText.DynamicallyScaleDownToWidth = true;
 
 
 			MainElement.Append(BG);
@@ -135,8 +124,8 @@ namespace EnhancedTeamUIDisplay
 				for (int i = 0; i < 3; i++) ArmorTextValue += Equipment[i] != 0 ? $"[i:{Equipment[i]}]" : "";
 				for (int i = 3; i < 10; i++) { if (Equipment[i] != 0) { AccessoriesTextValue += $"[i:{Equipment[i]}]"; currentAcc++; if (currentAcc == 4) AccessoriesTextValue += "\n"; } }
 
-				StatTextRValue += $"[i:{ItemID.LifeCrystal}]{Ally.statLifeMax2}\n[i:{ItemID.CobaltShield}]{Ally.statDefense}\n[i:{ItemID.HermesBoots}]{(int)((Ally.accRunSpeed + Ally.maxRunSpeed) / 2f * Ally.moveSpeed * 6)}";
-				StatTextLValue += $"[i:{ItemID.RegenerationPotion}]{Ally.lifeRegen / 2}\n[i:{ItemID.PaladinsShield}]{(int)(Ally.endurance * 100)}\n[i:{ItemID.LeafWings}]{(Math.Round(Ally.wingTimeMax / 60.0, 2) <= 0 ? Math.Round(Ally.wingTimeMax / 60.0, 2) : "N/A")}";
+				StatTextLValue += $"[i:{ItemID.LifeCrystal}]{Ally.statLifeMax2}\n[i:{ItemID.CobaltShield}]{Ally.statDefense}\n[i:{ItemID.HermesBoots}]{(int)((Ally.accRunSpeed + Ally.maxRunSpeed) / 2f * Ally.moveSpeed * 6)}";
+				StatTextRValue += $"[i:{ItemID.RegenerationPotion}]{Ally.lifeRegen / 2}\n[i:{ItemID.PaladinsShield}]{(int)(Ally.endurance * 100)}\n[i:{ItemID.LeafWings}]{(Math.Round(Ally.wingTimeMax / 60.0, 2) <= 0 ? Math.Round(Ally.wingTimeMax / 60.0, 2) : "-")}";
 
 				StatTextR.SetText(StatTextRValue);
 				StatTextL.SetText(StatTextLValue);
@@ -147,26 +136,27 @@ namespace EnhancedTeamUIDisplay
 				if (extended)
 				{
 					string AllyClass = MiscEventHandler.DeterminePlayerClass(Ally);
+					Mod CMod = ETUD.CalamityMod;
 
 					playerClassText.SetText((AllyClass == "None" || string.IsNullOrEmpty(AllyClass)) ? "No class" : AllyClass);
 
 					switch (AllyClass)
 					{
 						case "Melee":
-							statClassText.SetText($"[i:{ItemID.IronBroadsword}] Damage: {GetClassDamage(DamageClass.Melee, Ally)}\nCrit. Chance: {(int)Ally.GetTotalCritChance(DamageClass.Melee)}\n[i:{ItemID.IronBroadsword}] Attack Speed: {1f / Ally.GetTotalAttackSpeed(DamageClass.Melee) * 100}%\n[i:{ItemID.FleshKnuckles}] Aggro: {Ally.aggro}");
+							statClassText.SetText($"[i:{ItemID.IronBroadsword}] Damage Increase: {GetClassDamage(DamageClass.Melee, Ally)}\n[i:{ItemID.PsychoKnife}] Crit. Chance: {(int)Ally.GetTotalCritChance(DamageClass.Melee)}\n[i:{ItemID.Arkhalis}] Attack Speed: {(int)(Ally.GetTotalAttackSpeed(DamageClass.Melee) * 100)}%\n[i:{ItemID.FleshKnuckles}] Aggro: {Ally.aggro}");
 							break;
 						case "Ranged":
-							statClassText.SetText($"[i:{ItemID.IronBow}] Damage: {GetClassDamage(DamageClass.Ranged, Ally)}\nCrit. Chance: {(int)Ally.GetTotalCritChance(DamageClass.Ranged)}\n[i:{ItemID.SharkToothNecklace}] Armor Penetr.:{Ally.GetArmorPenetration(DamageClass.Generic)}");
+							statClassText.SetText($"[i:{ItemID.IronBow}] Damage Increase: {GetClassDamage(DamageClass.Ranged, Ally)}\n[i:{ItemID.SniperRifle}] Crit. Chance: {(int)Ally.GetTotalCritChance(DamageClass.Ranged)}\n[i:{ItemID.SharkToothNecklace}] Armor Penetration: {Ally.GetArmorPenetration(DamageClass.Generic)}");
 							break;
 						case "Magic":
-							statClassText.SetText($"[i:{ItemID.MagicalHarp}] Damage: {GetClassDamage(DamageClass.Magic, Ally)}\nCrit. Chance: {(int)Ally.GetTotalCritChance(DamageClass.Magic)}\n[i:{ItemID.CrystalBall}] MP Cost Reduct.: {Math.Round((1.0 - Ally.manaCost) * 100)}%");
+							statClassText.SetText($"[i:{ItemID.MagicalHarp}] Damage Increase: {GetClassDamage(DamageClass.Magic, Ally)}\n[i:{ItemID.SkyFracture}] Crit. Chance: {(int)Ally.GetTotalCritChance(DamageClass.Magic)}\n[i:{ItemID.CrystalBall}] MP Cost Reduction: {Math.Round((1.0 - Ally.manaCost) * 100)}%");
 							break;
 						case "Summon":
-							statClassText.SetText($"[i:{ItemID.ImpStaff}] Damage: {GetClassDamage(DamageClass.Summon, Ally)}\nCrit. Chance: {(int)Ally.GetTotalCritChance(DamageClass.Summon)}\n[i:{ItemID.ImpStaff}] Max Minions: {Ally.maxMinions}\n[i:{ItemID.DD2BallistraTowerT1Popper}] Max Centries: {Ally.maxTurrets}");
+							statClassText.SetText($"[i:{ItemID.StardustCellStaff}] Damage Increase: {GetClassDamage(DamageClass.Summon, Ally)}\n[i:{ItemID.MonkAltHead}] Crit. Chance: {(int)Ally.GetTotalCritChance(DamageClass.Summon)}\n[i:{ItemID.ImpStaff}] Max Minions: {Ally.maxMinions}\n[i:{ItemID.DD2BallistraTowerT1Popper}] Max Centries: {Ally.maxTurrets}");
 							break;
 						case "Rogue":
-							if (ETUD.CalamityMod.TryFind<DamageClass>("RogueDamageClass", out var rogueclass))
-								statClassText.SetText($"[i:{ItemID.IronBroadsword}] Damage: {GetClassDamage(rogueclass, Ally)}\nCrit. Chance: {(int)Ally.GetTotalCritChance(rogueclass)}");
+							if (CMod is not null && CMod.TryFind<DamageClass>("RogueDamageClass", out var rogueclass))
+								statClassText.SetText($"[i:{CMod.Find<ModItem>("HeavenfallenStardisk").Type}] Damage Increase: {GetClassDamage(rogueclass, Ally)}\n[i:{CMod.Find<ModItem>("GleamingDagger").Type}] Crit. Chance: {(int)Ally.GetTotalCritChance(rogueclass)}");
 							break;
 						case "None":
 							statClassText.SetText($"");

@@ -30,10 +30,8 @@ namespace EnhancedTeamUIDisplay
 		internal static Player Ally;
 		internal static bool allyFound;
 
-		internal Color HPColor1;
-		internal Color HPColor2;
-		internal Color RColor1;
-		internal Color RColor2;
+		internal Color HPColor;
+		internal Color RColor;
 
 
 		public override void OnInitialize()
@@ -43,51 +41,41 @@ namespace EnhancedTeamUIDisplay
 			Height.Pixels = height;
 			MainElement = new UIElement();
 
-			//Panel position
-			//MainElement.Left.Set(0, 0f);
-			//MainElement.Top.Set(0, 0f);
-
 			MainElement.Width.Set(200, 0f);
 			MainElement.Height.Set(60, 0f);
 
 			//Frame
 			Frame = new UIImage(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/Panel"));
-			Frame.Left.Set(0, 0f);
-			Frame.Top.Set(0, 0f);
 			Frame.Width.Set(200, 0f);
 			Frame.Height.Set(60, 0f);
 
-
 			//Name
 			Name = new UIText("", 0.7f);
-			Name.Left.Set(10, 0f);
 			Name.Top.Set(12, 0f);
-			Name.Width.Set(80, 0f);
-			Name.Height.Set(60, 0f);
-			Name.HAlign = 0;
+			Name.Width.Set(90, 0f);
+			Name.HAlign = .15f;
+			Name.TextOriginX = 0;
 
 			//HP
 			HPlabel = new UIText("", 0.7f);
-			HPlabel.Left.Set(-7, 0f);
 			HPlabel.Top.Set(12, 0f);
-			HPlabel.Width.Set(50, 0f);
-			HPlabel.Height.Set(30, 0f);
-			HPlabel.HAlign = 1;
+			HPlabel.Width.Set(90, 0f);
+			HPlabel.HAlign = .85f;
+			HPlabel.TextOriginX = 1;
 
 			//R
 			Rlabel = new UIText("", 0.7f);
-			Rlabel.Left.Set(-7, 0f);
 			Rlabel.Top.Set(37, 0f);
-			Rlabel.Width.Set(50, 0f);
-			Rlabel.Height.Set(30, 0f);
-			Rlabel.HAlign = 1;
+			Rlabel.Width.Set(90, 0f);
+			Rlabel.HAlign = .85f;
+			Rlabel.TextOriginX = 1;
 
 			//Ammo
 			Ammolabel = new UIText("", 0.7f);
-			Ammolabel.Left.Set(10, 0f);
 			Ammolabel.Top.Set(37, 0f);
-			Ammolabel.Width.Set(50, 0f);
-			Ammolabel.Height.Set(30, 0f);
+			Rlabel.Width.Set(90, 0f);
+			Ammolabel.HAlign = .15f;
+			Ammolabel.TextOriginX = 0;
 
 			MainElement.Append(Frame);
 			MainElement.Append(Name);
@@ -112,156 +100,51 @@ namespace EnhancedTeamUIDisplay
 
 			string PlayerClass = MiscEventHandler.DeterminePlayerClass(Ally);
 
-			// HP Color
-			Tuple<Color, Color, Color, Color> classColours = MiscEventHandler.GetClassColours(ETUDConfig.Instanse.EnableColorMatch ? PlayerClass : "None");
-			HPColor1 = classColours.Item1;
-			HPColor2 = classColours.Item2;
+			// HP
+			Tuple<Color, Color> classColours = MiscEventHandler.GetClassColours((Ally is not null && ETUDConfig.Instanse.ShowOfflinePlayers && !Ally.active) ? "Offline" : ETUDConfig.Instanse.EnableColorMatch ? PlayerClass : "None");
+			HPColor = classColours.Item1;
 
-			// HPBar
 			Rectangle HPBar = Frame.GetInnerDimensions().ToRectangle();
 			HPBar.X += 8;
 			HPBar.Width -= 16;
 			HPBar.Y += 6;
 			HPBar.Height = (HPBar.Height - 12) / 2;
 
-			float HPQ;
+			float HPQ = 1;
 			if (Ally is not null)
 			{
 				HPQ = (float)Ally.statLife / Ally.statLifeMax2;
 				HPQ = Utils.Clamp(HPQ, 0f, 1f);
-			}
-			else HPQ = 1;
-
-			if (Ally is not null && ETUDConfig.Instanse.ShowOfflinePlayers)
-			{
-				if (!Ally.active)
-				{
-					HPColor1 = Color.LightGray;
-					HPColor2 = Color.LightGray;
-					HPQ = 1;
-				}
 			}
 
 			int HPleft = HPBar.Left;
 			int HPright = HPBar.Right;
 			int HPsteps = (int)((HPright - HPleft) * HPQ);
 			for (int i = 0; i < HPsteps; i++)
-			{
-				float hppercent = (float)i / (HPright - HPleft);
-				spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle(HPleft + i, HPBar.Y, 1, HPBar.Height), Color.Lerp(HPColor1, HPColor2, hppercent));
-			}
-
+				spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle(HPleft + i, HPBar.Y, 1, HPBar.Height), HPColor);
+			
 			// Resource
-			float RQ;
-			if (ETUDConfig.Instanse.EnableColorMatch)
-			{
-				switch (PlayerClass)
-				{
-					case "Melee":
-						RColor1 = Color.IndianRed;
-						RColor2 = Color.DarkRed;
-						RQ = 1;
-						// TODO: Show exact healing potion CD
-						break;
-					case "Ranged":
-						RColor1 = Color.OrangeRed;
-						RColor2 = Color.Orange;
-						RQ = 1;
-						break;
-					case "Magic":
-						RColor1 = Color.Blue;
-						RColor2 = Color.DeepSkyBlue;
-						if (Ally is not null)
-						{
-							RQ = (float)Ally.statMana / Ally.statManaMax2;
-							RQ = Utils.Clamp(RQ, 0f, 1f);
-						}
-						else RQ = 1;
-						break;
-					case "Summon":
-						RColor1 = Color.Blue;
-						RColor2 = Color.DeepSkyBlue;
-						if (Ally is not null)
-						{
-							RQ = (float)Ally.statMana / Ally.statManaMax2;
-							RQ = Utils.Clamp(RQ, 0f, 1f);
-						}
-						else RQ = 1;
-						break;
-					case "Rogue":
-						RColor1 = Color.Yellow;
-						RColor2 = Color.Yellow;
-						if(Ally is not null)
-						{							
-							RQ = CalamityHelper.RogueStealth(Ally) / CalamityHelper.RogueStealthMax(Ally);
-							RQ = Utils.Clamp(RQ, 0f, 1f);
-						}
-						else RQ = 1;
-						break;
-					case "None":
-						RColor1 = Color.Blue;
-						RColor2 = Color.DeepSkyBlue;
-						if (Ally is not null)
-						{
-							RQ = (float)Ally.statMana / Ally.statManaMax2;
-							RQ = Utils.Clamp(RQ, 0f, 1f);
-						}
-						else RQ = 1;
-						break;
-					default:
-						RColor1 = Color.Blue;
-						RColor2 = Color.DeepSkyBlue;
-						if (Ally is not null)
-						{
-							RQ = (float)Ally.statMana / Ally.statManaMax2;
-							RQ = Utils.Clamp(RQ, 0f, 1f);
-						}
-						else RQ = 1;
-						break;
-				}
-			}
-			else
-			{
-				RColor1 = Color.Blue;
-				RColor2 = Color.DeepSkyBlue;
-				if (Ally is not null)
-				{
-					RQ = (float)Ally.statMana / Ally.statManaMax2;
-					RQ = Utils.Clamp(RQ, 0f, 1f);
-				}
-				else RQ = 1;
-			}
+			RColor = classColours.Item2;
+			float RQ = Ally is not null ? MiscEventHandler.GetClassRQ(ETUDConfig.Instanse.EnableColorMatch ? PlayerClass : "None", Ally) : 1;
 
-			// ResourceBar
 			Rectangle RBar = Frame.GetInnerDimensions().ToRectangle();
 			RBar.X += 8;
 			RBar.Width -= 16;
 			RBar.Y += 30;
 			RBar.Height = (RBar.Height - 12) / 2;
 
-			if (Ally is not null && ETUDConfig.Instanse.ShowOfflinePlayers)
-			{
-				if (!Ally.active)
-				{
-					RColor1 = Color.Gray;
-					RColor2 = Color.Gray;
-					RQ = 1;
-				}
-			}
-
 			int Rleft = RBar.Left;
 			int Rright = RBar.Right;
 			int Rsteps = (int)((Rright - Rleft) * RQ);
 			for (int i = 0; i < Rsteps; i++)
-			{
-				float Rpercent = (float)i / (Rright - Rleft);
-				spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle(Rleft + i, RBar.Y, 1, RBar.Height), Color.Lerp(RColor1, RColor2, Rpercent));
-			}
+				spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle(Rleft + i, RBar.Y, 1, RBar.Height), RColor);			
 		}
 
 		public override void Update(GameTime gameTime)
 		{
 			base.Update(gameTime);
+
+			Name.SetText(""); Rlabel.SetText(""); HPlabel.SetText(""); Ammolabel.SetText("");
 
 			string PlayerClass = MiscEventHandler.DeterminePlayerClass(Ally);
 			
@@ -275,10 +158,10 @@ namespace EnhancedTeamUIDisplay
 
 			MainLeft = Left; MainTop = Top;
 
-			if (Main.LocalPlayer.team == 0) { Name.SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.EnterTeamLabel"));  HPlabel.SetText(""); Rlabel.SetText(""); Ammolabel.SetText(""); }
+			if (Main.LocalPlayer.team == 0) Name.SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.EnterTeamLabel"));
 			else if (!allyFound && Main.netMode != NetmodeID.SinglePlayer && Main.LocalPlayer.team != 0)
 			{
-				Name.SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.NoPlayersLabel")); HPlabel.SetText(""); Rlabel.SetText(""); Ammolabel.SetText("");
+				Name.SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.NoPlayersLabel"));
 				for (int i = 0; i < Main.maxPlayers; i++)
 				{
 					if (Main.player[i] is not null && Main.player[i].team == Main.LocalPlayer.team && Main.player[i] != Main.LocalPlayer && Main.player[i] != ETUDPanel3.Ally && Main.player[i] != ETUDPanel2.Ally && (ETUDConfig.Instanse.ShowOfflinePlayers || Main.player[i].active)) // && Main.player[i].active
@@ -297,8 +180,6 @@ namespace EnhancedTeamUIDisplay
 				if (!Ally.dead)
 				{
 					HPlabel.SetText($"{Ally.statLife}/{Ally.statLifeMax2}");
-					
-					if (PlayerClass != "Ranged") Ammolabel.SetText("");
 
 					if (PlayerClass == "Melee") Rlabel.SetText(Ally.HasBuff(BuffID.PotionSickness) ? Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.PotionCD").Value : Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.PotionReady").Value);
 					else if (PlayerClass == "Ranged")
@@ -311,31 +192,20 @@ namespace EnhancedTeamUIDisplay
 							if (Ally.inventory[i].ammo == AmmoID.Arrow) arrowcount += Ally.inventory[i].stack;
 						}
 						Ammolabel.SetText($"   {Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.BulletLabel")} {bulletcount} {Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.ArrowLabel")} {arrowcount}");
-						Rlabel.SetText("");
 					}
 					else if (PlayerClass == "Rogue") if (CalamityHelper.RogueStealth(Ally) == CalamityHelper.RogueStealthMax(Ally) && CalamityHelper.RogueStealthMax(Ally) != 0) Rlabel.SetText("Stealthed "); else Rlabel.SetText("");
 					else Rlabel.SetText($"{Ally.statMana}/{Ally.statManaMax2}");
 
-					if (!Ally.active)
-					{
-						HPlabel.SetText("");
-						Rlabel.SetText("");
-						Ammolabel.SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.Offline"));
-					}
+					if (!Ally.active) Ammolabel.SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.Offline"));
 
-					Name.SetText(Ally.name);				
+					Name.SetText(Ally.name);
 				}
-				else
-				{
-					Name.SetText($"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.Dead")} {(Ally.respawnTimer / 60 + 1)}");
-					Rlabel.SetText("");
-					HPlabel.SetText("");
-					Ammolabel.SetText("");
-				}
+				else Name.SetText($"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.Dead")} {(Ally.respawnTimer / 60 + 1)}");				
 			}
 			else if (Main.LocalPlayer.team != 0)
 			{
-				allyFound = false; Name.SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.NoPlayersLabel")); HPlabel.SetText(""); Rlabel.SetText(""); Ammolabel.SetText("");
+				allyFound = false;
+				Name.SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.NoPlayersLabel"));
 			}
 
 			if (!ETUDConfig.Instanse.LockUIPosition)
@@ -423,10 +293,8 @@ namespace EnhancedTeamUIDisplay
 		internal static Player Ally;
 		internal static bool allyFound;
 
-		internal Color HPColor1;
-		internal Color HPColor2;
-		internal Color RColor1;
-		internal Color RColor2;
+		internal Color HPColor;
+		internal Color RColor;
 
 		public override void OnInitialize()
 		{
@@ -435,50 +303,42 @@ namespace EnhancedTeamUIDisplay
 			Height.Pixels = height;
 			MainElement = new UIElement();
 
-			//Panel position
-			MainElement.Left.Set(0, 0f);
-			MainElement.Top.Set(0, 0f);
-
 			MainElement.Width.Set(200, 0f);
 			MainElement.Height.Set(60, 0f);
 
 			//Frame
 			Frame = new UIImage(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/Panel"));
-			Frame.Left.Set(0, 0f);
-			Frame.Top.Set(0, 0f);
 			Frame.Width.Set(200, 0f);
 			Frame.Height.Set(60, 0f);
 
+
 			//Name
 			Name = new UIText("", 0.7f);
-			Name.Left.Set(10, 0f);
 			Name.Top.Set(12, 0f);
-			Name.Width.Set(80, 0f);
-			Name.Height.Set(60, 0f);
-			Name.HAlign = 0;
+			Name.Width.Set(90, 0f);
+			Name.HAlign = .25f;
+			Name.TextOriginX = 0;
 
 			//HP
 			HPlabel = new UIText("", 0.7f);
-			HPlabel.Left.Set(-7, 0f);
 			HPlabel.Top.Set(12, 0f);
-			HPlabel.Width.Set(50, 0f);
-			HPlabel.Height.Set(30, 0f);
-			HPlabel.HAlign = 1;
+			HPlabel.Width.Set(90, 0f);
+			HPlabel.HAlign = .75f;
+			HPlabel.TextOriginX = 1;
 
 			//R
 			Rlabel = new UIText("", 0.7f);
-			Rlabel.Left.Set(-7, 0f);
 			Rlabel.Top.Set(37, 0f);
-			Rlabel.Width.Set(50, 0f);
-			Rlabel.Height.Set(30, 0f);
-			Rlabel.HAlign = 1;
+			Rlabel.Width.Set(90, 0f);
+			Rlabel.HAlign = .75f;
+			Rlabel.TextOriginX = 1;
 
 			//Ammo
 			Ammolabel = new UIText("", 0.7f);
-			Ammolabel.Left.Set(10, 0f);
 			Ammolabel.Top.Set(37, 0f);
-			Ammolabel.Width.Set(50, 0f);
-			Ammolabel.Height.Set(30, 0f);
+			Rlabel.Width.Set(90, 0f);
+			Ammolabel.HAlign = .25f;
+			Ammolabel.TextOriginX = 0;
 
 			MainElement.Append(Frame);
 			MainElement.Append(Name);
@@ -503,156 +363,51 @@ namespace EnhancedTeamUIDisplay
 
 			string PlayerClass = MiscEventHandler.DeterminePlayerClass(Ally);
 
-			// HP Color
-			Tuple<Color, Color, Color, Color> classColours = MiscEventHandler.GetClassColours(ETUDConfig.Instanse.EnableColorMatch ? PlayerClass : "None");
-			HPColor1 = classColours.Item1;
-			HPColor2 = classColours.Item2;
+			// HP
+			Tuple<Color, Color> classColours = MiscEventHandler.GetClassColours((Ally is not null && ETUDConfig.Instanse.ShowOfflinePlayers && !Ally.active) ? "Offline" : ETUDConfig.Instanse.EnableColorMatch ? PlayerClass : "None");
+			HPColor = classColours.Item1;
 
-			// HPBar
 			Rectangle HPBar = Frame.GetInnerDimensions().ToRectangle();
 			HPBar.X += 8;
 			HPBar.Width -= 16;
 			HPBar.Y += 6;
 			HPBar.Height = (HPBar.Height - 12) / 2;
 
-			float HPQ;
+			float HPQ = 1;
 			if (Ally is not null)
 			{
 				HPQ = (float)Ally.statLife / Ally.statLifeMax2;
 				HPQ = Utils.Clamp(HPQ, 0f, 1f);
-			}
-			else HPQ = 1;
-
-			if (Ally is not null && ETUDConfig.Instanse.ShowOfflinePlayers)
-			{
-				if (!Ally.active)
-				{
-					HPColor1 = Color.LightGray;
-					HPColor2 = Color.LightGray;
-					HPQ = 1;
-				}
 			}
 
 			int HPleft = HPBar.Left;
 			int HPright = HPBar.Right;
 			int HPsteps = (int)((HPright - HPleft) * HPQ);
 			for (int i = 0; i < HPsteps; i++)
-			{
-				float hppercent = (float)i / (HPright - HPleft);
-				spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle(HPleft + i, HPBar.Y, 1, HPBar.Height), Color.Lerp(HPColor1, HPColor2, hppercent));
-			}
+				spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle(HPleft + i, HPBar.Y, 1, HPBar.Height), HPColor);
 
 			// Resource
-			float RQ;
-			if (ETUDConfig.Instanse.EnableColorMatch)
-			{
-				switch (PlayerClass)
-				{
-					case "Melee":
-						RColor1 = Color.IndianRed;
-						RColor2 = Color.DarkRed;
-						RQ = 1;
-						// TODO: Show exact healing potion CD
-						break;
-					case "Ranged":
-						RColor1 = Color.OrangeRed;
-						RColor2 = Color.Orange;
-						RQ = 1;
-						break;
-					case "Magic":
-						RColor1 = Color.Blue;
-						RColor2 = Color.DeepSkyBlue;
-						if (Ally is not null)
-						{
-							RQ = (float)Ally.statMana / Ally.statManaMax2;
-							RQ = Utils.Clamp(RQ, 0f, 1f);
-						}
-						else RQ = 1;
-						break;
-					case "Summon":
-						RColor1 = Color.Blue;
-						RColor2 = Color.DeepSkyBlue;
-						if (Ally is not null)
-						{
-							RQ = (float)Ally.statMana / Ally.statManaMax2;
-							RQ = Utils.Clamp(RQ, 0f, 1f);
-						}
-						else RQ = 1;
-						break;
-					case "Rogue":
-						RColor1 = Color.Yellow;
-						RColor2 = Color.Yellow;
-						if (Ally is not null)
-						{
-							RQ = CalamityHelper.RogueStealth(Ally) / CalamityHelper.RogueStealthMax(Ally);
-							RQ = Utils.Clamp(RQ, 0f, 1f);
-						}
-						else RQ = 1;
-						break;
-					case "None":
-						RColor1 = Color.Blue;
-						RColor2 = Color.DeepSkyBlue;
-						if (Ally is not null)
-						{
-							RQ = (float)Ally.statMana / Ally.statManaMax2;
-							RQ = Utils.Clamp(RQ, 0f, 1f);
-						}
-						else RQ = 1;
-						break;
-					default:
-						RColor1 = Color.Blue;
-						RColor2 = Color.DeepSkyBlue;
-						if (Ally is not null)
-						{
-							RQ = (float)Ally.statMana / Ally.statManaMax2;
-							RQ = Utils.Clamp(RQ, 0f, 1f);
-						}
-						else RQ = 1;
-						break;
-				}
-			}
-			else
-			{
-				RColor1 = Color.Blue;
-				RColor2 = Color.DeepSkyBlue;
-				if (Ally is not null)
-				{
-					RQ = (float)Ally.statMana / Ally.statManaMax2;
-					RQ = Utils.Clamp(RQ, 0f, 1f);
-				}
-				else RQ = 1;
-			}
+			RColor = classColours.Item2;
+			float RQ = Ally is not null ? MiscEventHandler.GetClassRQ(ETUDConfig.Instanse.EnableColorMatch ? PlayerClass : "None", Ally) : 1;
 
-			// ResourceBar
 			Rectangle RBar = Frame.GetInnerDimensions().ToRectangle();
 			RBar.X += 8;
 			RBar.Width -= 16;
 			RBar.Y += 30;
 			RBar.Height = (RBar.Height - 12) / 2;
 
-			if (Ally is not null && ETUDConfig.Instanse.ShowOfflinePlayers)
-			{
-				if (!Ally.active)
-				{
-					RColor1 = Color.Gray;
-					RColor2 = Color.Gray;
-					RQ = 1;
-				}
-			}
-
 			int Rleft = RBar.Left;
 			int Rright = RBar.Right;
 			int Rsteps = (int)((Rright - Rleft) * RQ);
 			for (int i = 0; i < Rsteps; i++)
-			{
-				float Rpercent = (float)i / (Rright - Rleft);
-				spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle(Rleft + i, RBar.Y, 1, RBar.Height), Color.Lerp(RColor1, RColor2, Rpercent));
-			}
+				spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle(Rleft + i, RBar.Y, 1, RBar.Height), RColor);
 		}
 
 		public override void Update(GameTime gameTime)
 		{
 			base.Update(gameTime);
+
+			Name.SetText(""); Rlabel.SetText(""); HPlabel.SetText(""); Ammolabel.SetText("");
 
 			string PlayerClass = MiscEventHandler.DeterminePlayerClass(Ally);
 			
@@ -667,10 +422,9 @@ namespace EnhancedTeamUIDisplay
 			Left.Pixels = ETUDPanel1.MainLeft.Pixels;
 			Top.Pixels = ETUDPanel1.MainTop.Pixels + height + 10;
 
-			if (Main.LocalPlayer.team == 0) { Name.SetText(""); HPlabel.SetText(""); Rlabel.SetText(""); Ammolabel.SetText(""); }
-			else if (!allyFound && Main.netMode != NetmodeID.SinglePlayer && Main.LocalPlayer.team != 0)
+			if (!allyFound && Main.netMode != NetmodeID.SinglePlayer && Main.LocalPlayer.team != 0)
 			{
-				Name.SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.NoPlayersLabel2")); HPlabel.SetText(""); Rlabel.SetText(""); Ammolabel.SetText("");
+				Name.SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.NoPlayersLabel2"));
 				for (int i = 0; i < Main.maxPlayers; i++)
 				{
 					if (Main.player[i] is not null && Main.player[i].team == Main.LocalPlayer.team && Main.player[i] != Main.LocalPlayer && Main.player[i] != ETUDPanel3.Ally && Main.player[i] != ETUDPanel1.Ally && (ETUDConfig.Instanse.ShowOfflinePlayers || Main.player[i].active)) // && Main.player[i].active
@@ -699,8 +453,6 @@ namespace EnhancedTeamUIDisplay
 				{
 					HPlabel.SetText($"{Ally.statLife}/{Ally.statLifeMax2}");
 
-					if (PlayerClass != "Ranged") Ammolabel.SetText("");
-
 					if (PlayerClass == "Melee") Rlabel.SetText(Ally.HasBuff(BuffID.PotionSickness) ? Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.PotionCD").Value : Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.PotionReady").Value);
 					else if (PlayerClass == "Ranged")
 					{
@@ -712,31 +464,21 @@ namespace EnhancedTeamUIDisplay
 							if (Ally.inventory[i].ammo == AmmoID.Arrow) arrowcount += Ally.inventory[i].stack;
 						}
 						Ammolabel.SetText($"   {Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.BulletLabel")} {bulletcount} {Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.ArrowLabel")} {arrowcount}");
-						Rlabel.SetText("");
 					}
 					else if (PlayerClass == "Rogue") if (CalamityHelper.RogueStealth(Ally) == CalamityHelper.RogueStealthMax(Ally) && CalamityHelper.RogueStealthMax(Ally) != 0) Rlabel.SetText("Stealthed "); else Rlabel.SetText("");
 					else Rlabel.SetText($"{Ally.statMana}/{Ally.statManaMax2}");
 
-					if (!Ally.active)
-					{
-						HPlabel.SetText("");
-						Rlabel.SetText("");
-						Ammolabel.SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.Offline"));
-					}
+					if (!Ally.active) Ammolabel.SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.Offline"));				
 
 					Name.SetText(Ally.name);
 				}
-				else
-				{
-					Name.SetText($"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.Dead")} {(Ally.respawnTimer / 60 + 1)}");
-					Rlabel.SetText("");
-					HPlabel.SetText("");
-					Ammolabel.SetText("");
-				}
+				else Name.SetText($"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.Dead")} {(Ally.respawnTimer / 60 + 1)}");
+				
 			}
 			else if (Main.LocalPlayer.team != 0)
 			{
-				allyFound = false; Name.SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.NoPlayersLabel2")); HPlabel.SetText(""); Rlabel.SetText(""); Ammolabel.SetText("");
+				allyFound = false;
+				Name.SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.NoPlayersLabel2"));
 			}
 		}
 
@@ -765,10 +507,8 @@ namespace EnhancedTeamUIDisplay
 		internal static Player Ally;
 		internal static bool allyFound;
 
-		internal Color HPColor1;
-		internal Color HPColor2;
-		internal Color RColor1;
-		internal Color RColor2;
+		internal Color HPColor;
+		internal Color RColor;
 
 		public override void OnInitialize()
 		{
@@ -777,50 +517,42 @@ namespace EnhancedTeamUIDisplay
 			Height.Pixels = height;
 			MainElement = new UIElement();
 
-			//Panel position
-			MainElement.Left.Set(0, 0f);
-			MainElement.Top.Set(0, 0f);
-
 			MainElement.Width.Set(200, 0f);
 			MainElement.Height.Set(60, 0f);
 
 			//Frame
 			Frame = new UIImage(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/Panel"));
-			Frame.Left.Set(0, 0f);
-			Frame.Top.Set(0, 0f);
 			Frame.Width.Set(200, 0f);
 			Frame.Height.Set(60, 0f);
 
+
 			//Name
 			Name = new UIText("", 0.7f);
-			Name.Left.Set(10, 0f);
 			Name.Top.Set(12, 0f);
-			Name.Width.Set(80, 0f);
-			Name.Height.Set(60, 0f);
-			Name.HAlign = 0;
+			Name.Width.Set(90, 0f);
+			Name.HAlign = .25f;
+			Name.TextOriginX = 0;
 
 			//HP
 			HPlabel = new UIText("", 0.7f);
-			HPlabel.Left.Set(-7, 0f);
 			HPlabel.Top.Set(12, 0f);
-			HPlabel.Width.Set(50, 0f);
-			HPlabel.Height.Set(30, 0f);
-			HPlabel.HAlign = 1;
+			HPlabel.Width.Set(90, 0f);
+			HPlabel.HAlign = .75f;
+			HPlabel.TextOriginX = 1;
 
 			//R
 			Rlabel = new UIText("", 0.7f);
-			Rlabel.Left.Set(-7, 0f);
 			Rlabel.Top.Set(37, 0f);
-			Rlabel.Width.Set(50, 0f);
-			Rlabel.Height.Set(30, 0f);
-			Rlabel.HAlign = 1;
+			Rlabel.Width.Set(90, 0f);
+			Rlabel.HAlign = .75f;
+			Rlabel.TextOriginX = 1;
 
 			//Ammo
 			Ammolabel = new UIText("", 0.7f);
-			Ammolabel.Left.Set(10, 0f);
 			Ammolabel.Top.Set(37, 0f);
-			Ammolabel.Width.Set(50, 0f);
-			Ammolabel.Height.Set(30, 0f);
+			Rlabel.Width.Set(90, 0f);
+			Ammolabel.HAlign = .25f;
+			Ammolabel.TextOriginX = 0;
 
 			MainElement.Append(Frame);
 			MainElement.Append(Name);
@@ -845,157 +577,52 @@ namespace EnhancedTeamUIDisplay
 
 			string PlayerClass = MiscEventHandler.DeterminePlayerClass(Ally);
 
-			// HP Color
-			Tuple<Color, Color, Color, Color> classColours = MiscEventHandler.GetClassColours(ETUDConfig.Instanse.EnableColorMatch ? PlayerClass : "None");
-			HPColor1 = classColours.Item1;
-			HPColor2 = classColours.Item2;
+			// HP
+			Tuple<Color, Color> classColours = MiscEventHandler.GetClassColours((Ally is not null && ETUDConfig.Instanse.ShowOfflinePlayers && !Ally.active) ? "Offline" : ETUDConfig.Instanse.EnableColorMatch ? PlayerClass : "None");
+			HPColor = classColours.Item1;
 
-			// HPBar
 			Rectangle HPBar = Frame.GetInnerDimensions().ToRectangle();
 			HPBar.X += 8;
 			HPBar.Width -= 16;
 			HPBar.Y += 6;
 			HPBar.Height = (HPBar.Height - 12) / 2;
 
-			float HPQ;
+			float HPQ = 1;
 			if (Ally is not null)
 			{
 				HPQ = (float)Ally.statLife / Ally.statLifeMax2;
 				HPQ = Utils.Clamp(HPQ, 0f, 1f);
-			}
-			else HPQ = 1;
-
-			if (Ally is not null && ETUDConfig.Instanse.ShowOfflinePlayers)
-			{
-				if (!Ally.active)
-				{
-					HPColor1 = Color.LightGray;
-					HPColor2 = Color.LightGray;
-					HPQ = 1;
-				}
 			}
 
 			int HPleft = HPBar.Left;
 			int HPright = HPBar.Right;
 			int HPsteps = (int)((HPright - HPleft) * HPQ);
 			for (int i = 0; i < HPsteps; i++)
-			{
-				float hppercent = (float)i / (HPright - HPleft);
-				spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle(HPleft + i, HPBar.Y, 1, HPBar.Height), Color.Lerp(HPColor1, HPColor2, hppercent));
-			}
+				spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle(HPleft + i, HPBar.Y, 1, HPBar.Height), HPColor);
 
 			// Resource
-			float RQ;
-			if (ETUDConfig.Instanse.EnableColorMatch)
-			{
-				switch (PlayerClass)
-				{
-					case "Melee":
-						RColor1 = Color.IndianRed;
-						RColor2 = Color.DarkRed;
-						RQ = 1;
-						// TODO: Show exact healing potion CD
-						break;
-					case "Ranged":
-						RColor1 = Color.OrangeRed;
-						RColor2 = Color.Orange;
-						RQ = 1;
-						break;
-					case "Magic":
-						RColor1 = Color.Blue;
-						RColor2 = Color.DeepSkyBlue;
-						if (Ally is not null)
-						{
-							RQ = (float)Ally.statMana / Ally.statManaMax2;
-							RQ = Utils.Clamp(RQ, 0f, 1f);
-						}
-						else RQ = 1;
-						break;
-					case "Summon":
-						RColor1 = Color.Blue;
-						RColor2 = Color.DeepSkyBlue;
-						if (Ally is not null)
-						{
-							RQ = (float)Ally.statMana / Ally.statManaMax2;
-							RQ = Utils.Clamp(RQ, 0f, 1f);
-						}
-						else RQ = 1;
-						break;
-					case "Rogue":
-						RColor1 = Color.Yellow;
-						RColor2 = Color.Yellow;
-						if (Ally is not null)
-						{
-							RQ = CalamityHelper.RogueStealth(Ally) / CalamityHelper.RogueStealthMax(Ally);
-							RQ = Utils.Clamp(RQ, 0f, 1f);
-						}
-						else RQ = 1;
-						break;
-					case "None":
-						RColor1 = Color.Blue;
-						RColor2 = Color.DeepSkyBlue;
-						if (Ally is not null)
-						{
-							RQ = (float)Ally.statMana / Ally.statManaMax2;
-							RQ = Utils.Clamp(RQ, 0f, 1f);
-						}
-						else RQ = 1;
-						break;
-					default:
-						RColor1 = Color.Blue;
-						RColor2 = Color.DeepSkyBlue;
-						if (Ally is not null)
-						{
-							RQ = (float)Ally.statMana / Ally.statManaMax2;
-							RQ = Utils.Clamp(RQ, 0f, 1f);
-						}
-						else RQ = 1;
-						break;
-				}
-			}
-			else
-			{
-				RColor1 = Color.Blue;
-				RColor2 = Color.DeepSkyBlue;
-				if (Ally is not null)
-				{
-					RQ = (float)Ally.statMana / Ally.statManaMax2;
-					RQ = Utils.Clamp(RQ, 0f, 1f);
-				}
-				else RQ = 1;
-			}
+			RColor = classColours.Item2;
+			float RQ = Ally is not null ? MiscEventHandler.GetClassRQ(ETUDConfig.Instanse.EnableColorMatch ? PlayerClass : "None", Ally) : 1;
 
-			// ResourceBar
 			Rectangle RBar = Frame.GetInnerDimensions().ToRectangle();
 			RBar.X += 8;
 			RBar.Width -= 16;
 			RBar.Y += 30;
 			RBar.Height = (RBar.Height - 12) / 2;
 
-			if (Ally is not null && ETUDConfig.Instanse.ShowOfflinePlayers)
-			{
-				if (!Ally.active)
-				{
-					RColor1 = Color.Gray;
-					RColor2 = Color.Gray;
-					RQ = 1;
-				}
-			}
-
 			int Rleft = RBar.Left;
 			int Rright = RBar.Right;
 			int Rsteps = (int)((Rright - Rleft) * RQ);
 			for (int i = 0; i < Rsteps; i++)
-			{
-				float Rpercent = (float)i / (Rright - Rleft);
-				spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle(Rleft + i, RBar.Y, 1, RBar.Height), Color.Lerp(RColor1, RColor2, Rpercent));
-			}
+				spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle(Rleft + i, RBar.Y, 1, RBar.Height), RColor);
 		}
 
 		public override void Update(GameTime gameTime)
 		{
 			base.Update(gameTime);
-			
+
+			Name.SetText(""); Rlabel.SetText(""); HPlabel.SetText(""); Ammolabel.SetText("");
+
 			string PlayerClass = MiscEventHandler.DeterminePlayerClass(Ally);
 
 			if (allyFound && Main.LocalPlayer.team != Ally.team) allyFound = false;
@@ -1009,10 +636,9 @@ namespace EnhancedTeamUIDisplay
 			Left.Pixels = ETUDPanel1.MainLeft.Pixels;
 			Top.Pixels = ETUDPanel1.MainTop.Pixels + (height + 10) * 2;
 
-			if (Main.LocalPlayer.team == 0) { Name.SetText(""); HPlabel.SetText(""); Rlabel.SetText(""); Ammolabel.SetText(""); }
-			else if (!allyFound && Main.netMode != NetmodeID.SinglePlayer && Main.LocalPlayer.team != 0)
+			if (!allyFound && Main.netMode != NetmodeID.SinglePlayer && Main.LocalPlayer.team != 0)
 			{
-				Name.SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.NoPlayersLabel2")); HPlabel.SetText(""); Rlabel.SetText(""); Ammolabel.SetText("");
+				Name.SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.NoPlayersLabel2"));
 				for (int i = 0; i < Main.maxPlayers; i++)
 				{
 					if (Main.player[i] is not null && Main.player[i].team == Main.LocalPlayer.team && Main.player[i] != Main.LocalPlayer && Main.player[i] != ETUDPanel1.Ally && Main.player[i] != ETUDPanel2.Ally && (ETUDConfig.Instanse.ShowOfflinePlayers || Main.player[i].active)) // && Main.player[i].active
@@ -1041,8 +667,6 @@ namespace EnhancedTeamUIDisplay
 				{
 					HPlabel.SetText($"{Ally.statLife}/{Ally.statLifeMax2}");
 
-					if (PlayerClass != "Ranged") Ammolabel.SetText("");
-
 					if (PlayerClass == "Melee") Rlabel.SetText(Ally.HasBuff(BuffID.PotionSickness) ? Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.PotionCD").Value : Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.PotionReady").Value);
 					else if (PlayerClass == "Ranged")
 					{
@@ -1054,31 +678,20 @@ namespace EnhancedTeamUIDisplay
 							if (Ally.inventory[i].ammo == AmmoID.Arrow) arrowcount += Ally.inventory[i].stack;
 						}
 						Ammolabel.SetText($"   {Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.BulletLabel")} {bulletcount} {Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.ArrowLabel")} {arrowcount}");
-						Rlabel.SetText("");
 					}
 					else if (PlayerClass == "Rogue") if (CalamityHelper.RogueStealth(Ally) == CalamityHelper.RogueStealthMax(Ally) && CalamityHelper.RogueStealthMax(Ally) != 0) Rlabel.SetText("Stealthed "); else Rlabel.SetText("");
 					else Rlabel.SetText($"{Ally.statMana}/{Ally.statManaMax2}");
 
-					if (!Ally.active)
-					{
-						HPlabel.SetText("");
-						Rlabel.SetText("");
-						Ammolabel.SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.Offline"));
-					}
-
+					if (!Ally.active) Ammolabel.SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.Offline"));
+					
 					Name.SetText(Ally.name);
 				}
-				else
-				{
-					Name.SetText($"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.Dead")} {(Ally.respawnTimer / 60 + 1)}");
-					Rlabel.SetText("");
-					HPlabel.SetText("");
-					Ammolabel.SetText("");
-				}
+				else Name.SetText($"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.Dead")} {(Ally.respawnTimer / 60 + 1)}");		
 			}
 			else if (Main.LocalPlayer.team != 0)
 			{
-				allyFound = false; Name.SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.NoPlayersLabel2")); HPlabel.SetText(""); Rlabel.SetText(""); Ammolabel.SetText("");
+				allyFound = false;
+				Name.SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDPanels.NoPlayersLabel2"));
 			}
 		}
 
@@ -1121,17 +734,29 @@ namespace EnhancedTeamUIDisplay
 			};
 		}
 
-		public static Tuple<Color, Color, Color, Color> GetClassColours(string playerClass)
+		public static float GetClassRQ(string playerClass, Player Ally)
 		{
 			return playerClass switch
 			{
-				"Melee" => new(Color.SandyBrown, Color.Brown, Color.IndianRed, Color.DarkRed),
-				"Ranged" => new(Color.Lime, Color.LightGreen, Color.OrangeRed, Color.Orange),
-				"Magic" => new(Color.LightSkyBlue, Color.LightBlue, Color.Blue, Color.DeepSkyBlue),
-				"Summon" => new(Color.MediumPurple, Color.Purple, Color.Blue, Color.DeepSkyBlue),
-				"Rogue" => new(Color.LightGoldenrodYellow, Color.LightGoldenrodYellow, Color.Yellow, Color.Yellow),
-				"None" => new(Color.Green, Color.LawnGreen, Color.White, Color.White),
-				_ => new(Color.White, Color.White, Color.White, Color.White),
+				"Melee" => 1,
+				"Ranged" => 1,
+				"Rogue" => Utils.Clamp(CalamityHelper.RogueStealth(Ally) / CalamityHelper.RogueStealthMax(Ally), 0f, 1f),
+				_ => Utils.Clamp((float)Ally.statMana / Ally.statManaMax2, 0f, 1f),
+			};
+		}
+
+		public static Tuple<Color, Color> GetClassColours(string playerClass)
+		{
+			return playerClass switch
+			{
+				"Melee" => new(new(200, 155, 100), new(145, 30, 50)),
+				"Ranged" => new(new(170, 210, 115), new(165, 80, 40)),
+				"Magic" => new(new(110, 200, 240), new(50, 80, 140)),
+				"Summon" => new(new(150, 130, 200), new(50, 80, 140)),
+				"Rogue" => new(new(255, 240, 110), new(180, 150, 20)),
+				"Offline" => new(Color.Gray, Color.LightGray),
+				"None" => new(Color.Green, Color.Blue),
+				_ => new(Color.White, Color.White),
 			};
 		}
 

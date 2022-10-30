@@ -119,29 +119,30 @@ namespace EnhancedTeamUIDisplay
 			}
 		}
 
-		private static bool started;
-		private static DateTime FightStartTime;
-		private static DateTime FightEndTime;
-		private static TimeSpan FightDuration;
+		internal static bool BossFightStarted = false;
+		private static DateTime BossFightStartTime;
+		internal static DateTime BossFightEndTime;
+		private static TimeSpan BossFightDuration;
 
-		public static void StartBossSummary()
+		public static void OnBossFightStart()
 		{
-			FightStartTime = DateTime.Now;
-			started = true;
+			BossFightStartTime = DateTime.Now;
+			BossFightStarted = true;
+			if (!Main.CurrentFrameFlags.AnyActiveBossNPC) ETUD.Instance.ResetVariables();
 		}
 
 		// Arg - Boss Name, Addarg - Dictionary call(boss name, won and lost battles), Special - special text if first boss has escaped but some other has been defeated 
-		public static void EndBossSummary(string arg, string addarg = "", bool special = false)
+		public static void OnBossFightEnd(string arg, string addarg = "", bool special = false)
 		{
-			if (!started) return;
-			started = false;
+			if (!BossFightStarted) return;
+			BossFightStarted = false;
 
-			FightEndTime = DateTime.Now;
-			FightDuration = FightEndTime - FightStartTime;
+			BossFightEndTime = DateTime.Now;
+			BossFightDuration = BossFightEndTime - BossFightStartTime;
 
 			string output = Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.ETUDInfoDPS").Value + "\n";
-			if (!special) output += (arg == "" ? "> Team wiped in " : "> " + arg + " killed in ") + FightDuration.ToString(@"hh\:mm\:ss") + "\n";
-			else output += arg + "Fight time: " + FightDuration.ToString(@"hh\:mm\:ss") + "\n";
+			if (!special) output += (arg == "" ? "> Team wiped in " : "> " + arg + " killed in ") + BossFightDuration.ToString(@"hh\:mm\:ss") + "\n";
+			else output += arg + "Fight time: " + BossFightDuration.ToString(@"hh\:mm\:ss") + "\n";
 			output += addarg + "\n";
 
 			// TODO: Top-3 player by damage dealt (DPS)
@@ -150,7 +151,7 @@ namespace EnhancedTeamUIDisplay
 			if (playersdps[1][0] != -1) output += " 2: " + Main.player[playersdps[1][0]].name + (playersdps[1][1] != 0 ? (" - Peak DPS: " + playersdps[1][1]) : " - No damage") + "\n";
 			if (playersdps[2][0] != -1) output += " 3: " + Main.player[playersdps[2][0]].name + (playersdps[2][1] != 0 ? (" - Peak DPS: " + playersdps[2][1]) : " - No damage");*/
 
-			Main.NewText(output, ETUDTextColor);
+			if (ETUDConfig.Instanse.ShowBossSummary) Main.NewText(output, ETUDTextColor);
 		}
 
 		private static int ErrorsAmount = 0;

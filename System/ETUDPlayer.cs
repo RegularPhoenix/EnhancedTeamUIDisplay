@@ -26,7 +26,7 @@ namespace EnhancedTeamUIDisplay
 		public override void OnEnterWorld(Player player)
 		{
 			ETUDUISystem.CloseETUDInterface();
-			if (Main.netMode == NetmodeID.SinglePlayer) Main.NewText("ETUD will not work in singleplayer. You might have wanted to host and play.", 255, 255, 0);
+			if (Main.netMode == NetmodeID.SinglePlayer) Main.NewText("ETUD Warning: ETUD is intended to use in multiplayer and most of its options will not work in singleplayer.", 255, 255, 0);
 		}
 
 		public override void SaveData(TagCompound tag)
@@ -62,7 +62,7 @@ namespace EnhancedTeamUIDisplay
 
 			if (BossFightAttempts is null) BossFightAttempts = new();
 			var List = tag.GetList<TagCompound>("BFA");
-			if (List is not null || List.Count == 0)
+			if (List is not null && List.Count != 0)
 			{
 				foreach (var item in List)
 				{

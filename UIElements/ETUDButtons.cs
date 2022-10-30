@@ -111,7 +111,7 @@ namespace EnhancedTeamUIDisplay
 
 		public override void Update(GameTime gameTime)
 		{
-			if (ETUDPanel1.Ally is null) IgnoresMouseInteraction = true;
+			if (ETUDPanel1.Ally is null) IgnoresMouseInteraction = true; else IgnoresMouseInteraction = false;
 
 			base.Update(gameTime);
 
@@ -138,7 +138,7 @@ namespace EnhancedTeamUIDisplay
 
 		public override void Update(GameTime gameTime)
 		{
-			if (ETUDPanel2.Ally is null) IgnoresMouseInteraction = true;
+			if (ETUDPanel2.Ally is null) IgnoresMouseInteraction = true; else IgnoresMouseInteraction = false;
 
 			base.Update(gameTime);
 
@@ -165,7 +165,7 @@ namespace EnhancedTeamUIDisplay
 
 		public override void Update(GameTime gameTime)
 		{
-			if (ETUDPanel3.Ally is null) IgnoresMouseInteraction = true;
+			if (ETUDPanel3.Ally is null) IgnoresMouseInteraction = true; else IgnoresMouseInteraction = false;
 
 			base.Update(gameTime);
 
