@@ -1,13 +1,12 @@
-﻿using Terraria.GameContent.UI.Elements;
-using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.Localization;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.UI;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
 using Terraria.GameContent;
-using System.Linq;
+using Terraria.Localization;
+using Terraria.GameContent.UI.Elements;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 using System;
 
 namespace EnhancedTeamUIDisplay
@@ -703,87 +702,5 @@ namespace EnhancedTeamUIDisplay
 				Main.LocalPlayer.TakeUnityPotion();
 			}
 		}
-	}
-	
-	public class MiscEventHandler
-	{
-		public static string DeterminePlayerClass(Player player)
-		{
-			if (player is null) return "None";
-
-			float MeleeCoeff = player.GetTotalDamage(DamageClass.Melee).Additive + (player.GetCritChance(DamageClass.Melee) / 100) + (player.GetAttackSpeed(DamageClass.Melee) / 2);
-			float RangedCoeff = player.GetTotalDamage(DamageClass.Ranged).Additive + (player.GetCritChance(DamageClass.Ranged) / 100) + (player.GetAttackSpeed(DamageClass.Ranged) / 2);
-			float MagicCoeff = player.GetTotalDamage(DamageClass.Magic).Additive + (player.GetCritChance(DamageClass.Magic) / 100) + (player.GetAttackSpeed(DamageClass.Magic) / 2);
-			float SummonCoeff = player.GetTotalDamage(DamageClass.Summon).Additive + (player.GetCritChance(DamageClass.Summon) / 100) + (player.GetAttackSpeed(DamageClass.Summon) / 2 + (player.maxMinions - 1));
-			float RogueCoeff = 0;
-			if (ETUD.CalamityMod is not null)
-				if (ETUD.CalamityMod.TryFind<DamageClass>("RogueDamageClass", out var rogueclass))
-					RogueCoeff = player.GetTotalDamage(rogueclass).Additive + (player.GetCritChance(rogueclass) / 100) + (player.GetAttackSpeed(rogueclass) / 2);
-
-			float[] CoeffArray = new float[] { MeleeCoeff, RangedCoeff, MagicCoeff, SummonCoeff, RogueCoeff };
-			int StatNum = Array.IndexOf(CoeffArray, CoeffArray.Max());
-
-			return StatNum switch
-			{
-				0 => "Melee",
-				1 => "Ranged",
-				2 => "Magic",
-				3 => "Summon",
-				4 => "Rogue",
-				_ => "None",
-			};
-		}
-
-		public static float GetClassRQ(string playerClass, Player Ally)
-		{
-			return playerClass switch
-			{
-				"Melee" => 1,
-				"Ranged" => 1,
-				"Rogue" => Utils.Clamp(CalamityHelper.RogueStealth(Ally) / CalamityHelper.RogueStealthMax(Ally), 0f, 1f),
-				_ => Utils.Clamp((float)Ally.statMana / Ally.statManaMax2, 0f, 1f),
-			};
-		}
-
-		public static Tuple<Color, Color> GetClassColours(string playerClass)
-		{
-			return playerClass switch
-			{
-				"Melee" => new(new(200, 155, 100), new(145, 30, 50)),
-				"Ranged" => new(new(170, 210, 115), new(165, 80, 40)),
-				"Magic" => new(new(110, 200, 240), new(50, 80, 140)),
-				"Summon" => new(new(150, 130, 200), new(50, 80, 140)),
-				"Rogue" => new(new(255, 240, 110), new(180, 150, 20)),
-				"Offline" => new(Color.Gray, Color.LightGray),
-				"None" => new(Color.Green, Color.Blue),
-				_ => new(Color.White, Color.White),
-			};
-		}
-
-		public static bool HasItemsInInventory(Player player, int[] itemtypes)
-		{
-			for (int i = 0; i < itemtypes.Length; i++) if (player.HasItem(itemtypes[i])) return true;
-			return false;
-		}
-
-		public static bool HasBuffs(Player player, int[] bufftypes)
-		{
-			for (int i = 0; i < bufftypes.Length; i++) if (player.HasBuff(bufftypes[i])) return true;
-			return false;
-		}
-
-		public static int CountItemsInInventory(Player player, int[] itemtypes)
-		{
-			int count = 0;
-			for (int i = 0; i < itemtypes.Length; i++) count += player.CountItem(itemtypes[i]);
-			return count;
-		}
-	}
-
-	public class CalamityHelper
-	{
-		public static float RogueStealth(Player player) => (float)ETUD.CalamityMod.Call("GetCurrentStealth", player);
-
-		public static float RogueStealthMax(Player player) => (float)ETUD.CalamityMod.Call("GetMaxStealth", player);
 	}
 }

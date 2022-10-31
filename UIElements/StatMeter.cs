@@ -58,23 +58,23 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 		{		
 			base.PostUpdatePlayers();
 
-			if ((DateTime.Now - ETUDAdditionalOptions.BossFightEndTime).Seconds > 20) BossFightEndedRecently = true;
+			if (ETUDAdditionalOptions.LastFightEndTime != DateTime.MinValue && !BossFightEndedRecently && (DateTime.Now - ETUDAdditionalOptions.LastFightEndTime).TotalSeconds < 20) { BossFightEndedRecently = true;Main.NewText($"{ETUDAdditionalOptions.LastFightEndTime} {(DateTime.Now - ETUDAdditionalOptions.LastFightEndTime).TotalSeconds}"); }
 
 			NoPlayersInCombat = true;
 
 			for (int i = 0; i < 256; i++) if (Main.player[i].active) if (Main.player[i].GetModPlayer<DamageCounterPlayer>().InCombat) NoPlayersInCombat = false;
-
+			
 			if (!BossFightEndedRecently)
 			{
+				// Reset after 10 sec of no combat
 				if (!NoPlayersInCombat) AwaitsReset = true;
-				if (NoPlayersInCombat && AwaitsReset) ETUD.Instance.ResetVariables();
-				if (NoPlayersInCombat && AwaitsReset) Main.NewText("Reset after 10 sec of no combat");
+				if (NoPlayersInCombat && AwaitsReset) ETUD.Instance.ResetVariables();							
 			}
-			else if (!NoPlayersInCombat)
+			else if (ETUDAdditionalOptions.LastFightEndTime != DateTime.MinValue && !NoPlayersInCombat && DateTime.Now > ETUDAdditionalOptions.LastFightEndTime.AddSeconds(20))
 			{
+				// Reset after 20 sec of last boss death on fight start
 				ETUD.Instance.ResetVariables();
-				BossFightEndedRecently = false;
-				Main.NewText("Ready to reset after 20 sec of last boss death");
+				BossFightEndedRecently = false;				
 			}
 		}
 	}
@@ -95,7 +95,11 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 
 			if (!Main.CurrentFrameFlags.AnyActiveBossNPC)
 			{
-				if (InCombat && (DateTime.Now - lastCombatTime).TotalSeconds >= 10) InCombat = false;
+				if (DateTime.Now > ETUDAdditionalOptions.LastFightEndTime.AddSeconds(20))
+				{
+					if (InCombat && (DateTime.Now - lastCombatTime).TotalSeconds >= 10) InCombat = false;
+				}
+				else InCombat = false;
 			}
 			else InCombat = true;
 		}
@@ -177,7 +181,7 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 			Left.Set(player.DCLeftOffset == 0 ? player.PanelLeftOffset - 300 : player.DCLeftOffset, 0f);
 			Top.Set(player.DCTopOffset == 0 ? player.PanelTopOffset : player.DCTopOffset, 0f);
 
-			image = new(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/DamageCounter/DamageCounterPanelTop"));
+			image = new(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/StatMeter/DamageCounterPanelTop"));
 			Append(image);
 
 			StatNameText = new UIText("", .8f);
@@ -206,8 +210,8 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 
 			buttons = new UIImageButton[]
 			{
-				new UIImageButton(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/DamageCounter/ArrowLeft")),
-				new UIImageButton(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/DamageCounter/ArrowRight")),
+				new UIImageButton(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/StatMeter/ArrowLeft")),
+				new UIImageButton(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/StatMeter/ArrowRight")),
 			};
 
 			buttons[0].OnClick += (e, l) => { if (StatNum == 0) StatNum = 3; else StatNum--; };
@@ -262,7 +266,7 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 
 			if (PlayersCount == 0)
 			{
-				spriteBatch.Draw(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/DamageCounter/DamageCounterPanelBottom").Value, new Rectangle(Bar.X - 6, Bar.Y + 20, 200, 10), Color.White);
+				spriteBatch.Draw(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/StatMeter/DamageCounterPanelBottom").Value, new Rectangle(Bar.X - 6, Bar.Y + 20, 200, 10), Color.White);
 				UITexts[0].SetText("No data");
 				return;
 			}
@@ -292,10 +296,10 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 
 					UITexts[i].SetText($"{currentPlayer.name}({currentValue})");
 
-					spriteBatch.Draw(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/DamageCounter/DamageCounterPanelMid").Value, new Rectangle(Bar.X - 6, Bar.Y, 200, 28), Color.White);
+					spriteBatch.Draw(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/StatMeter/DamageCounterPanelMid").Value, new Rectangle(Bar.X - 6, Bar.Y, 200, 28), Color.White);
 				}
 
-			spriteBatch.Draw(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/DamageCounter/DamageCounterPanelBottom").Value, new Rectangle(Bar.X - 6, Bar.Y + 20, 200, 10), Color.White);
+			spriteBatch.Draw(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/StatMeter/DamageCounterPanelBottom").Value, new Rectangle(Bar.X - 6, Bar.Y + 20, 200, 10), Color.White);
 		}
 
 		// Dragging

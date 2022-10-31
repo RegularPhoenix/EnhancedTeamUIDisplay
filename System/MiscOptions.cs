@@ -3,6 +3,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 
@@ -119,9 +120,11 @@ namespace EnhancedTeamUIDisplay
 			}
 		}
 
-		internal static bool BossFightStarted = false;
+		public static DateTime LastFightEndTime => BossFightEndTime;		
+
+		private static bool BossFightStarted = false;
 		private static DateTime BossFightStartTime;
-		internal static DateTime BossFightEndTime;
+		private static DateTime BossFightEndTime = DateTime.MinValue;
 		private static TimeSpan BossFightDuration;
 
 		public static void OnBossFightStart()
@@ -145,12 +148,6 @@ namespace EnhancedTeamUIDisplay
 			else output += arg + "Fight time: " + BossFightDuration.ToString(@"hh\:mm\:ss") + "\n";
 			output += addarg + "\n";
 
-			// TODO: Top-3 player by damage dealt (DPS)
-			/*output += "> Top DPS:" + "\n";
-			output += " 1: " + Main.player[playersdps[0][0]].name + (playersdps[0][1] != 0 ? ( " - Peak DPS: " + playersdps[0][1]) : " - No damage") + "\n";
-			if (playersdps[1][0] != -1) output += " 2: " + Main.player[playersdps[1][0]].name + (playersdps[1][1] != 0 ? (" - Peak DPS: " + playersdps[1][1]) : " - No damage") + "\n";
-			if (playersdps[2][0] != -1) output += " 3: " + Main.player[playersdps[2][0]].name + (playersdps[2][1] != 0 ? (" - Peak DPS: " + playersdps[2][1]) : " - No damage");*/
-
 			if (ETUDConfig.Instanse.ShowBossSummary) Main.NewText(output, ETUDTextColor);
 		}
 
@@ -166,5 +163,87 @@ namespace EnhancedTeamUIDisplay
 				if (ErrorsAmount >= 5) { ETUDConfig.Instanse.ShowErrorMessages = false; Main.NewText("ETUD Warning: There were too many errors, so \"Show error messages\" option in config was disabled. If you see anything strange in ETUD, please contact the mod author. There is a possibility that this is a false positive, so if you don't notice anything strange, simply ignore this message, the problem will probably be fixed in the next update.", Color.OrangeRed); }
 			}
 		}
-	}	
+	}
+
+	public class MiscEventHandler
+	{
+		public static string DeterminePlayerClass(Player player)
+		{
+			if (player is null) return "None";
+
+			float MeleeCoeff = player.GetTotalDamage(DamageClass.Melee).Additive + (player.GetCritChance(DamageClass.Melee) / 100) + (player.GetAttackSpeed(DamageClass.Melee) / 2);
+			float RangedCoeff = player.GetTotalDamage(DamageClass.Ranged).Additive + (player.GetCritChance(DamageClass.Ranged) / 100) + (player.GetAttackSpeed(DamageClass.Ranged) / 2);
+			float MagicCoeff = player.GetTotalDamage(DamageClass.Magic).Additive + (player.GetCritChance(DamageClass.Magic) / 100) + (player.GetAttackSpeed(DamageClass.Magic) / 2);
+			float SummonCoeff = player.GetTotalDamage(DamageClass.Summon).Additive + (player.GetCritChance(DamageClass.Summon) / 100) + (player.GetAttackSpeed(DamageClass.Summon) / 2 + (player.maxMinions - 1));
+			float RogueCoeff = 0;
+			if (ETUD.CalamityMod is not null)
+				if (ETUD.CalamityMod.TryFind<DamageClass>("RogueDamageClass", out var rogueclass))
+					RogueCoeff = player.GetTotalDamage(rogueclass).Additive + (player.GetCritChance(rogueclass) / 100) + (player.GetAttackSpeed(rogueclass) / 2);
+
+			float[] CoeffArray = new float[] { MeleeCoeff, RangedCoeff, MagicCoeff, SummonCoeff, RogueCoeff };
+			int StatNum = Array.IndexOf(CoeffArray, CoeffArray.Max());
+
+			return StatNum switch
+			{
+				0 => "Melee",
+				1 => "Ranged",
+				2 => "Magic",
+				3 => "Summon",
+				4 => "Rogue",
+				_ => "None",
+			};
+		}
+
+		public static float GetClassRQ(string playerClass, Player Ally)
+		{
+			return playerClass switch
+			{
+				"Melee" => 1,
+				"Ranged" => 1,
+				"Rogue" => Utils.Clamp(CalamityHelper.RogueStealth(Ally) / CalamityHelper.RogueStealthMax(Ally), 0f, 1f),
+				_ => Utils.Clamp((float)Ally.statMana / Ally.statManaMax2, 0f, 1f),
+			};
+		}
+
+		public static Tuple<Color, Color> GetClassColours(string playerClass)
+		{
+			return playerClass switch
+			{
+				"Melee" => new(new(200, 155, 100), new(145, 30, 50)),
+				"Ranged" => new(new(170, 210, 115), new(165, 80, 40)),
+				"Magic" => new(new(110, 200, 240), new(50, 80, 140)),
+				"Summon" => new(new(150, 130, 200), new(50, 80, 140)),
+				"Rogue" => new(new(255, 240, 110), new(180, 150, 20)),
+				"Offline" => new(Color.Gray, Color.LightGray),
+				"None" => new(Color.Green, Color.Blue),
+				_ => new(Color.White, Color.White),
+			};
+		}
+
+		public static bool HasItemsInInventory(Player player, int[] itemtypes)
+		{
+			for (int i = 0; i < itemtypes.Length; i++) if (player.HasItem(itemtypes[i])) return true;
+			return false;
+		}
+
+		public static bool HasBuffs(Player player, int[] bufftypes)
+		{
+			for (int i = 0; i < bufftypes.Length; i++) if (player.HasBuff(bufftypes[i])) return true;
+			return false;
+		}
+
+		public static int CountItemsInInventory(Player player, int[] itemtypes)
+		{
+			int count = 0;
+			for (int i = 0; i < itemtypes.Length; i++) count += player.CountItem(itemtypes[i]);
+			return count;
+		}
+	}
+
+	public class CalamityHelper
+	{
+		public static float RogueStealth(Player player) => (float)ETUD.CalamityMod.Call("GetCurrentStealth", player);
+
+		public static float RogueStealthMax(Player player) => (float)ETUD.CalamityMod.Call("GetMaxStealth", player);
+	}
 }
