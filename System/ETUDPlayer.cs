@@ -38,10 +38,10 @@ namespace EnhancedTeamUIDisplay
 			tag["DCLeftOffset"] = DCLeftOffset;
 
 			if (BossFightAttempts is null) BossFightAttempts = new();
-			var List = new List<TagCompound>();
+			var list = new List<TagCompound>();
 			foreach (var item in BossFightAttempts)
 			{
-				List.Add(new TagCompound()
+				list.Add(new TagCompound()
 				{
 					{"name", item.Key },
 					{"wins", item.Value[0]},
@@ -49,7 +49,7 @@ namespace EnhancedTeamUIDisplay
 				});
 			}
 
-			tag["BFA"] = List;
+			tag["BFA"] = list;
 		}
 
 		public override void LoadData(TagCompound tag)
@@ -61,10 +61,10 @@ namespace EnhancedTeamUIDisplay
 			if (tag.ContainsKey("DCLeftOffset")) DCLeftOffset = (int)tag["DCLeftOffset"];
 
 			if (BossFightAttempts is null) BossFightAttempts = new();
-			var List = tag.GetList<TagCompound>("BFA");
-			if (List is not null && List.Count != 0)
+			var list = tag.GetList<TagCompound>("BFA");
+			if (list is not null && list.Count != 0)
 			{
-				foreach (var item in List)
+				foreach (var item in list)
 				{
 					string name = item.GetString("name");
 					int wins = item.GetInt("wins");

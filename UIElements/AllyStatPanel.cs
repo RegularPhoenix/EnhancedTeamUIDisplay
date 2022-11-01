@@ -14,7 +14,7 @@ namespace EnhancedTeamUIDisplay
 		internal const int width = 20;
 		internal const int height = 24;
 
-		private UIElement MainElement;
+		private UIElement mainElement;
 		private UIImageButton button;
 
 		public override void OnInitialize()
@@ -22,11 +22,11 @@ namespace EnhancedTeamUIDisplay
 			Width.Pixels = width;
 			Height.Pixels = height;
 
-			MainElement = new UIElement();
-			MainElement.Left.Set(0, 0f);
-			MainElement.Top.Set(0, 0f);
-			MainElement.Width.Set(20, 0f);
-			MainElement.Height.Set(24, 0f);
+			mainElement = new UIElement();
+			mainElement.Left.Set(0, 0f);
+			mainElement.Top.Set(0, 0f);
+			mainElement.Width.Set(20, 0f);
+			mainElement.Height.Set(24, 0f);
 
 			//Button
 			button = new UIImageButton(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/AllyStatButton"));
@@ -39,8 +39,8 @@ namespace EnhancedTeamUIDisplay
 			button.OnMouseOver += (e, l) => OnMouseSelect(e, l);
 			button.OnMouseOut += (e, l) => OnMouseDeselect(e, l);
 
-			MainElement.Append(button);
-			Append(MainElement);
+			mainElement.Append(button);
+			Append(mainElement);
 		}
 
 		internal virtual void OnMouseSelect(UIMouseEvent evt, UIElement listeningElement) { if (ETUDUISystem.ETUDAllyStatScreen.CurrentState is null) { ETUDUISystem.OpenAllyStatScreen(); } ETUDAllyInfoPanel.GetLeft = Left.Pixels - ETUDAllyInfoPanel.width; ETUDAllyInfoPanel.GetTop = Top.Pixels; }
@@ -134,14 +134,14 @@ namespace EnhancedTeamUIDisplay
 		internal const int width = 232;
 		internal const int height = 264;
 
-		public static Player Ally;
-		public static float GetLeft;
-		public static float GetTop;
-		public static bool extended;
+		internal static Player Ally;
+		internal static float GetLeft;
+		internal static float GetTop;
+		internal static bool extended;
 
-		private UIElement MainElement;
+		private UIElement mainElement;
 		private UIImage panel, BG;
-		private UIText NameText, ArmorText, AccessoryText, StatTextR, StatTextL;
+		private UIText nameText, armorText, accessoryText, statTextR, statTextL;
 
 		private UIText playerClassText, statClassText;
 
@@ -150,11 +150,11 @@ namespace EnhancedTeamUIDisplay
 			Width.Pixels = width;
 			Height.Pixels = height;
 
-			MainElement = new UIElement();
-			MainElement.Left.Set(0, 0f);
-			MainElement.Top.Set(0, 0f);
-			MainElement.Width.Set(232, 0f);
-			MainElement.Height.Set(264, 0f);
+			mainElement = new UIElement();
+			mainElement.Left.Set(0, 0f);
+			mainElement.Top.Set(0, 0f);
+			mainElement.Width.Set(232, 0f);
+			mainElement.Height.Set(264, 0f);
 
 			BG = new UIImage(extended ? ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/AllyStatPanelExtendedBG") : ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/AllyStatPanelBG"));
 			BG.Left.Set(0, 0f);
@@ -166,34 +166,34 @@ namespace EnhancedTeamUIDisplay
 			panel.Width.Set(232, 0f);
 			panel.Height.Set(264, 0f);
 
-			ArmorText = new UIText("");
-			ArmorText.Top.Set(35, 0f);
-			ArmorText.Width.Set(50, 0f);
-			ArmorText.HAlign = .15f;
-			ArmorText.TextOriginX = 0;
+			armorText = new UIText("");
+			armorText.Top.Set(35, 0f);
+			armorText.Width.Set(50, 0f);
+			armorText.HAlign = .15f;
+			armorText.TextOriginX = 0;
+			
+			accessoryText = new UIText("");
+			accessoryText.Top.Set(72, 0f);
+			accessoryText.Width.Set(50, 0f);
+			accessoryText.HAlign = .10f;
+			accessoryText.TextOriginX = 0;
 
-			AccessoryText = new UIText("");
-			AccessoryText.Top.Set(72, 0f);
-			AccessoryText.Width.Set(50, 0f);
-			AccessoryText.HAlign = .10f;
-			AccessoryText.TextOriginX = 0;
+			nameText = new UIText("");
+			nameText.Top.Set(8, 0f);
+			nameText.Width.Set(160, 0f);
+			nameText.HAlign = .5f;
 
-			NameText = new UIText("");
-			NameText.Top.Set(8, 0f);
-			NameText.Width.Set(160, 0f);
-			NameText.HAlign = .5f;
-
-			StatTextR = new UIText("");
-			StatTextR.Top.Set(37, 0f);
-			StatTextR.Height.Set(50, 0f);
-			StatTextR.HAlign = .92f;
-			StatTextR.TextOriginX = 1;
-
-			StatTextL = new UIText("");
-			StatTextL.Top.Set(37, 0f);
-			StatTextL.Height.Set(50, 0f);
-			StatTextL.HAlign = .67f;
-			StatTextL.TextOriginX = 0;
+			statTextR = new UIText("");
+			statTextR.Top.Set(37, 0f);
+			statTextR.Height.Set(50, 0f);
+			statTextR.HAlign = .92f;
+			statTextR.TextOriginX = 1;
+			
+			statTextL = new UIText("");
+			statTextL.Top.Set(37, 0f);
+			statTextL.Height.Set(50, 0f);
+			statTextL.HAlign = .67f;
+			statTextL.TextOriginX = 0;
 
 			playerClassText = new UIText("");
 			playerClassText.Top.Set(136, 0f);
@@ -208,16 +208,16 @@ namespace EnhancedTeamUIDisplay
 			statClassText.DynamicallyScaleDownToWidth = true;
 
 
-			MainElement.Append(BG);
-			MainElement.Append(NameText);
-			if (extended) { MainElement.Append(playerClassText); MainElement.Append(statClassText); }
-			MainElement.Append(panel);
-			MainElement.Append(ArmorText);
-			MainElement.Append(StatTextR);
-			MainElement.Append(StatTextL);
-			MainElement.Append(AccessoryText);
+			mainElement.Append(BG);
+			mainElement.Append(nameText);
+			if (extended) { mainElement.Append(playerClassText); mainElement.Append(statClassText); }
+			mainElement.Append(panel);
+			mainElement.Append(armorText);
+			mainElement.Append(statTextR);
+			mainElement.Append(statTextL);
+			mainElement.Append(accessoryText);
 
-			Append(MainElement);
+			Append(mainElement);
 
 			Left.Pixels = GetLeft;
 			Top.Pixels = GetTop;
@@ -230,37 +230,37 @@ namespace EnhancedTeamUIDisplay
 			Left.Pixels = GetLeft;
 			Top.Pixels = GetTop;
 
-			int[] Equipment = new int[10];
-			string ArmorTextValue = "";
-			string AccessoriesTextValue = "";
-			string StatTextRValue = "";
-			string StatTextLValue = "";
+			int[] equipment = new int[10];
+			string armorTextValue = "";
+			string accessoriesTextValue = "";
+			string statTextRValue = "";
+			string statTextLValue = "";
 
 			int currentAcc = 0;
 
 			try
 			{
-				for (int i = 0; i < 10; i++) Equipment[i] = Ally.armor[i].type;
-				for (int i = 0; i < 3; i++) ArmorTextValue += Equipment[i] != 0 ? $"[i:{Equipment[i]}]" : "";
-				for (int i = 3; i < 10; i++) { if (Equipment[i] != 0) { AccessoriesTextValue += $"[i:{Equipment[i]}]"; currentAcc++; if (currentAcc == 4) AccessoriesTextValue += "\n"; } }
+				for (int i = 0; i < 10; i++) equipment[i] = Ally.armor[i].type;
+				for (int i = 0; i < 3; i++) armorTextValue += equipment[i] != 0 ? $"[i:{equipment[i]}]" : "";
+				for (int i = 3; i < 10; i++) { if (equipment[i] != 0) { accessoriesTextValue += $"[i:{equipment[i]}]"; currentAcc++; if (currentAcc == 4) accessoriesTextValue += "\n"; } }
 
-				StatTextLValue += $"[i:{ItemID.LifeCrystal}]{Ally.statLifeMax2}\n[i:{ItemID.CobaltShield}]{Ally.statDefense}\n[i:{ItemID.HermesBoots}]{(int)((Ally.accRunSpeed + Ally.maxRunSpeed) / 2f * Ally.moveSpeed * 6)}";
-				StatTextRValue += $"[i:{ItemID.RegenerationPotion}]{Ally.lifeRegen / 2}\n[i:{ItemID.PaladinsShield}]{(int)(Ally.endurance * 100)}\n[i:{ItemID.LeafWings}]{(Math.Round(Ally.wingTimeMax / 60.0, 2) <= 0 ? Math.Round(Ally.wingTimeMax / 60.0, 2) : "-")}";
+				statTextLValue += $"[i:{ItemID.LifeCrystal}]{Ally.statLifeMax2}\n[i:{ItemID.CobaltShield}]{Ally.statDefense}\n[i:{ItemID.HermesBoots}]{(int)((Ally.accRunSpeed + Ally.maxRunSpeed) / 2f * Ally.moveSpeed * 6)}";
+				statTextRValue += $"[i:{ItemID.RegenerationPotion}]{Ally.lifeRegen / 2}\n[i:{ItemID.PaladinsShield}]{(int)(Ally.endurance * 100)}\n[i:{ItemID.LeafWings}]{(Math.Round(Ally.wingTimeMax / 60.0, 2) <= 0 ? Math.Round(Ally.wingTimeMax / 60.0, 2) : "-")}";
 
-				StatTextR.SetText(StatTextRValue);
-				StatTextL.SetText(StatTextLValue);
-				NameText.SetText(Ally.name);
-				ArmorText.SetText(ArmorTextValue != "" ? ArmorTextValue : "No armor");
-				AccessoryText.SetText(AccessoriesTextValue != "" ? AccessoriesTextValue : "No acc-ies");
+				statTextR.SetText(statTextRValue);
+				statTextL.SetText(statTextLValue);
+				nameText.SetText(Ally.name);
+				armorText.SetText(armorTextValue != "" ? armorTextValue : "No armor");
+				accessoryText.SetText(accessoriesTextValue != "" ? accessoriesTextValue : "No acc-ies");
 
 				if (extended)
 				{
-					string AllyClass = MiscEventHandler.DeterminePlayerClass(Ally);
-					Mod CMod = ETUD.CalamityMod;
+					string allyClass = MiscEventHandler.DeterminePlayerClass(Ally);
+					Mod calamityMod = ETUD.CalamityMod;
 
-					playerClassText.SetText((AllyClass == "None" || string.IsNullOrEmpty(AllyClass)) ? "No class" : AllyClass);
+					playerClassText.SetText((allyClass == "None" || string.IsNullOrEmpty(allyClass)) ? "No class" : allyClass);
 
-					switch (AllyClass)
+					switch (allyClass)
 					{
 						case "Melee":
 							statClassText.SetText($"[i:{ItemID.IronBroadsword}] Damage Increase: {GetClassDamage(DamageClass.Melee, Ally)}\n[i:{ItemID.PsychoKnife}] Crit. Chance: {(int)Ally.GetTotalCritChance(DamageClass.Melee)}\n[i:{ItemID.Arkhalis}] Attack Speed: {(int)(Ally.GetTotalAttackSpeed(DamageClass.Melee) * 100)}%\n[i:{ItemID.FleshKnuckles}] Aggro: {Ally.aggro}");
@@ -275,8 +275,8 @@ namespace EnhancedTeamUIDisplay
 							statClassText.SetText($"[i:{ItemID.StardustCellStaff}] Damage Increase: {GetClassDamage(DamageClass.Summon, Ally)}\n[i:{ItemID.MonkAltHead}] Crit. Chance: {(int)Ally.GetTotalCritChance(DamageClass.Summon)}\n[i:{ItemID.ImpStaff}] Max Minions: {Ally.maxMinions}\n[i:{ItemID.DD2BallistraTowerT1Popper}] Max Centries: {Ally.maxTurrets}");
 							break;
 						case "Rogue":
-							if (CMod is not null && CMod.TryFind<DamageClass>("RogueDamageClass", out var rogueclass))
-								statClassText.SetText($"[i:{CMod.Find<ModItem>("HeavenfallenStardisk").Type}] Damage Increase: {GetClassDamage(rogueclass, Ally)}\n[i:{CMod.Find<ModItem>("GleamingDagger").Type}] Crit. Chance: {(int)Ally.GetTotalCritChance(rogueclass)}");
+							if (calamityMod is not null && calamityMod.TryFind<DamageClass>("RogueDamageClass", out var rogueclass))
+								statClassText.SetText($"[i:{calamityMod.Find<ModItem>("HeavenfallenStardisk").Type}] Damage Increase: {GetClassDamage(rogueclass, Ally)}\n[i:{calamityMod.Find<ModItem>("GleamingDagger").Type}] Crit. Chance: {(int)Ally.GetTotalCritChance(rogueclass)}");
 							break;
 						case "None":
 							statClassText.SetText($"");
@@ -289,11 +289,11 @@ namespace EnhancedTeamUIDisplay
 			}
 			catch (Exception e)
 			{
-				StatTextR.SetText("N/A");
-				StatTextL.SetText("N/A");
-				NameText.SetText("Error");
-				ArmorText.SetText("N/A");
-				AccessoryText.SetText("N/A");
+				statTextR.SetText("N/A");
+				statTextL.SetText("N/A");
+				nameText.SetText("Error");
+				armorText.SetText("N/A");
+				accessoryText.SetText("N/A");
 
 				ETUDAdditionalOptions.CreateErrorMessage("MiscPanels", e);
 			}

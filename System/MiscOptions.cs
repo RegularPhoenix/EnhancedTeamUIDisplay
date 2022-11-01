@@ -21,82 +21,82 @@ namespace EnhancedTeamUIDisplay
 
 			for (int i = -1; i < Main.maxPlayers; i++)
 			{
-				Player Ally = null;
+				Player ally = null;
 				
-				if (i == -1) Ally = Main.LocalPlayer;
-				else if (Main.player[i] is not null && Main.player[i].active && Main.player[i].team == Main.LocalPlayer.team && Main.player[i] != Main.LocalPlayer) Ally = Main.player[i];
+				if (i == -1) ally = Main.LocalPlayer;
+				else if (Main.player[i] is not null && Main.player[i].active && Main.player[i].team == Main.LocalPlayer.team && Main.player[i] != Main.LocalPlayer) ally = Main.player[i];
 				
-				if(Ally is not null)
+				if(ally is not null)
 				{
 					Color textColor = Color.Yellow;
-					string PlayerClass = MiscEventHandler.DeterminePlayerClass(Ally);
+					string playerClass = MiscEventHandler.DeterminePlayerClass(ally);
 					string output = "";
-					string classname = "";
+					string className = "";
 
-					switch (PlayerClass)
+					switch (playerClass)
 					{
 						// Melee
 						case "Melee":
-							classname += $"[{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.ClassWarrior")}]";
+							className += $"[{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.ClassWarrior")}]";
 
-							if (!(MiscEventHandler.HasItemsInInventory(Ally, new int[] { ItemID.FlaskofCursedFlames, ItemID.FlaskofFire, ItemID.FlaskofGold, ItemID.FlaskofIchor, ItemID.FlaskofNanites, ItemID.FlaskofParty, ItemID.FlaskofPoison, ItemID.FlaskofVenom })
-								|| MiscEventHandler.HasBuffs(Ally, new int[] { BuffID.WeaponImbueCursedFlames, BuffID.WeaponImbueFire, BuffID.WeaponImbueIchor, BuffID.WeaponImbueNanites, BuffID.WeaponImbueConfetti, BuffID.WeaponImbuePoison, BuffID.WeaponImbueVenom })))
+							if (!(MiscEventHandler.HasItemsInInventory(ally, new int[] { ItemID.FlaskofCursedFlames, ItemID.FlaskofFire, ItemID.FlaskofGold, ItemID.FlaskofIchor, ItemID.FlaskofNanites, ItemID.FlaskofParty, ItemID.FlaskofPoison, ItemID.FlaskofVenom })
+								|| MiscEventHandler.HasBuffs(ally, new int[] { BuffID.WeaponImbueCursedFlames, BuffID.WeaponImbueFire, BuffID.WeaponImbueIchor, BuffID.WeaponImbueNanites, BuffID.WeaponImbueConfetti, BuffID.WeaponImbuePoison, BuffID.WeaponImbueVenom })))
 								output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.NoFlask")} ";
 
-							if (!Ally.HasBuff(BuffID.Sharpened)) output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.SharpBuff")} ";
+							if (!ally.HasBuff(BuffID.Sharpened)) output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.SharpBuff")} ";
 
 							break;
 
 						// Ranged
 						case "Ranged":
-							classname += $"[{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.ClassRanger")}]";
-							if (!(MiscEventHandler.HasItemsInInventory(Ally, new int[] { ItemID.AmmoReservationPotion, ItemID.ArcheryPotion })
-								|| MiscEventHandler.HasBuffs(Ally, new int[] { BuffID.AmmoReservation, BuffID.Archery })))
+							className += $"[{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.ClassRanger")}]";
+							if (!(MiscEventHandler.HasItemsInInventory(ally, new int[] { ItemID.AmmoReservationPotion, ItemID.ArcheryPotion })
+								|| MiscEventHandler.HasBuffs(ally, new int[] { BuffID.AmmoReservation, BuffID.Archery })))
 								output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.RangerBuff")} ";
 
-							if (!Ally.HasBuff(BuffID.AmmoBox)) output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.AmmoBoxBuff")} ";
+							if (!ally.HasBuff(BuffID.AmmoBox)) output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.AmmoBoxBuff")} ";
 
 							break;
 
 						// Magic
 						case "Magic":
-							classname += $"[{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.ClassMage")}]";
+							className += $"[{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.ClassMage")}]";
 
-							if (!(MiscEventHandler.HasItemsInInventory(Ally, new int[] { ItemID.ManaRegenerationPotion, ItemID.MagicPowerPotion })
-								|| MiscEventHandler.HasBuffs(Ally, new int[] { BuffID.ManaRegeneration, BuffID.MagicPower })))
+							if (!(MiscEventHandler.HasItemsInInventory(ally, new int[] { ItemID.ManaRegenerationPotion, ItemID.MagicPowerPotion })
+								|| MiscEventHandler.HasBuffs(ally, new int[] { BuffID.ManaRegeneration, BuffID.MagicPower })))
 								output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.MageBuff")} ";
 							
-							if (!Ally.HasBuff(BuffID.Clairvoyance)) output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.CrystalBuff")} ";
+							if (!ally.HasBuff(BuffID.Clairvoyance)) output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.CrystalBuff")} ";
 
-							int ManaAmount = MiscEventHandler.CountItemsInInventory(Ally, new int[] { ItemID.ManaPotion, ItemID.GreaterManaPotion, ItemID.LesserManaPotion, ItemID.SuperManaPotion, ItemID.RestorationPotion });
-							if (ETUD.CalamityMod is not null) if (ETUD.CalamityMod.TryFind<ModItem>("SupremeManaPotion", out var SupremeManaPotion)) ManaAmount += Ally.CountItem(SupremeManaPotion.Type);
+							int manaAmount = MiscEventHandler.CountItemsInInventory(ally, new int[] { ItemID.ManaPotion, ItemID.GreaterManaPotion, ItemID.LesserManaPotion, ItemID.SuperManaPotion, ItemID.RestorationPotion });
+							if (ETUD.CalamityMod is not null) if (ETUD.CalamityMod.TryFind<ModItem>("SupremeManaPotion", out var SupremeManaPotion)) manaAmount += ally.CountItem(SupremeManaPotion.Type);
 
-							if (ManaAmount == 0) output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.OutOfManaPotions")} ";
-							else if (ManaAmount <= 5) output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.IsLowOnManaPotions")} ";
+							if (manaAmount == 0) output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.OutOfManaPotions")} ";
+							else if (manaAmount <= 5) output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.IsLowOnManaPotions")} ";
 							break;
 
 						// Summon
 						case "Summon":
-							classname += $"[{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.Summoner")}]";
-							if (!(Ally.HasItem(ItemID.SummoningPotion) || Ally.HasBuff(BuffID.Summoning)))
+							className += $"[{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.Summoner")}]";
+							if (!(ally.HasItem(ItemID.SummoningPotion) || ally.HasBuff(BuffID.Summoning)))
 								output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.SummonBuff")} ";
 							
-							if (!Ally.HasBuff(BuffID.Bewitched)) output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.BewitchedBuff")} ";
+							if (!ally.HasBuff(BuffID.Bewitched)) output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.BewitchedBuff")} ";
 							break;
 
 						// Rogue #CALAMITY
 						case "Rogue":
-							classname += $"[{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.ClassRogue")}]";
-							if (!(MiscEventHandler.HasItemsInInventory(Ally, new int[] { ItemID.FlaskofCursedFlames, ItemID.FlaskofFire, ItemID.FlaskofGold, ItemID.FlaskofIchor, ItemID.FlaskofNanites, ItemID.FlaskofParty, ItemID.FlaskofPoison, ItemID.FlaskofVenom })
-								|| MiscEventHandler.HasBuffs(Ally, new int[] { BuffID.WeaponImbueCursedFlames, BuffID.WeaponImbueFire, BuffID.WeaponImbueIchor, BuffID.WeaponImbueNanites, BuffID.WeaponImbueConfetti, BuffID.WeaponImbuePoison, BuffID.WeaponImbueVenom })))
+							className += $"[{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.ClassRogue")}]";
+							if (!(MiscEventHandler.HasItemsInInventory(ally, new int[] { ItemID.FlaskofCursedFlames, ItemID.FlaskofFire, ItemID.FlaskofGold, ItemID.FlaskofIchor, ItemID.FlaskofNanites, ItemID.FlaskofParty, ItemID.FlaskofPoison, ItemID.FlaskofVenom })
+								|| MiscEventHandler.HasBuffs(ally, new int[] { BuffID.WeaponImbueCursedFlames, BuffID.WeaponImbueFire, BuffID.WeaponImbueIchor, BuffID.WeaponImbueNanites, BuffID.WeaponImbueConfetti, BuffID.WeaponImbuePoison, BuffID.WeaponImbueVenom })))
 								output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.NoFlask")} ";
 
 							if (ETUD.CalamityMod is not null)
 							{
 								if (ETUD.CalamityMod.TryFind<ModItem>("ShadowPotion", out var ShadowPotion) && ETUD.CalamityMod.TryFind<ModBuff>("ShadowBuff", out var ShadowBuff))
 								{
-									if (!(MiscEventHandler.HasItemsInInventory(Ally, new int[] { ItemID.InvisibilityPotion, ShadowPotion.Type })
-									|| MiscEventHandler.HasBuffs(Ally, new int[] { BuffID.Invisibility, ShadowBuff.Type })))
+									if (!(MiscEventHandler.HasItemsInInventory(ally, new int[] { ItemID.InvisibilityPotion, ShadowPotion.Type })
+									|| MiscEventHandler.HasBuffs(ally, new int[] { BuffID.Invisibility, ShadowBuff.Type })))
 										output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.RogueBuff")} ";
 								}
 							}
@@ -107,15 +107,15 @@ namespace EnhancedTeamUIDisplay
 							break;
 					}
 
-					int HealsAmount = MiscEventHandler.CountItemsInInventory(Ally, new int[] { ItemID.HealingPotion, ItemID.GreaterHealingPotion, ItemID.LesserHealingPotion, ItemID.SuperHealingPotion, ItemID.RestorationPotion });
+					int healsAmount = MiscEventHandler.CountItemsInInventory(ally, new int[] { ItemID.HealingPotion, ItemID.GreaterHealingPotion, ItemID.LesserHealingPotion, ItemID.SuperHealingPotion, ItemID.RestorationPotion });
 
-					if (ETUD.CalamityMod is not null) if (ETUD.CalamityMod.TryFind<ModItem>("SupremeHealingPotion", out var SupremeHealingPotion) && ETUD.CalamityMod.TryFind<ModItem>("OmegaHealingPotion", out var OmegaHealingPotion)) HealsAmount += Ally.CountItem(SupremeHealingPotion.Type) + Ally.CountItem(OmegaHealingPotion.Type);
+					if (ETUD.CalamityMod is not null) if (ETUD.CalamityMod.TryFind<ModItem>("SupremeHealingPotion", out var SupremeHealingPotion) && ETUD.CalamityMod.TryFind<ModItem>("OmegaHealingPotion", out var OmegaHealingPotion)) healsAmount += ally.CountItem(SupremeHealingPotion.Type) + ally.CountItem(OmegaHealingPotion.Type);
 
-					if (HealsAmount == 0) { output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.OutOfHPPotions")} "; textColor = Color.Red; }
-					else if (HealsAmount <= 5) output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.IsLowOnHPPotions")} ";
+					if (healsAmount == 0) { output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.OutOfHPPotions")} "; textColor = Color.Red; }
+					else if (healsAmount <= 5) output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.IsLowOnHPPotions")} ";
 
 					if (output == "") { output = "- Has required buffs and potions"; textColor = Color.Green; }
-					Main.NewText($"{Ally.name} {classname} {output}", textColor);
+					Main.NewText($"{ally.name} {className} {output}", textColor);
 				}
 			}
 		}
@@ -171,16 +171,16 @@ namespace EnhancedTeamUIDisplay
 		{
 			if (player is null) return "None";
 
-			float MeleeCoeff = player.GetTotalDamage(DamageClass.Melee).Additive + (player.GetCritChance(DamageClass.Melee) / 100) + (player.GetAttackSpeed(DamageClass.Melee) / 2);
-			float RangedCoeff = player.GetTotalDamage(DamageClass.Ranged).Additive + (player.GetCritChance(DamageClass.Ranged) / 100) + (player.GetAttackSpeed(DamageClass.Ranged) / 2);
-			float MagicCoeff = player.GetTotalDamage(DamageClass.Magic).Additive + (player.GetCritChance(DamageClass.Magic) / 100) + (player.GetAttackSpeed(DamageClass.Magic) / 2);
-			float SummonCoeff = player.GetTotalDamage(DamageClass.Summon).Additive + (player.GetCritChance(DamageClass.Summon) / 100) + (player.GetAttackSpeed(DamageClass.Summon) / 2 + (player.maxMinions - 1));
-			float RogueCoeff = 0;
+			float meleeCoeff = player.GetTotalDamage(DamageClass.Melee).Additive + (player.GetCritChance(DamageClass.Melee) / 100) + (player.GetAttackSpeed(DamageClass.Melee) / 2);
+			float rangedCoeff = player.GetTotalDamage(DamageClass.Ranged).Additive + (player.GetCritChance(DamageClass.Ranged) / 100) + (player.GetAttackSpeed(DamageClass.Ranged) / 2);
+			float magicCoeff = player.GetTotalDamage(DamageClass.Magic).Additive + (player.GetCritChance(DamageClass.Magic) / 100) + (player.GetAttackSpeed(DamageClass.Magic) / 2);
+			float summonCoeff = player.GetTotalDamage(DamageClass.Summon).Additive + (player.GetCritChance(DamageClass.Summon) / 100) + (player.GetAttackSpeed(DamageClass.Summon) / 2 + (player.maxMinions - 1));
+			float rogueCoeff = 0;
 			if (ETUD.CalamityMod is not null)
 				if (ETUD.CalamityMod.TryFind<DamageClass>("RogueDamageClass", out var rogueclass))
-					RogueCoeff = player.GetTotalDamage(rogueclass).Additive + (player.GetCritChance(rogueclass) / 100) + (player.GetAttackSpeed(rogueclass) / 2);
+					rogueCoeff = player.GetTotalDamage(rogueclass).Additive + (player.GetCritChance(rogueclass) / 100) + (player.GetAttackSpeed(rogueclass) / 2);
 
-			float[] CoeffArray = new float[] { MeleeCoeff, RangedCoeff, MagicCoeff, SummonCoeff, RogueCoeff };
+			float[] CoeffArray = new float[] { meleeCoeff, rangedCoeff, magicCoeff, summonCoeff, rogueCoeff };
 			int StatNum = Array.IndexOf(CoeffArray, CoeffArray.Max());
 
 			return StatNum switch
@@ -194,14 +194,14 @@ namespace EnhancedTeamUIDisplay
 			};
 		}
 
-		public static float GetClassRQ(string playerClass, Player Ally)
+		public static float GetClassRQ(string playerClass, Player ally)
 		{
 			return playerClass switch
 			{
 				"Melee" => 1,
 				"Ranged" => 1,
-				"Rogue" => Utils.Clamp(CalamityHelper.RogueStealth(Ally) / CalamityHelper.RogueStealthMax(Ally), 0f, 1f),
-				_ => Utils.Clamp((float)Ally.statMana / Ally.statManaMax2, 0f, 1f),
+				"Rogue" => Utils.Clamp(CalamityHelper.RogueStealth(ally) / CalamityHelper.RogueStealthMax(ally), 0f, 1f),
+				_ => Utils.Clamp((float)ally.statMana / ally.statManaMax2, 0f, 1f),
 			};
 		}
 
