@@ -20,5 +20,6 @@ If you find a bug, please report it to RegularPhoenix#2044
 Update 1.1.0:
 	- Added damage (and more) meter UI panel
 	- Added an option to see equipment of allies who are currently on ETUD panels
+	- Added boss fight summary option
 	- Fixed ETUD position not being saved
 	- Changed class colours

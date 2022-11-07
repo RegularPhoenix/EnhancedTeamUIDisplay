@@ -17,6 +17,8 @@ namespace EnhancedTeamUIDisplay
 		private UIElement mainElement;
 		private UIImageButton button;
 
+		private static bool hovered;
+
 		public override void OnInitialize()
 		{
 			Width.Pixels = width;
@@ -35,7 +37,7 @@ namespace EnhancedTeamUIDisplay
 			button.Width.Set(20, 0f);
 			button.Height.Set(24, 0f);
 			button.OnMouseDown += (e, l) => { ETUDUISystem.CloseAllyStatScreen(); ETUDAllyInfoPanel.extended = true; ETUDUISystem.OpenAllyStatScreen(); };
-			button.OnMouseUp += (e, l) => { ETUDUISystem.CloseAllyStatScreen(); ETUDAllyInfoPanel.extended = false; ETUDUISystem.OpenAllyStatScreen(); };
+			button.OnMouseUp += (e, l) => { ETUDUISystem.CloseAllyStatScreen(); ETUDAllyInfoPanel.extended = false; if (hovered) ETUDUISystem.OpenAllyStatScreen(); };
 			button.OnMouseOver += (e, l) => OnMouseSelect(e, l);
 			button.OnMouseOut += (e, l) => OnMouseDeselect(e, l);
 
@@ -43,9 +45,9 @@ namespace EnhancedTeamUIDisplay
 			Append(mainElement);
 		}
 
-		internal virtual void OnMouseSelect(UIMouseEvent evt, UIElement listeningElement) { if (ETUDUISystem.ETUDAllyStatScreen.CurrentState is null) { ETUDUISystem.OpenAllyStatScreen(); } ETUDAllyInfoPanel.GetLeft = Left.Pixels - ETUDAllyInfoPanel.width; ETUDAllyInfoPanel.GetTop = Top.Pixels; }
+		internal virtual void OnMouseSelect(UIMouseEvent evt, UIElement listeningElement) { hovered = true; if (ETUDUISystem.ETUDAllyStatScreen.CurrentState is null) { ETUDUISystem.OpenAllyStatScreen(); } ETUDAllyInfoPanel.GetLeft = Left.Pixels - ETUDAllyInfoPanel.width + width; ETUDAllyInfoPanel.GetTop = Top.Pixels + height; }
 
-		internal virtual void OnMouseDeselect(UIMouseEvent evt, UIElement listeningElement) { if (ETUDUISystem.ETUDAllyStatScreen.CurrentState is not null) ETUDUISystem.CloseAllyStatScreen(); }
+		internal virtual void OnMouseDeselect(UIMouseEvent evt, UIElement listeningElement) { hovered = false; if (ETUDUISystem.ETUDAllyStatScreen.CurrentState is not null) ETUDUISystem.CloseAllyStatScreen(); }
 	}
 
 	internal class AllyInfoButton1 : AllyInfoButton
@@ -245,7 +247,7 @@ namespace EnhancedTeamUIDisplay
 				for (int i = 3; i < 10; i++) { if (equipment[i] != 0) { accessoriesTextValue += $"[i:{equipment[i]}]"; currentAcc++; if (currentAcc == 4) accessoriesTextValue += "\n"; } }
 
 				statTextLValue += $"[i:{ItemID.LifeCrystal}]{Ally.statLifeMax2}\n[i:{ItemID.CobaltShield}]{Ally.statDefense}\n[i:{ItemID.HermesBoots}]{(int)((Ally.accRunSpeed + Ally.maxRunSpeed) / 2f * Ally.moveSpeed * 6)}";
-				statTextRValue += $"[i:{ItemID.RegenerationPotion}]{Ally.lifeRegen / 2}\n[i:{ItemID.PaladinsShield}]{(int)(Ally.endurance * 100)}\n[i:{ItemID.LeafWings}]{(Math.Round(Ally.wingTimeMax / 60.0, 2) <= 0 ? Math.Round(Ally.wingTimeMax / 60.0, 2) : "-")}";
+				statTextRValue += $"[i:{ItemID.RegenerationPotion}]{Ally.lifeRegen / 2}\n[i:{ItemID.PaladinsShield}]{(int)(Ally.endurance * 100)}\n[i:{ItemID.LeafWings}]{(Math.Round(Ally.wingTimeMax / 60.0, 2) > 0 ? Math.Round(Ally.wingTimeMax / 60.0, 2) : "-")}";
 
 				statTextR.SetText(statTextRValue);
 				statTextL.SetText(statTextLValue);
@@ -277,9 +279,6 @@ namespace EnhancedTeamUIDisplay
 						case "Rogue":
 							if (calamityMod is not null && calamityMod.TryFind<DamageClass>("RogueDamageClass", out var rogueclass))
 								statClassText.SetText($"[i:{calamityMod.Find<ModItem>("HeavenfallenStardisk").Type}] Damage Increase: {GetClassDamage(rogueclass, Ally)}\n[i:{calamityMod.Find<ModItem>("GleamingDagger").Type}] Crit. Chance: {(int)Ally.GetTotalCritChance(rogueclass)}");
-							break;
-						case "None":
-							statClassText.SetText($"");
 							break;
 						default:
 							statClassText.SetText($"");
