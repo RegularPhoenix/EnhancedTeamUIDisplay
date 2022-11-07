@@ -60,11 +60,6 @@ namespace EnhancedTeamUIDisplay
 		[Slider]
 		public int DCPlayersToShowAmount;
 
-		[Tooltip("$Mods.EnhancedTeamUIDisplay.Config.AutoResetDamageCounter.Tooltip")]
-		[Label("$Mods.EnhancedTeamUIDisplay.Config.AutoResetDamageCounter.Label")]
-		[DefaultValue(true)]
-		public bool AutoResetDamageCounter;
-
 		[Header("$Mods.EnhancedTeamUIDisplay.Config.AddOptionsHeader")]
 
 		[Tooltip("$Mods.EnhancedTeamUIDisplay.Config.ShowBuffCheckButton.Tooltip")]

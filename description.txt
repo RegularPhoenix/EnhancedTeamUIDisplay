@@ -1,22 +1,25 @@
-Did you ever want to see what armour and accessories your allies are using, how many damage they deal? Maybe you want to compete with your friends? Or maybe you are a WoW player and like many useful(probably) info on your screen? If the answer is "Yes!" then Enhanced Team UI Display (ETUD) is what you need! ETUD adds fashionable UI that allows you to see overall and in-combat statictics.
+Did you ever want to see what armour and accessories your allies are using, how much damage they deal? Maybe you want to compete with your friends? Or maybe you are a WoW player and like a lot of useful(probably) info on your screen? If the answer is "Yes!" then Enhanced Team UI Display (ETUD) is what you need! ETUD adds a fashionable UI that allows you to see overall and in-combat statistics.
 
 Features:
-	- Main ETUD panels: Shows HP, stat (MP, Ammo amount or healing potion cooldown depending on class) and respawn time of up to three teammates.
-	- Buff check: Checks if all players have buffs that are recommended for their class.
-	- Ally info panel: Shows armour, accessories and some stats like defence, health regenenration rate etc. of allies shown in main panels.
-	- StatMeter: Shows current DPS and total damage received and dealt in a cirtain period of time.
+	- Main ETUD panel: shows HP, stat (MP, Ammo amount or healing potion cooldown depending on class) and respawn time of up to three teammates.
+	- Buff check: Check if all players have buffs that are recommended for their class.
+	- Ally info panel: shows armour, accessories and some stats like defence, health regeneration rate etc. of allies shown in the main panels.
+	- StatMeter: shows current DPS, total damage received and dealt in a certain period of time.
 
-Note: dps meter will not track dps of players without DPS Meter accessory equipped. Taken damage shows only damage taken from enemies. Environmental damage (fall, lava, etc.) does not count.
+Compatible with Calamity Mod
+
+Note: the dps meter will not track the dps of players without a DPS Meter accessory equipped. Taken damage shows only damage taken from enemies. Environmental damage (fall, lava, etc.) does not count.
 
 Default keybind - 'L'
 
 Compatible with Calamity Mod
 
-Feel free to give your feedback on mod on Steam Workshop page.
-If you found a bug, please report it to RegularPhoenix#2044
+Feel free to give your feedback on the mod on the Steam Workshop page.
+If you find a bug, please report it to RegularPhoenix#2044
 
 Update 1.1.0:
 	- Added damage (and more) meter UI panel
 	- Added an option to see equipment of allies who are currently on ETUD panels
+	- Added boss fight summary option
 	- Fixed ETUD position not being saved
 	- Changed class colours

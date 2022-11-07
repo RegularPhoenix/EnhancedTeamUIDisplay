@@ -74,6 +74,7 @@ namespace EnhancedTeamUIDisplay
 
 		public override void HandlePacket(BinaryReader reader, int whoAmI)
 		{
+			if (Main.netMode is Terraria.ID.NetmodeID.SinglePlayer) return;
 			byte id = reader.ReadByte();
 			switch (id)
 			{
@@ -97,17 +98,19 @@ namespace EnhancedTeamUIDisplay
 					break;
 				case 2:
 					int dealtdmg = reader.ReadInt32();
+					if (DealtDamageValues[whoAmI] is -1) DealtDamageValues[whoAmI]++;
 					DealtDamageValues[whoAmI] += dealtdmg;
 					break;
 				case 3:
 					int takendmg = reader.ReadInt32();
+					if(TakenDamageValues[whoAmI] is -1) TakenDamageValues[whoAmI]++;
 					TakenDamageValues[whoAmI] += takendmg;
 					break;
 				case 4:
-					if(DeathValues[whoAmI] is not -1) DeathValues[whoAmI]++; else DeathValues[whoAmI] = 1;
+					if (DeathValues[whoAmI] is not -1) DeathValues[whoAmI]++; else DeathValues[whoAmI] = 1;
 					break;
 				default:
-					ETUDAdditionalOptions.CreateErrorMessage(Name, new System.NotImplementedException("Invalid Packet ID"), id);
+					ETUDAdditionalOptions.CreateErrorMessage(Name, new System.ArgumentOutOfRangeException($"Invalid Packet ID: {id}"), id);
 					break;
 			}
 		}

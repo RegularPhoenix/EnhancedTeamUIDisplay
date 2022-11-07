@@ -1,24 +1,13 @@
 Mods: {
 		EnhancedTeamUIDisplay: {
-								ETUDUI: {
-										EnterTeamLine1: First off,
-										EnterTeamLine2: enter a team
-
-										PlayersNotFoundLine1: No other players
-										PlayersNotFoundLine2: found on your team
-
-										HPLabel: HP: 
-										MPLabel: MP:
-										RespawnLabel: Respawning in: 
-								}
 								ETUDPanels: {
 										AllowTPLabel: Teleport to 
-										UIUnfrozen: Panels are currently dragable. Check config to freeze UI or/and enable other options.
+										UIUnfrozen: Panels are currently draggable. Check the config to freeze the UI or/and enable other options.
 
-										EnterTeamLabel: At first, enter a team
+										EnterTeamLabel: First off, join a team
 
-										NoPlayersLabel: No players found
-										NoPlayersLabel2: No other players found
+										NoPlayersLabel: No players were found
+										NoPlayersLabel2: No other players were found
 
 										PotionCD: On cooldown
 										PotionReady: Ready
@@ -39,22 +28,22 @@ Mods: {
 
 										LockUIPosition: {
 												Label: Lock UI position
-												Tooltip: When enabled, UI position will be locked. If disabled, you can freely move UI using mouse
+												Tooltip: When enabled, the UI position will be locked. If disabled, you can freely move the UI.
 										}
 
 										AllowOnClickTeleport: {
 												Label: Allow teleport on click
-												Tooltip: When enabled, click on panel to teleport to the corresponding player (You still need the wormhole potion; Option will not work if "Lock UI position" option is disabled)
+												Tooltip: When enabled, click on the panel to teleport to the corresponding player (You still need the wormhole potion; Option will not work if the "Lock UI position" option is disabled).
 										}
 
 										EnableAutoToggle: {
 												Label: Enable auto toggle
-												Tooltip: Automatically enables ETUD when any boss appears and disables it when all bosses die or despawn
+												Tooltip: Automatically enables ETUD when any boss appears and disables it when all bosses die or despawn.
 										}
 
 										ShowOfflinePlayers: {
 												Label: Show offline players
-												Tooltip: Offline players will not be removed from UI
+												Tooltip: Offline players will not be removed from the UI.
 										}
 
 										EnableColorMatch: {
@@ -81,30 +70,25 @@ Mods: {
 												Label: Amount of players to show
 										}
 
-										AutoResetDamageCounter: {
-												Label: Auto reset stat meter
-												Tooltip: When any boss appears, automatically resets values of stat meter
-										}
-
 										AddOptionsHeader: Additional options
 
 										ShowBuffCheckButton: {
 												Label: Show buff check button
 												Tooltip: 
 													'''
-													Shows button that allows to check your teammates for required buffs.
-													You will still be able to check buffs using /buffcheck command if this option is disabled.
+													Shows a button that allows you to check your teammates for required buffs.
+													You will still be able to check buffs using the /buffcheck command if this option is disabled.
 													'''
 										}
 
 										ShowBossSummary: {
 												Label: Show boss fight summary
-												Tooltip: After boss fight ends shows short dps summary in chat
+												Tooltip: After the boss fight ends, a short summary is shown in the chat.
 										}
 
 										ShowErrorMessages: {
 												Label: Show error messages
-												Tooltip: If ETUD throws an error, its code will be shown in chat. This code will make it easier for mod developer to determine cause of error. Automatically disables if too many errors are thrown.
+												Tooltip: If ETUD throws an error, its code will be shown in chat. This code will make it easier for the mod developer to determine the cause of the error. Automatically disables if too many errors are thrown.
 										}
 								}
 								ETUDAddOptions: {

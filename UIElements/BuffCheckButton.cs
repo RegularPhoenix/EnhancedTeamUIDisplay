@@ -12,7 +12,7 @@ namespace EnhancedTeamUIDisplay
 		internal const int width = 46;
 		internal const int height = 46;
 
-		private UIElement MainElement;
+		private UIElement mainElement;
 		private UIImageButton button;
 
 		public override void OnInitialize()
@@ -20,11 +20,11 @@ namespace EnhancedTeamUIDisplay
 			Width.Pixels = width;
 			Height.Pixels = height;
 
-			MainElement = new UIElement();
-			MainElement.Left.Set(0, 0f);
-			MainElement.Top.Set(0, 0f);
-			MainElement.Width.Set(46, 0f);
-			MainElement.Height.Set(46, 0f);
+			mainElement = new UIElement();
+			mainElement.Left.Set(0, 0f);
+			mainElement.Top.Set(0, 0f);
+			mainElement.Width.Set(46, 0f);
+			mainElement.Height.Set(46, 0f);
 
 			//Button
 			button = new UIImageButton(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/BuffCheckButtonSprite"));
@@ -34,8 +34,8 @@ namespace EnhancedTeamUIDisplay
 			button.Height.Set(46, 0f);
 			button.OnClick += (e, l) => ETUDAdditionalOptions.CheckForBuffs();
 
-			MainElement.Append(button);
-			Append(MainElement);
+			mainElement.Append(button);
+			Append(mainElement);
 		}
 
 		protected override void DrawSelf(SpriteBatch spriteBatch)

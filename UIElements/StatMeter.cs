@@ -84,7 +84,7 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 		internal bool InCombat = false;
 		private DateTime lastCombatTime;
 
-		// DPS - Working
+		#region Tracked stats
 		public override void PostUpdate()
 		{
 			if (Player.accDreamCatcher)
@@ -132,6 +132,7 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 
 		// Deaths
 		public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource) => SendInfoToServer(DamageCounterSystem.DamageCounterPacketType.InformServerOfDeaths);
+		#endregion
 
 		//Sending changes
 		private void SendInfoToServer(DamageCounterSystem.DamageCounterPacketType pt, int? info = null)
@@ -302,7 +303,7 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 			spriteBatch.Draw(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/StatMeter/DamageCounterPanelBottom").Value, new Rectangle(Bar.X - 6, Bar.Y + 20, 200, 10), Color.White);
 		}
 
-		// Dragging
+		#region Dragging
 
 		private Vector2 offset;
 		public bool dragging;
@@ -366,5 +367,6 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 
 			Recalculate();
 		}
+		#endregion
 	}
 }
