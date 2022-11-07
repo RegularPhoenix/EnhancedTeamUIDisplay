@@ -35,12 +35,9 @@ namespace EnhancedTeamUIDisplay
 
 					int manaPotionsAmount = 0, healingPotionsAmount = 0;
 
-					for (int j = 0; j < 58; j++)
+					for (int j = 0; j < ally.inventory.Length; j++)
 					{
 						Item item = ally.inventory[j];
-
-						if (item is not null)
-							continue;
 
 						if (item.healLife > 0) healingPotionsAmount += item.stack;
 						if (item.healMana > 0) manaPotionsAmount += item.stack;

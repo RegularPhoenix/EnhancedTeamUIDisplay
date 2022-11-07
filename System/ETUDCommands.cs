@@ -262,16 +262,16 @@ namespace EnhancedTeamUIDisplay
 							3 => $"{ETUDPanel3.Ally.name}",
 							_ => "Incorrect panel number"
 						},
-						"BossFightAttempts" => Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts.Count == 0 ? "Empty" : string.Join(Environment.NewLine, Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts.Select(s => $"{s.Key} {s.Value[0]} {s.Value[1]}")),
+						"BFA" => Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts.Count == 0 ? "Empty" : string.Join(Environment.NewLine, Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts.Select(s => $"{s.Key} {s.Value[0]} {s.Value[1]}")),
 						_ => "Incorrect argument(s): <variable(s)>",
 						
 					});
 					break;
 				case "set":
-					if (args[1] == "BossFightAttempts") if (args[2] == "clear" && Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts is not null) Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts.Clear();			
+					if (args[1] == "BFA") if (args[2] == "clear" && Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts is not null) Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts.Clear();			
 					break;
 				case "add":
-					if (args[1] == "BossFightAttempts")
+					if (args[1] == "BFA")
 					{
 						if (Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts is null) Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts = new();
 						Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts.Add(args[2], new int[] { int.Parse(args[3]), int.Parse(args[4]) });
