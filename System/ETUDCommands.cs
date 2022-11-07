@@ -3,11 +3,11 @@ using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using System.Linq;
 
 namespace EnhancedTeamUIDisplay
 {
-	// Check for buffs
-
+	#region ReadyCommand
 	public class ReadyCommand : ModCommand
 	{
 		public override CommandType Type
@@ -30,9 +30,9 @@ namespace EnhancedTeamUIDisplay
 			ETUDAdditionalOptions.CheckForBuffs();
 		}
 	}
+	#endregion
 
-	// All commands related to ETUD itself
-
+	#region ETUD Command
 	public class ETUDCommand : ModCommand
 	{
 		public override CommandType Type
@@ -42,7 +42,7 @@ namespace EnhancedTeamUIDisplay
 			=> "setplayer";
 
 		public override string Description
-			=> "Change player displayed on panel";
+			=> "Changes the player displayed on the panel";
 
 		public override string Usage
 			=> "/setplayer <player name> <panel number>";
@@ -223,9 +223,9 @@ namespace EnhancedTeamUIDisplay
 			}
 		}
 	}
+	#endregion
 
-	// Dev only
-
+	#region DebugCommand
 	public class DebugCommand : ModCommand
 	{
 		public override CommandType Type
@@ -242,90 +242,50 @@ namespace EnhancedTeamUIDisplay
 
 		public override void Action(CommandCaller caller, string input, string[] args)
 		{
-
-			if (args[0] == "get")
+			switch (args[0])
 			{
-				if (args[1] == "paneloffset")
-				{
-					caller.Reply(Main.LocalPlayer.GetModPlayer<ETUDPlayer>().PanelLeftOffset + " " + Main.LocalPlayer.GetModPlayer<ETUDPlayer>().PanelTopOffset);
-				}
-				if (args[1] == "allyFound")
-				{
-					int.TryParse(args[2], out int panelnum);
-
-					switch (panelnum)
+				case "get":
+					caller.Reply(args[1] switch
 					{
-						default:
-							break;
-						case 1:
-							Main.NewText(ETUDPanel1.allyFound);
-							break;
-						case 2:
-							Main.NewText(ETUDPanel1.allyFound);
-							break;
-						case 3:
-							Main.NewText(ETUDPanel1.allyFound);
-							break;
-					}
-				}
-
-				if (args[1] == "name")
-				{
-					int.TryParse(args[2], out int panelnum);
-
-					switch (panelnum)
-					{
-						default:
-							break;
-						case 1:
-							Main.NewText(ETUDPanel1.Ally.name);
-							break;
-						case 2:
-							Main.NewText(ETUDPanel1.Ally.name);
-							break;
-						case 3:
-							Main.NewText(ETUDPanel1.Ally.name);
-							break;
-					}
-				}
-
-				if (args[1] == "BossFightAttempts")
-				{
-					if (Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts is null) caller.Reply("Empty");
-					else
-					{
-						if (Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts.Count == 0) caller.Reply("Empty");
-						foreach (System.Collections.Generic.KeyValuePair<string, int[]> pair in Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts)
+						"paneloffset" => $"{Main.LocalPlayer.GetModPlayer<ETUDPlayer>().PanelLeftOffset} {Main.LocalPlayer.GetModPlayer<ETUDPlayer>().PanelTopOffset}",
+						"allyFound" => int.Parse(args[2]) switch
 						{
-							Main.NewText(pair.Key + " " + pair.Value[0].ToString() + " " + pair.Value[1].ToString());
-						}
-					}				
-				}
+							1 => $"{ETUDPanel1.allyFound}",
+							2 => $"{ETUDPanel2.allyFound}",
+							3 => $"{ETUDPanel3.allyFound}",
+							_ => "Incorrect panel number"
+						},
+						"name" => int.Parse(args[2]) switch
+						{
+							1 => $"{ETUDPanel1.Ally.name}",
+							2 => $"{ETUDPanel2.Ally.name}",
+							3 => $"{ETUDPanel3.Ally.name}",
+							_ => "Incorrect panel number"
+						},
+						"BossFightAttempts" => Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts.Count == 0 ? "Empty" : string.Join(Environment.NewLine, Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts.Select(s => $"{s.Key} {s.Value[0]} {s.Value[1]}")),
+						_ => "Incorrect argument(s): <variable(s)>",
+						
+					});
+					break;
+				case "set":
+					if (args[1] == "BossFightAttempts") if (args[2] == "clear" && Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts is not null) Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts.Clear();			
+					break;
+				case "add":
+					if (args[1] == "BossFightAttempts")
+					{
+						if (Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts is null) Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts = new();
+						Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts.Add(args[2], new int[] { int.Parse(args[3]), int.Parse(args[4]) });
+						caller.Reply("Success");
+					}
+					break;
+				case "throw":
+					ETUDAdditionalOptions.CreateErrorMessage("TEST", new NotImplementedException(""), 255);
+					break;
+				default:
+					caller.Reply("Incorrect argument: 2 - <get/set/add>");
+					break;
 			}
-			else if (args[0] == "add")
-			{
-				if (args[1] == "BossFightAttempts")
-				{
-					if (Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts is null) Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts = new();
-					Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts.Add(args[2], new int[] { int.Parse(args[3]), int.Parse(args[4]) });
-					caller.Reply("Success");
-				}
-			}
-			else if (args[0] == "set")
-			{
-				if (args[1] == "BossFightAttempts")
-				{
-					if (args[2] == "clear" && Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts is not null) Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts.Clear();
-				}
-			}
-			else if (args[0] == "throw")
-			{
-				ETUDAdditionalOptions.CreateErrorMessage("TEST", new NotImplementedException(""), 255);
-			}
-
-			// /debugETUD add BossFightAttempts bos 12 412
-			// /debugETUD get BossFightAttempts
-			// /debugETUD set BossFightAttempts clear
 		}
 	}
+	#endregion
 }

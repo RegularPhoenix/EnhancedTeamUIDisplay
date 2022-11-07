@@ -33,6 +33,19 @@ namespace EnhancedTeamUIDisplay
 					string output = "";
 					string className = "";
 
+					int manaPotionsAmount = 0, healingPotionsAmount = 0;
+
+					for (int j = 0; j < 58; j++)
+					{
+						Item item = ally.inventory[j];
+
+						if (item is not null)
+							continue;
+
+						if (item.healLife > 0) healingPotionsAmount += item.stack;
+						if (item.healMana > 0) manaPotionsAmount += item.stack;
+					}
+
 					switch (playerClass)
 					{
 						// Melee
@@ -68,11 +81,11 @@ namespace EnhancedTeamUIDisplay
 							
 							if (!ally.HasBuff(BuffID.Clairvoyance)) output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.CrystalBuff")} ";
 
-							int manaAmount = MiscEventHandler.CountItemsInInventory(ally, new int[] { ItemID.ManaPotion, ItemID.GreaterManaPotion, ItemID.LesserManaPotion, ItemID.SuperManaPotion, ItemID.RestorationPotion });
-							if (ETUD.CalamityMod is not null) if (ETUD.CalamityMod.TryFind<ModItem>("SupremeManaPotion", out var SupremeManaPotion)) manaAmount += ally.CountItem(SupremeManaPotion.Type);
+							//int manaAmount = MiscEventHandler.CountItemsInInventory(ally, new int[] { ItemID.ManaPotion, ItemID.GreaterManaPotion, ItemID.LesserManaPotion, ItemID.SuperManaPotion, ItemID.RestorationPotion });
+							//if (ETUD.CalamityMod is not null) if (ETUD.CalamityMod.TryFind<ModItem>("SupremeManaPotion", out var SupremeManaPotion)) manaAmount += ally.CountItem(SupremeManaPotion.Type);
 
-							if (manaAmount == 0) output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.OutOfManaPotions")} ";
-							else if (manaAmount <= 5) output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.IsLowOnManaPotions")} ";
+							if (manaPotionsAmount == 0) output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.OutOfManaPotions")} ";
+							else if (manaPotionsAmount <= 5) output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.IsLowOnManaPotions")} ";
 							break;
 
 						// Summon
@@ -101,18 +114,16 @@ namespace EnhancedTeamUIDisplay
 								}
 							}
 							break;
-						case "None":
-							break;
 						default:
+							CreateErrorMessage("ETUDAdditionalOptions", new ArgumentException(), i);
 							break;
 					}
 
-					int healsAmount = MiscEventHandler.CountItemsInInventory(ally, new int[] { ItemID.HealingPotion, ItemID.GreaterHealingPotion, ItemID.LesserHealingPotion, ItemID.SuperHealingPotion, ItemID.RestorationPotion });
+					//int healsAmount = MiscEventHandler.CountItemsInInventory(ally, new int[] { ItemID.HealingPotion, ItemID.GreaterHealingPotion, ItemID.LesserHealingPotion, ItemID.SuperHealingPotion, ItemID.RestorationPotion });
+					//if (ETUD.CalamityMod is not null) if (ETUD.CalamityMod.TryFind<ModItem>("SupremeHealingPotion", out var SupremeHealingPotion) && ETUD.CalamityMod.TryFind<ModItem>("OmegaHealingPotion", out var OmegaHealingPotion)) healsAmount += ally.CountItem(SupremeHealingPotion.Type) + ally.CountItem(OmegaHealingPotion.Type);
 
-					if (ETUD.CalamityMod is not null) if (ETUD.CalamityMod.TryFind<ModItem>("SupremeHealingPotion", out var SupremeHealingPotion) && ETUD.CalamityMod.TryFind<ModItem>("OmegaHealingPotion", out var OmegaHealingPotion)) healsAmount += ally.CountItem(SupremeHealingPotion.Type) + ally.CountItem(OmegaHealingPotion.Type);
-
-					if (healsAmount == 0) { output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.OutOfHPPotions")} "; textColor = Color.Red; }
-					else if (healsAmount <= 5) output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.IsLowOnHPPotions")} ";
+					if (healingPotionsAmount == 0) { output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.OutOfHPPotions")} "; textColor = Color.Red; }
+					else if (healingPotionsAmount <= 5) output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.IsLowOnHPPotions")} ";
 
 					if (output == "") { output = "- Has required buffs and potions"; textColor = Color.Green; }
 					Main.NewText($"{ally.name} {className} {output}", textColor);
