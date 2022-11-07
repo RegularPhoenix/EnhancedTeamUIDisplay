@@ -11,4 +11,4 @@ Features:
 
 - StatMeter: shows current DPS, total damage received and dealt in a certain period of time.
 
-Compatible with Calamity Mod
+Compatible with Calamity Mod.
