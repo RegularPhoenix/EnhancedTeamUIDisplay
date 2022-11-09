@@ -36,6 +36,8 @@ namespace EnhancedTeamUIDisplay
 
 		internal void ResetVariables()
 		{
+			if (Main.netMode == Terraria.ID.NetmodeID.SinglePlayer) return;
+
 			var netMessage = GetPacket();
 			netMessage.Write((byte)DamageCounterSystem.DamageCounterPacketType.InformClientsOfValues);
 

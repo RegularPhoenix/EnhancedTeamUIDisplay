@@ -58,7 +58,9 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 		{		
 			base.PostUpdatePlayers();
 
-			if (ETUDAdditionalOptions.LastFightEndTime != DateTime.MinValue && !BossFightEndedRecently && (DateTime.Now - ETUDAdditionalOptions.LastFightEndTime).TotalSeconds < 20) { BossFightEndedRecently = true;Main.NewText($"{ETUDAdditionalOptions.LastFightEndTime} {(DateTime.Now - ETUDAdditionalOptions.LastFightEndTime).TotalSeconds}"); }
+			if (Main.netMode == NetmodeID.SinglePlayer) return;
+
+			if (ETUDAdditionalOptions.LastFightEndTime != DateTime.MinValue && !BossFightEndedRecently && (DateTime.Now - ETUDAdditionalOptions.LastFightEndTime).TotalSeconds < 20) BossFightEndedRecently = true;
 
 			NoPlayersInCombat = true;
 

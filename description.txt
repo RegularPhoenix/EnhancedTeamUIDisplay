@@ -17,9 +17,6 @@ Compatible with Calamity Mod
 Feel free to give your feedback on the mod on the Steam Workshop page.
 If you find a bug, please report it to RegularPhoenix#2044
 
-Update 1.2.0:
-	- Added damage (and more) meter UI panel
-	- Added an option to see equipment of allies who are currently on ETUD panels
-	- Added boss fight summary option
-	- Fixed ETUD position not being saved
-	- Changed class colours
+Hotfix 1.2.1:
+	- The "Cannot get packet for EnhancedTeamUIDisplay because it does not exist on the other side" exception that was causing the game to freeze has been fixed.
+	- The boss fight summary no longer displays the time plus some random numbers when the boss was defeated.
