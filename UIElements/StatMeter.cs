@@ -3,6 +3,7 @@ using Terraria.ID;
 using Terraria.UI;
 using Terraria.ModLoader;
 using Terraria.GameContent;
+using Terraria.Localization;
 using Terraria.DataStructures;
 using Terraria.GameContent.UI.Elements;
 using System;
@@ -10,7 +11,6 @@ using System.Linq;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
 
 namespace EnhancedTeamUIDisplay.DamageCounter
 {
@@ -247,19 +247,19 @@ namespace EnhancedTeamUIDisplay.DamageCounter
 			{
 				case 0:
 					Array.Copy(ETUD.DPSValues, SourceStatArray, 256);
-					StatNameText.SetText("DPS:");
+					StatNameText.SetText($"{Language.GetText("Mods.EnhancedTeamUIDisplay.StatMeter.DPS")}:");
 					break;
 				case 1:
 					Array.Copy(ETUD.DeathValues, SourceStatArray, 256);
-					StatNameText.SetText("Deaths:");
+					StatNameText.SetText($"{Language.GetText("Mods.EnhancedTeamUIDisplay.StatMeter.Deaths")}:");
 					break;
 				case 2:
 					Array.Copy(ETUD.TakenDamageValues, SourceStatArray, 256);
-					StatNameText.SetText("Damage taken:");
+					StatNameText.SetText($"{Language.GetText("Mods.EnhancedTeamUIDisplay.StatMeter.TakenDmg")}:");
 					break;
 				case 3:
 					Array.Copy(ETUD.DealtDamageValues, SourceStatArray, 256);
-					StatNameText.SetText("Damage dealt:");
+					StatNameText.SetText($"{Language.GetText("Mods.EnhancedTeamUIDisplay.StatMeter.DealtDmg")}:");
 					break;
 			}
 

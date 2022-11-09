@@ -1,6 +1,7 @@
 ﻿using Terraria;
-using Terraria.ModLoader;
 using Terraria.UI;
+using Terraria.ModLoader;
+using Terraria.Localization;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using EnhancedTeamUIDisplay.DamageCounter;
@@ -156,10 +157,10 @@ namespace EnhancedTeamUIDisplay
 
 						if (playeralive && !bossEvaded)
 						{
-							ETUDAdditionalOptions.OnBossFightEnd(firstBossName + (KilledBosses.Count > 1 ? (" and " + (KilledBosses.Count - 1) + " other bosses") : ""), "> You have killed this boss " + tempDictionary[firstBossName][0] + " time(s).");
+							ETUDAdditionalOptions.OnBossFightEnd(firstBossName + (KilledBosses.Count > 1 ? ($" {Language.GetText("Mods.EnhancedTeamUIDisplay.UISystem.and")} " + (KilledBosses.Count - 1) + $" {Language.GetText("Mods.EnhancedTeamUIDisplay.UISystem.OtherBosses")}") : ""), $"> {Language.GetText("Mods.EnhancedTeamUIDisplay.UISystem.KilledBoss")} " + tempDictionary[firstBossName][0] + $" {Language.GetText("Mods.EnhancedTeamUIDisplay.UISystem.Times")}");
 						}
-						else if (playeralive && bossEvaded && KilledBosses.Count > 0) ETUDAdditionalOptions.OnBossFightEnd("First boss has escaped, but you killed " + KilledBosses.Count + " other bosses. ", "> You have wiped on this boss (" + firstBossName + ") " + tempDictionary[firstBossName][1] + " time(s).", true);
-						else ETUDAdditionalOptions.OnBossFightEnd("", "> You have wiped on this boss (" + firstBossName + ") " + tempDictionary[firstBossName][1] + " time(s).");	
+						else if (playeralive && bossEvaded && KilledBosses.Count > 0) ETUDAdditionalOptions.OnBossFightEnd($"{Language.GetText("Mods.EnhancedTeamUIDisplay.AllyStatPanel.KilledOtherBosses")} " + KilledBosses.Count + $" {Language.GetText("Mods.EnhancedTeamUIDisplay.UISystem.OtherBosses")}. ", $"> {Language.GetText("Mods.EnhancedTeamUIDisplay.UISystem.TeamWiped")} (" + firstBossName + ") " + tempDictionary[firstBossName][1] + $" {Language.GetText("Mods.EnhancedTeamUIDisplay.UISystem.Times")}", true);
+						else ETUDAdditionalOptions.OnBossFightEnd("", $"> {Language.GetText("Mods.EnhancedTeamUIDisplay.UISystem.TeamWiped")} (" + firstBossName + ") " + tempDictionary[firstBossName][1] + $" {Language.GetText("Mods.EnhancedTeamUIDisplay.UISystem.Times")}");	
 					}
 					anyBossFound = false;
 					firstBossName = "";

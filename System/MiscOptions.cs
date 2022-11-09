@@ -1,7 +1,7 @@
 ﻿using Terraria;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.Localization;
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -122,7 +122,7 @@ namespace EnhancedTeamUIDisplay
 					if (healingPotionsAmount == 0) { output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.OutOfHPPotions")} "; textColor = Color.Red; }
 					else if (healingPotionsAmount <= 5) output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.IsLowOnHPPotions")} ";
 
-					if (output == "") { output = "- Has required buffs and potions"; textColor = Color.Green; }
+					if (output == "") { output = Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.HasRequired").Value; textColor = Color.Green; }
 					Main.NewText($"{ally.name} {className} {output}", textColor);
 				}
 			}
@@ -152,8 +152,8 @@ namespace EnhancedTeamUIDisplay
 			BossFightDuration = BossFightEndTime - BossFightStartTime;
 
 			string output = Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.ETUDInfoDPS").Value + "\n";
-			if (!special) output += (arg == "" ? "> Team wiped in " : "> " + arg + " killed in ") + BossFightDuration.ToString(@"hh\:mm\:ss") + "\n";
-			else output += arg + "Fight time: " + BossFightDuration.ToString(@"hh\:mm\:ss") + "\n";
+			if (!special) output += (arg == "" ? $"> {Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.FightSummary.Wipe")} " : "> " + arg + $" {Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.FightSummary.Kill")} ") + BossFightDuration.ToString(@"hh\:mm\:ss") + "\n";
+			else output += arg + $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.FightSummary.Time")} " + BossFightDuration.ToString(@"hh\:mm\:ss") + "\n";
 			output += addarg + "\n";
 
 			if (ETUDConfig.Instanse.ShowBossSummary) Main.NewText(output, ETUDTextColor);
@@ -166,9 +166,9 @@ namespace EnhancedTeamUIDisplay
 			if (ETUDConfig.Instanse.ShowErrorMessages)
 			{
 				ErrorsAmount++;
-				Main.NewText($"ETUD Error: [{Regex.Replace(className, "[^A-Z]", "")}-{Regex.Replace(exception.GetType().Name, "[^A-Z]", "")}-{Convert.ToString(num ?? 0, 16)}] If this error persists, please contact the mod creator.", Color.Red);
+				Main.NewText($"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.Error.Message")}: [{Regex.Replace(className, "[^A-Z]", "")}-{Regex.Replace(exception.GetType().Name, "[^A-Z]", "")}-{Convert.ToString(num ?? 0, 16)}] {Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.Error.Desc")}", Color.Red);
 				ETUD.Instance.Logger.Error($"Enhanced Team UI Display Error: In:{className} Error type:{exception.GetType().Name} Stack trace:{exception.StackTrace} ETUD Error Number:{num}");
-				if (ErrorsAmount >= 5) { ETUDConfig.Instanse.ShowErrorMessages = false; Main.NewText("ETUD Warning: There were too many errors, so \"Show error messages\" option in config was disabled. If you see anything strange in ETUD, please contact the mod author. There is a possibility that this is a false positive, so if you don't notice anything strange, simply ignore this message, the problem will probably be fixed in the next update.", Color.OrangeRed); }
+				if (ErrorsAmount >= 5) { ETUDConfig.Instanse.ShowErrorMessages = false; Main.NewText(Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.Error.ManyErrors"), Color.OrangeRed); }
 			}
 		}
 	}

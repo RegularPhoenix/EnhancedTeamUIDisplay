@@ -26,7 +26,7 @@ namespace EnhancedTeamUIDisplay
 		public override void OnEnterWorld(Player player)
 		{
 			ETUDUISystem.CloseETUDInterface();
-			if (Main.netMode == NetmodeID.SinglePlayer) Main.NewText("ETUD Warning: ETUD is intended to use in multiplayer and most of its options will not work in singleplayer.", 255, 255, 0);
+			if (Main.netMode == NetmodeID.SinglePlayer) Main.NewText(Terraria.Localization.Language.GetText("Mods.EnhancedTeamUIDisplay.SingleplayerWarning").Value, 255, 255, 0);
 		}
 
 		public override void SaveData(TagCompound tag)

@@ -121,8 +121,47 @@ Mods: {
 										IsLowOnHPPotions: - Is low on healing potions
 
 										HasRequired: - Has required buffs and potions
-								}
 
+										FightSummary: {
+												Wipe: Team wiped in
+												Kill: killed in
+												Time: Fight time:
+										}
+
+										Error: {
+												Message: ETUD Error
+												Desc: If this error persists, please contact the mod creator.
+												ManyErrors: ETUD Warning: There were too many errors, so \"Show error messages\" option in config was disabled. If you see anything strange in ETUD, please contact the mod author. There is a possibility that this is a false positive, so if you don't notice anything strange, simply ignore this message, the problem will probably be fixed in the next update.
+										}
+								}
+								UISystem: {
+										and: and
+										Times: time(s).
+										KilledBoss: You have killed this boss
+										OtherBosses: other bosses
+										TeamWiped: You have wiped on this boss
+										KilledOtherBosses: The first boss has escaped, but you killed
+								}
+								AllyStatPanel: {
+										NoArmor: No armor
+										NoAccs: No acc-ies
+										Dmg: Damage Increase
+										Crit: Crit. Chance
+										MeleeSpeed: Attack Speed
+										Aggro: Aggro
+										Pen: Armor Penetration
+										MPRed: MP Cost Reduction
+										Minions: Max Minions
+										Centries: Max Centries
+								}
+								StatMeter: {
+										DPS: DPS
+										Deaths: Deaths
+										TakenDmg: Damage taken
+										DealtDmg: Damage dealt
+										NoData: No data
+								}
+								SingleplayerWarning: ETUD Warning: ETUD is intended to use in multiplayer and most of its options will not work in singleplayer.
 		}
 }
 	

@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.UI;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.Localization;
 using Terraria.GameContent.UI.Elements;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -252,8 +253,8 @@ namespace EnhancedTeamUIDisplay
 				statTextR.SetText(statTextRValue);
 				statTextL.SetText(statTextLValue);
 				nameText.SetText(Ally.name);
-				armorText.SetText(armorTextValue != "" ? armorTextValue : "No armor");
-				accessoryText.SetText(accessoriesTextValue != "" ? accessoriesTextValue : "No acc-ies");
+				armorText.SetText(armorTextValue != "" ? armorTextValue : Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.AllyStatPanel.NoArmor").Value);
+				accessoryText.SetText(accessoriesTextValue != "" ? accessoriesTextValue : Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.AllyStatPanel.NoAccs").Value);
 
 				if (extended)
 				{
@@ -265,23 +266,23 @@ namespace EnhancedTeamUIDisplay
 					switch (allyClass)
 					{
 						case "Melee":
-							statClassText.SetText($"[i:{ItemID.IronBroadsword}] Damage Increase: {GetClassDamage(DamageClass.Melee, Ally)}\n[i:{ItemID.PsychoKnife}] Crit. Chance: {(int)Ally.GetTotalCritChance(DamageClass.Melee)}\n[i:{ItemID.Arkhalis}] Attack Speed: {(int)(Ally.GetTotalAttackSpeed(DamageClass.Melee) * 100)}%\n[i:{ItemID.FleshKnuckles}] Aggro: {Ally.aggro}");
+							statClassText.SetText($"[i:{ItemID.IronBroadsword}] {Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.AllyStatPanel.Dmg")}: {GetClassDamage(DamageClass.Melee, Ally)}\n[i:{ItemID.PsychoKnife}] {Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.AllyStatPanel.Crit")}: {(int)Ally.GetTotalCritChance(DamageClass.Melee)}\n[i:{ItemID.Arkhalis}] {Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.AllyStatPanel.MeleeSpeed")}: {(int)(Ally.GetTotalAttackSpeed(DamageClass.Melee) * 100)}%\n[i:{ItemID.FleshKnuckles}] {Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.AllyStatPanel.Aggro")}: {Ally.aggro}");
 							break;
 						case "Ranged":
-							statClassText.SetText($"[i:{ItemID.IronBow}] Damage Increase: {GetClassDamage(DamageClass.Ranged, Ally)}\n[i:{ItemID.SniperRifle}] Crit. Chance: {(int)Ally.GetTotalCritChance(DamageClass.Ranged)}\n[i:{ItemID.SharkToothNecklace}] Armor Penetration: {Ally.GetArmorPenetration(DamageClass.Generic)}");
+							statClassText.SetText($"[i:{ItemID.IronBow}] {Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.AllyStatPanel.Dmg")}: {GetClassDamage(DamageClass.Ranged, Ally)}\n[i:{ItemID.SniperRifle}] {Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.AllyStatPanel.Crit")}: {(int)Ally.GetTotalCritChance(DamageClass.Ranged)}\n[i:{ItemID.SharkToothNecklace}] {Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.AllyStatPanel.Pen")}: {Ally.GetArmorPenetration(DamageClass.Generic)}");
 							break;
 						case "Magic":
-							statClassText.SetText($"[i:{ItemID.MagicalHarp}] Damage Increase: {GetClassDamage(DamageClass.Magic, Ally)}\n[i:{ItemID.SkyFracture}] Crit. Chance: {(int)Ally.GetTotalCritChance(DamageClass.Magic)}\n[i:{ItemID.CrystalBall}] MP Cost Reduction: {Math.Round((1.0 - Ally.manaCost) * 100)}%");
+							statClassText.SetText($"[i:{ItemID.MagicalHarp}] {Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.AllyStatPanel.Dmg")}: {GetClassDamage(DamageClass.Magic, Ally)}\n[i:{ItemID.SkyFracture}] {Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.AllyStatPanel.Crit")}: {(int)Ally.GetTotalCritChance(DamageClass.Magic)}\n[i:{ItemID.CrystalBall}] {Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.AllyStatPanel.MPRed")}: {Math.Round((1.0 - Ally.manaCost) * 100)}%");
 							break;
 						case "Summon":
-							statClassText.SetText($"[i:{ItemID.StardustCellStaff}] Damage Increase: {GetClassDamage(DamageClass.Summon, Ally)}\n[i:{ItemID.MonkAltHead}] Crit. Chance: {(int)Ally.GetTotalCritChance(DamageClass.Summon)}\n[i:{ItemID.ImpStaff}] Max Minions: {Ally.maxMinions}\n[i:{ItemID.DD2BallistraTowerT1Popper}] Max Centries: {Ally.maxTurrets}");
+							statClassText.SetText($"[i:{ItemID.StardustCellStaff}] {Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.AllyStatPanel.Dmg")}: {GetClassDamage(DamageClass.Summon, Ally)}\n[i:{ItemID.MonkAltHead}] {Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.AllyStatPanel.Crit")}: {(int)Ally.GetTotalCritChance(DamageClass.Summon)}\n[i:{ItemID.ImpStaff}] {Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.AllyStatPanel.Minions")}: {Ally.maxMinions}\n[i:{ItemID.DD2BallistraTowerT1Popper}] {Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.AllyStatPanel.Centries")}: {Ally.maxTurrets}");
 							break;
 						case "Rogue":
 							if (calamityMod is not null && calamityMod.TryFind<DamageClass>("RogueDamageClass", out var rogueclass))
-								statClassText.SetText($"[i:{calamityMod.Find<ModItem>("HeavenfallenStardisk").Type}] Damage Increase: {GetClassDamage(rogueclass, Ally)}\n[i:{calamityMod.Find<ModItem>("GleamingDagger").Type}] Crit. Chance: {(int)Ally.GetTotalCritChance(rogueclass)}");
+								statClassText.SetText($"[i:{calamityMod.Find<ModItem>("HeavenfallenStardisk").Type}] {Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.AllyStatPanel.Dmg")}: {GetClassDamage(rogueclass, Ally)}\n[i:{calamityMod.Find<ModItem>("GleamingDagger").Type}] {Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.AllyStatPanel.Crit")}: {(int)Ally.GetTotalCritChance(rogueclass)}");
 							break;
 						default:
-							statClassText.SetText($"");
+							statClassText.SetText("");
 							break;
 					}
 				}
