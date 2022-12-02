@@ -87,7 +87,7 @@ namespace EnhancedTeamUIDisplay
 
 						// Summon
 						case "Summon":
-							className += $"[{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.Summoner")}]";
+							className += $"[{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.ClassSummoner")}]";
 							if (!(ally.HasItem(ItemID.SummoningPotion) || ally.HasBuff(BuffID.Summoning)))
 								output += $"{Language.GetText("Mods.EnhancedTeamUIDisplay.ETUDAddOptions.SummonBuff")} ";
 							
