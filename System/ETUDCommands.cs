@@ -238,7 +238,7 @@ namespace EnhancedTeamUIDisplay
 			=> "Don't use this command. For development purposes. May crash the game";
 
 		public override string Usage
-			=> "/debugETUD <get/set/add> <variable(s)> <panel number (optional)>";
+			=> "/debugETUD <get/reset/add> <variable(s)> <panel number (optional)>";
 
 		public override void Action(CommandCaller caller, string input, string[] args)
 		{
@@ -263,12 +263,19 @@ namespace EnhancedTeamUIDisplay
 							_ => "Incorrect panel number"
 						},
 						"BFA" => Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts.Count == 0 ? "Empty" : string.Join(Environment.NewLine, Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts.Select(s => $"{s.Key} {s.Value[0]} {s.Value[1]}")),
+						"dealtdmgvals" => string.Join(' ', ETUD.DealtDamageValues.Select((v, i)
+							=> new { v, i })
+							.Where(x => x.v != -1)
+							.Select(x => x.i)),
 						_ => "Incorrect argument(s): <variable(s)>",
 						
 					});
 					break;
-				case "set":
-					if (args[1] == "BFA") if (args[2] == "clear" && Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts is not null) Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts.Clear();			
+				case "reset":
+					if (args[1] == "BFA")
+						Main.LocalPlayer.GetModPlayer<ETUDPlayer>().BossFightAttempts?.Clear();					
+					else if (args[1] == "statmeter")
+						ETUD.Instance.ResetVariables();
 					break;
 				case "add":
 					if (args[1] == "BFA")
