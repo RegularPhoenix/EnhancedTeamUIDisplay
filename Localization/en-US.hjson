@@ -1,128 +1,165 @@
 Mods: {
-		EnhancedTeamUIDisplay: {
-								ETUDPanels: {
-										AllowTPLabel: Teleport to 
-										UIUnfrozen: Panels are currently draggable. Check the config to freeze the UI or/and enable other options.
+	EnhancedTeamUIDisplay: {
+		Keybinds.ToggleUI.DisplayName: Toggle ETUD UI
 
-										EnterTeamLabel: First off, join a team
-
-										NoPlayersLabel: No players were found
-										NoPlayersLabel2: No other players were found
-
-										PotionCD: On cooldown
-										PotionReady: Ready
-
-										Dead: Dead. Respawning in 
-
-										BulletLabel: Bullets:
-										ArrowLabel: Arrows:
-
-										Offline: Offline
-								}
-								Config: {
-										PanelHeader: Panels
-
-										PanelAmount: {
-												Label: Amount of panels
-										}
-
-										LockUIPosition: {
-												Label: Lock UI position
-												Tooltip: When enabled, the UI position will be locked. If disabled, you can freely move the UI.
-										}
-
-										AllowOnClickTeleport: {
-												Label: Allow teleport on click
-												Tooltip: When enabled, click on the panel to teleport to the corresponding player (You still need the wormhole potion; Option will not work if the "Lock UI position" option is disabled).
-										}
-
-										EnableAutoToggle: {
-												Label: Enable auto toggle
-												Tooltip: Automatically enables ETUD when any boss appears and disables it when all bosses die or despawn.
-										}
-
-										ShowOfflinePlayers: {
-												Label: Show offline players
-												Tooltip: Offline players will not be removed from the UI.
-										}
-
-										EnableColorMatch: {
-												Label: Advanced colour system
-												Tooltip:
-													'''		
-													ETUD will try to determine your allies' classes and show corresponding stats and use different colours: 
-													> Warrior - Brown HP - Healing potion cooldown 
-													> Ranger - Green HP - Ammo count 
-													> Mage - Blue HP - Mana 
-													> Summoner - Purple HP - Mana 
-													> [Calamity Mod] Rogue - Yellow HP - Stealth
-													'''
-										}
-
-										DCOptionsHeader: Stat meter options
-
-										EnableDamageCounter: {
-												Label: Enable stat meter
-												Tooltip: Adds an additional panel to ETUD that shows various in-combat stats like DPS, taken and dealt damage etc.
-										}
-
-										DCPlayersToShowAmount: {
-												Label: Amount of players to show
-										}
-
-										AddOptionsHeader: Additional options
-
-										ShowBuffCheckButton: {
-												Label: Show buff check button
-												Tooltip: 
-													'''
-													Shows a button that allows you to check your teammates for required buffs.
-													You will still be able to check buffs using the /buffcheck command if this option is disabled.
-													'''
-										}
-
-										ShowBossSummary: {
-												Label: Show boss fight summary
-												Tooltip: After the boss fight ends, a short summary is shown in the chat.
-										}
-
-										ShowErrorMessages: {
-												Label: Show error messages
-												Tooltip: If ETUD throws an error, its code will be shown in chat. This code will make it easier for the mod developer to determine the cause of the error. Automatically disables if too many errors are thrown.
-										}
-								}
-								ETUDAddOptions: {
-										ETUDInfoBC: ETUD Summary (Buff check):
-										ETUDInfoDPS: ETUD Summary (Boss fight):
-
-										ClassWarrior: Warrior
-										ClassRanger: Ranger
-										ClassMage: Mage
-										ClassSummoner: Summoner
-										ClassRogue: Rogue
-
-										NoFlask: - No flask
-										SharpBuff: - No sharpening station buff
-
-										RangerBuff: - No archery/ammo reservation buff
-										AmmoBoxBuff: - No ammo box buff
-
-										MageBuff: - No magic power/mana regeneration buff
-										CrystalBuff: - No crystal ball buff
-										OutOfManaPotions: - Ran out of mana potions
-										IsLowOnManaPotions: - Is low on mana potions
-
-										SummonBuff: - No summoning buff
-										BewitchedBuff: - No bewitching table buff
-
-										RogueBuff: - No invisibility/shadow buff
-
-										OutOfHPPotions: - Ran out of healing potions
-										IsLowOnHPPotions: - Is low on healing potions
-
-										HasRequired: - Has required buffs and potions
-								}
-
+		Announcements: {
+			Singleplayer: "[ETUD Info]: ETUD is designed for multiplayer use and therefore has no use in singleplayer."
+			Multiplayer:
+				'''
+				[ETUD Info]: ETUD was recently rewritten and has not been tested thoroughly yet.
+				If you encounter any bugs, please create an issue on GitHub or leave a comment on the mod's Steam Workshop page.
+				'''
 		}
+
+		ErrorTexts: {
+			Error: "[ETUD Error]: Oops, it seems an error happened in ETUD! If this message persists, please contact the mod creator"
+			TooManyErrors:
+				'''
+				[ETUD Warning]: There were too many errors, so "Show error messages" option in config was disabled.
+				If you see anything strange in ETUD, please contact the mod author.
+				There is a possibility that this is a false positive, so if you don't notice anything strange
+				simply ignore this message, the problem will probably be fixed in the next update. 
+				'''
+		}
+
+		GeneralNouns: {
+			Error: Error
+			ClassMelee: Warrior
+			ClassRanger: Ranger
+			ClassMage: Mage
+			ClassSummoner: Summoner
+			ClassRogue: Rogue
+			ClassBard: Bard
+			ClassHealer: Healer
+			ClassNone: No class
+		}
+
+		MainPanel: {
+			Teleport: Teleport to
+			Unfrozen: Panels are currently draggable. Check the config to freeze the UI or/and enable other options.
+			NoTeam: You are not in a team
+			PotionCooldown: On cooldown
+			PotionReady: Ready
+			NoPlayers: No players were found
+			NoOtherPlayers: No other players were found
+			Dead: Dead. Respawning in
+			Offline: Offline
+			Bullets: Bullets:
+			Arrows: Arrows:
+			Overt: Overt
+			Hidden: Hidden
+		}
+
+		EquipmentCheck: {
+			EnterTeam: You need to enter a team
+			Check: Check equipment
+			Title: ETUD Summary (Equipment check):
+			HasRecommended: - Has recommended buffs and potions
+			FlaskMissing: - No flask
+			SharpenedBuffMissing: - No sharpening station buff
+			RangerBuffMissing: - No archery/ammo reservation buff
+			AmmoBoxBuffMissing: - No ammo box buff
+			MageBuffMissing: - No magic power/mana regeneration buff
+			ClairvoyanceBuffMissing: - No crystal ball buff
+			SummonerBuffMissing: - No summoning buff
+			BewitchedBuffMissing: - No bewitching table buff
+			RogueBuffMissing: - No flask and/or shadow buff
+			BardBuffMissing: - No inspiration/earworm/creativity buff
+			ConductorsBuffMissing: - No conductors station buff
+			HealerBuffMissing: - No holy/glowing buff
+			AltarBuffMissing: - No altar buff
+			HealthPotionsMissing: - Ran out of healing potions
+			HealthPotionsLow: - Is low on healing potions
+			ManaPotionsMissing: - Ran out of mana potions
+			ManaPotionsLow: - Is low on mana potions
+		}
+
+		DamageMeter: {
+			DPS: DPS:
+			DealtDamage: Damage dealt:
+			TakenDamage: Damage taken:
+			Deaths: Deaths:
+			NoData: No data:
+		}
+
+		Configs: {
+			Config: {
+				DisplayName: User options
+				PanelHeader: Main panels options
+
+				PanelAmount: {
+					Label: Amount of panels
+					Tooltip: ""
+				}
+
+				LockUIPosition: {
+					Label: Lock UI Position
+					Tooltip: When enabled, the UI position will be locked. If disabled, you can freely move the UI.
+				}
+
+				AllowOnClickTeleport: {
+					Label: Allow teleport on click
+					Tooltip:
+						'''
+						When enabled, click on the panel to teleport to the corresponding player
+						(You still need the wormhole potion; Option will be disabled if the "Lock UI position" option is disabled).
+						'''
+				}
+
+				EnableAutoToggle: {
+					Label: Enable auto toggle
+					Tooltip: Automatically enables ETUD when any boss appears and disables it when all bosses die or despawn.
+				}
+
+				ShowOfflinePlayers: {
+					Label: Show offline players
+					Tooltip: Offline players will not be removed from the panels.
+				}
+
+				EnableColorMatch: {
+					Label: Advanced colour system
+					Tooltip:
+						'''
+						ETUD will try to determine your allies' classes and show corresponding stats and use different colours: 
+						> Warrior - Brown HP - Healing potion cooldown 
+						> Ranger - Green HP - Ammo count 
+						> Mage - Blue HP - Mana 
+						> Summoner - Purple HP - Mana 
+						> [Calamity Mod] Rogue - Yellow HP - Stealth
+						> [Thorium Mod] Bard - Pink HP - Inspiration
+						> [Thorium Mod] Healer - Cyan HP - Mana
+						'''
+				}
+
+				DamageMeterOptionsHeader: Stat meter options
+
+				EnableDamageMeter: {
+					Label: Enable damage meter
+					Tooltip: Adds an additional panel to ETUD that shows various in-combat stats like DPS, taken and dealt damage or deaths.
+				}
+
+				DamageMeterPlayerCountToShow: {
+					Label: Amount of players to show
+					Tooltip: ""
+				}
+
+				AdditionalFeaturesHeader: Additional features
+
+				ShowBuffCheckButton: {
+					Label: Show buff check button
+					Tooltip: Shows a button that allows you to check your teammates for recommended buffs.
+				}
+
+				ShowErrorMessages: {
+					Label: Show error messages
+					Tooltip:
+						'''
+						If ETUD throws an error, its code will be shown in chat.
+						This code will make it easier for the mod developer to determine the cause of the error.
+						Automatically disables if too many errors are thrown.
+						'''
+				}
+			}
+		}
+	}
 }
-	
