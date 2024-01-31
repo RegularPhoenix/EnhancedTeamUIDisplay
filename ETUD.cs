@@ -31,7 +31,7 @@ namespace EnhancedTeamUIDisplay
 				case 0: // InformClientsOfValues
 					byte count = reader.ReadByte();
 
-					Dictionary<int, int[]> increaseTables = [];
+					Dictionary<int, int[]> increaseTables = new();
 
 					for (int i = 0; i < count; i++) {
 						byte playerIndex = reader.ReadByte();
@@ -41,7 +41,7 @@ namespace EnhancedTeamUIDisplay
 						int playerTakenDamage = reader.ReadInt32();
 						int playerDeaths = reader.ReadInt32();
 
-						increaseTables.Add(playerIndex, [playerDPS, playerDealtDamage, playerTakenDamage, playerDeaths]);
+						increaseTables.Add(playerIndex, new int[] { playerDPS, playerDealtDamage, playerTakenDamage, playerDeaths });
 					}
 
 					List<DamageMeterPlayer> receivers = Main.player.Where(

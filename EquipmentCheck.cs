@@ -148,7 +148,7 @@ namespace EnhancedTeamUIDisplay
 		}
 
 		#region Items&Buffs arrays
-		private static readonly int[] meleeItems = [
+		private static readonly int?[] meleeItems = {
 			ItemID.FlaskofCursedFlames,
 			ItemID.FlaskofFire,
 			ItemID.FlaskofGold,
@@ -157,9 +157,9 @@ namespace EnhancedTeamUIDisplay
 			ItemID.FlaskofParty,
 			ItemID.FlaskofPoison,
 			ItemID.FlaskofVenom
-		];
+		};
 
-		private static readonly int[] meleeBuffs = [
+		private static readonly int?[] meleeBuffs = {
 			BuffID.WeaponImbueCursedFlames,
 			BuffID.WeaponImbueFire,
 			BuffID.WeaponImbueIchor,
@@ -167,63 +167,63 @@ namespace EnhancedTeamUIDisplay
 			BuffID.WeaponImbueConfetti,
 			BuffID.WeaponImbuePoison,
 			BuffID.WeaponImbueVenom
-		];
+		};
 
-		private static readonly int[] rangerItems = [
+		private static readonly int?[] rangerItems = {
 			ItemID.AmmoReservationPotion,
 			ItemID.ArcheryPotion
-		];
+		};
 
-		private static readonly int[] rangerBuffs = [
+		private static readonly int?[] rangerBuffs = {
 			BuffID.AmmoReservation,
 			BuffID.Archery
-		];
+		};
 
-		private static readonly int[] mageItems = [
+		private static readonly int?[] mageItems = {
 			ItemID.ManaRegenerationPotion,
 			ItemID.MagicPowerPotion
-		];
+		};
 
-		private static readonly int[] mageBuffs = [
+		private static readonly int?[] mageBuffs = {
 			BuffID.ManaRegeneration,
 			BuffID.MagicPower
-		];
+		};
 
-		private static readonly int[] rogueItems = [
-			CrossModHelper.CalamityMod.Find<ModItem>("FlaskOfBrimstone").Type,
-			CrossModHelper.CalamityMod.Find<ModItem>("FlaskOfHolyFlames").Type,
-			CrossModHelper.CalamityMod.Find<ModItem>("FlaskOfCrumbling").Type,
-			CrossModHelper.CalamityMod.Find<ModItem>("ShadowPotion").Type
-		];
+		private static readonly int?[] rogueItems = {
+			CrossModHelper.CalamityMod?.Find<ModItem>("FlaskOfBrimstone").Type,
+			CrossModHelper.CalamityMod?.Find<ModItem>("FlaskOfHolyFlames").Type,
+			CrossModHelper.CalamityMod?.Find<ModItem>("FlaskOfCrumbling").Type,
+			CrossModHelper.CalamityMod?.Find<ModItem>("ShadowPotion").Type
+		};
 
-		private static readonly int[] rogueBuffs = [
-			CrossModHelper.CalamityMod.Find<ModBuff>("WeaponImbueBrimstone").Type,
-			CrossModHelper.CalamityMod.Find<ModBuff>("WeaponImbueHolyFlames").Type,
-			CrossModHelper.CalamityMod.Find<ModBuff>("WeaponImbueCrumbling").Type,
-			CrossModHelper.CalamityMod.Find<ModBuff>("ShadowBuff").Type
-		];
+		private static readonly int?[] rogueBuffs = {
+			CrossModHelper.CalamityMod?.Find<ModBuff>("WeaponImbueBrimstone").Type,
+			CrossModHelper.CalamityMod?.Find<ModBuff>("WeaponImbueHolyFlames").Type,
+			CrossModHelper.CalamityMod?.Find<ModBuff>("WeaponImbueCrumbling").Type,
+			CrossModHelper.CalamityMod?.Find<ModBuff>("ShadowBuff").Type
+		};
 
-		private static readonly int[] bardItems = [
-			CrossModHelper.ThoriumMod.Find<ModItem>("CreativityPotion").Type,
-			CrossModHelper.ThoriumMod.Find<ModItem>("EarwormPotion").Type,
-			CrossModHelper.ThoriumMod.Find<ModItem>("InspirationReachPotion").Type
-		];
+		private static readonly int?[] bardItems = {
+			CrossModHelper.ThoriumMod?.Find<ModItem>("CreativityPotion").Type,
+			CrossModHelper.ThoriumMod?.Find<ModItem>("EarwormPotion").Type,
+			CrossModHelper.ThoriumMod?.Find<ModItem>("InspirationReachPotion").Type
+		};
 
-		private static readonly int[] bardBuffs = [
-			CrossModHelper.ThoriumMod.Find<ModBuff>("CreativityPotionBuff").Type,
-			CrossModHelper.ThoriumMod.Find<ModBuff>("EarwormPotionBuff").Type,
-			CrossModHelper.ThoriumMod.Find<ModBuff>("InspirationReachPotionBuff").Type
-		];
+		private static readonly int?[] bardBuffs = {
+			CrossModHelper.ThoriumMod?.Find<ModBuff>("CreativityPotionBuff").Type,
+			CrossModHelper.ThoriumMod?.Find<ModBuff>("EarwormPotionBuff").Type,
+			CrossModHelper.ThoriumMod?.Find<ModBuff>("InspirationReachPotionBuff").Type
+		};
 
-		private static readonly int[] healerItems = [
-			CrossModHelper.ThoriumMod.Find<ModItem>("HolyPotion").Type,
-			CrossModHelper.ThoriumMod.Find<ModItem>("GlowingPotion").Type
-		];
+		private static readonly int?[] healerItems = {
+			CrossModHelper.ThoriumMod?.Find<ModItem>("HolyPotion").Type,
+			CrossModHelper.ThoriumMod?.Find<ModItem>("GlowingPotion").Type
+		};
 
-		private static readonly int[] healerBuffs = [
-			CrossModHelper.ThoriumMod.Find<ModBuff>("HolyPotionBuff").Type,
-			CrossModHelper.ThoriumMod.Find<ModBuff>("GlowingPotionBuff").Type
-		];
+		private static readonly int?[] healerBuffs = {
+			CrossModHelper.ThoriumMod?.Find<ModBuff>("HolyPotionBuff").Type,
+			CrossModHelper.ThoriumMod?.Find<ModBuff>("GlowingPotionBuff").Type
+		};
 		#endregion
 	}
 }

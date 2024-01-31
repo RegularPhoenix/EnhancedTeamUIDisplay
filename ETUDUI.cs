@@ -13,7 +13,7 @@ namespace EnhancedTeamUIDisplay
 		private GameTime lastUpdateUIGameTime;
 		internal static UserInterface MainInterface, AllyInfoInterface;
 
-		internal static List<MainPanel> Panels = [];
+		internal static List<MainPanel> Panels = new();
 
 		public override void OnModLoad() {
 			if (!Main.dedServ) {
@@ -100,7 +100,7 @@ namespace EnhancedTeamUIDisplay
 					}
 
 					// Create a list with all tracked players
-					List<Player> trackedAllies = [];
+					List<Player> trackedAllies = new();
 					foreach (MainPanel temp in Panels)
 						trackedAllies.Add(temp.Ally);
 

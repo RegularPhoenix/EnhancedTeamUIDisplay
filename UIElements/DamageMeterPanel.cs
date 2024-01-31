@@ -37,7 +37,7 @@ namespace EnhancedTeamUIDisplay.UIElements
 			frameTop = new(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/DamageMeter/FrameTop"));
 			Append(frameTop);
 
-			barTexts = [];
+			barTexts = new();
 
 			for (int i = 0; i < 4; i++) {
 				UIText barText = new(string.Empty, .8f);
@@ -113,7 +113,7 @@ namespace EnhancedTeamUIDisplay.UIElements
 
 			DamageMeterPlayer damageMeterPlayer = Main.LocalPlayer.GetModPlayer<DamageMeterPlayer>();
 
-			Dictionary<int, int> statValues = [];
+			Dictionary<Player, int> statValues = new();
 
 			int[] sourceValues = StatNum switch {
 				0 => damageMeterPlayer.DPSTable,
