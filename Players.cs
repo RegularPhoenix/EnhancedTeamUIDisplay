@@ -42,7 +42,7 @@ namespace EnhancedTeamUIDisplay
 
 		public override void SaveData(TagCompound tag) {
 			tag.Set("MainPanelTopOffset", MainPanelTopOffset, true);
-			tag.Set("MainPanelLeftOffset", DamageMeterLeftOffset, true);
+			tag.Set("MainPanelLeftOffset", MainPanelLeftOffset, true);
 
 			tag.Set("DamageMeterTopOffset", DamageMeterTopOffset, true);
 			tag.Set("DamageMeterLeftOffset", DamageMeterLeftOffset, true);
@@ -51,17 +51,25 @@ namespace EnhancedTeamUIDisplay
 		}
 
 		public override void LoadData(TagCompound tag) {
-			if (tag.ContainsKey("MainPanelTopOffset"))
-				MainPanelTopOffset = (int) tag["MainPanelTopOffset"];
-			else
-				MainPanelLeftOffset = -600 - MainPanel.width;
+			MainPanelTopOffset =
+				tag.ContainsKey("MainPanelTopOffset")
+					? (int) tag["MainPanelTopOffset"]
+					: -600 - MainPanel.width;
 
-			if (tag.ContainsKey("MainPanelLeftOffset"))
-				MainPanelLeftOffset = (int) tag["MainPanelLeftOffset"];
-			else
-				MainPanelTopOffset = 30;
+			MainPanelLeftOffset =
+				tag.ContainsKey("MainPanelLeftOffset")
+					? (int) tag["MainPanelLeftOffset"]
+					: 30;
 
-			DamageMeterTopOffset = tag.ContainsKey("DamageMeterTopOffset") ? (int) tag["DamageMeterTopOffset"] : MainPanelTopOffset;
+			DamageMeterTopOffset =
+				tag.ContainsKey("DamageMeterTopOffset")
+					? (int) tag["DamageMeterTopOffset"]
+					: MainPanelTopOffset;
+
+			DamageMeterLeftOffset =
+				tag.ContainsKey("DamageMeterLeftOffset")
+					? (int) tag["DamageMeterLeftOffset"]
+					: MainPanelLeftOffset - 300;
 
 			if (tag.ContainsKey("Team"))
 				_team = (int) tag["Team"];
