@@ -10,6 +10,8 @@ namespace EnhancedTeamUIDisplay
 {
 	internal class ETUDUI : ModSystem
 	{
+		private bool anyBossActive = false;
+
 		private GameTime lastUpdateUIGameTime;
 		internal static UserInterface MainInterface, AllyInfoInterface;
 
@@ -125,10 +127,17 @@ namespace EnhancedTeamUIDisplay
 				}
 			}
 
+			if (Config.Instanse.EnableAutoReset) {
+				if (!anyBossActive && Main.CurrentFrameFlags.AnyActiveBossNPC)
+					Main.LocalPlayer.GetModPlayer<DamageMeterPlayer>().ResetTables();
+			}
+
+			anyBossActive = Main.CurrentFrameFlags.AnyActiveBossNPC;
+
 			if (Config.Instanse.EnableAutoToggle) {
-				if (Main.CurrentFrameFlags.AnyActiveBossNPC && MainInterface?.CurrentState is null)
+				if (anyBossActive && MainInterface?.CurrentState is null)
 					OpenMainInterface();
-				else if (!Main.CurrentFrameFlags.AnyActiveBossNPC && MainInterface?.CurrentState is not null)
+				else if (!anyBossActive && MainInterface?.CurrentState is not null)
 					CloseMainInterface();
 			}
 

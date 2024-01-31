@@ -44,6 +44,9 @@ namespace EnhancedTeamUIDisplay
 		[DefaultValue(true)]
 		public bool EnableDamageMeter;
 
+		[DefaultValue(true)]
+		public bool EnableAutoReset;
+
 		[DrawTicks]
 		[Increment(1)]
 		[Range(1, 4)]
