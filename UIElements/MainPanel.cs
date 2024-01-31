@@ -208,10 +208,13 @@ namespace EnhancedTeamUIDisplay.UIElements
 			if (Ally is not null) {
 				Util.PlayerClass allyClass = Util.GuessPlayerClass(Ally);
 
-				if (!Ally.dead) {
-					// HACK: Use packets instead of referencing player stats through Player directly?
-					nameText.SetText(Ally.name);
+				nameText.SetText(Ally.name.Length > 15 ? Ally.name[..12] + "..." : Ally.name);
 
+				if (!Ally.active) {
+					ammoText.SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.MainPanel.Offline"));
+				} else if (!Ally.dead) {
+					// HACK: Use packets instead of referencing player stats through Player directly?
+					// BUG: Lifeforce potion? causes health to reach absurtly high values; Unconfirmed
 					healthText.SetText($"{Ally.statLife}/{Ally.statLifeMax2}");
 
 					switch (allyClass) {
@@ -237,16 +240,19 @@ namespace EnhancedTeamUIDisplay.UIElements
 							}
 
 							ammoText.SetText(
-								$"{Language.GetText("Mods.EnhancedTeamUIDisplay.MainPanel.Bullets")}: {bulletcount}" +
-								$"{Language.GetText("Mods.EnhancedTeamUIDisplay.MainPanel.Arrows")}: {arrowcount}"
+								$"{Language.GetText("Mods.EnhancedTeamUIDisplay.MainPanel.Bullets")} {bulletcount} " +
+								$"{Language.GetText("Mods.EnhancedTeamUIDisplay.MainPanel.Arrows")} {arrowcount}"
 							);
 							break;
 
 						case Util.PlayerClass.Rogue:
 							resourceText.SetText(
+								Language.GetText(
 								CrossModHelper.GetRogueStealth(Ally) < CrossModHelper.GetRogueStealthMax(Ally)
 								? "Mods.EnhancedTeamUIDisplay.MainPanel.Overt"
-								: "Mods.EnhancedTeamUIDisplay.MainPanel.Hidden");
+									: "Mods.EnhancedTeamUIDisplay.MainPanel.Hidden"
+								)
+							);
 							break;
 
 						case Util.PlayerClass.Bard:
@@ -258,7 +264,7 @@ namespace EnhancedTeamUIDisplay.UIElements
 							break;
 					}
 				} else {
-					healthText.SetText($"{Language.GetText("Mods.EnhancedTeamUIDisplay.MainPanel.Dead")} {(Ally.respawnTimer / 60) + 1}");
+					ammoText.SetText($"{Language.GetText("Mods.EnhancedTeamUIDisplay.MainPanel.Dead")} {(Ally.respawnTimer / 60) + 1}");
 				}
 			} else {
 				nameText.SetText(

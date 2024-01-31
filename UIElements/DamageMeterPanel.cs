@@ -153,7 +153,7 @@ namespace EnhancedTeamUIDisplay.UIElements
 				).health
 			);
 
-			barTexts[0].SetText($"{bestPlayer.name}({highestValue})");
+			barTexts[0].SetText($"{(bestPlayer.name.Length > 15 ? bestPlayer.name[..12] + "..." : bestPlayer.name)}({highestValue})");
 
 			int playerCountToDraw = new int[2] {
 				Config.Instanse.DamageMeterPlayerCountToShow,
