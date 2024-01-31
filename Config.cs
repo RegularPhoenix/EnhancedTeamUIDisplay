@@ -57,6 +57,9 @@ namespace EnhancedTeamUIDisplay
 		[Header("$Mods.EnhancedTeamUIDisplay.Configs.Config.AdditionalFeaturesHeader")]
 
 		[DefaultValue(true)]
+		public bool KeepPlayerTeam;
+
+		[DefaultValue(true)]
 		public bool ShowBuffCheckButton;
 
 		[DefaultValue(true)]

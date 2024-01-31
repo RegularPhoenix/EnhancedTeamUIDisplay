@@ -18,6 +18,8 @@ namespace EnhancedTeamUIDisplay
 		public int DamageMeterTopOffset { get; set; }
 		public int DamageMeterLeftOffset { get; set; }
 
+		private int _team;
+
 		public override void ProcessTriggers(TriggersSet triggersSet) {
 			if (ETUD.UIHotkey.JustPressed && Main.netMode != NetmodeID.SinglePlayer)
 				ETUDUI.ToggleMainInterface();
@@ -26,10 +28,16 @@ namespace EnhancedTeamUIDisplay
 		public override void OnEnterWorld() {
 			ETUDUI.CloseMainInterface();
 
-			if (Main.netMode == NetmodeID.SinglePlayer)
+			if (Main.netMode == NetmodeID.SinglePlayer) {
 				Main.NewText(Language.GetText("Mods.EnhancedTeamUIDisplay.Announcements.Singleplayer"), Util.ETUDTextColor);
-			else
+			} else {
 				ChatHelper.BroadcastChatMessage(Language.GetText("Mods.EnhancedTeamUIDisplay.Announcements.Multiplayer").ToNetworkText(), Util.ETUDTextColor); // TODO: Remove after some time
+
+				if (Config.Instanse.KeepPlayerTeam && _team != 0) {
+					Main.LocalPlayer.team = _team;
+					NetMessage.SendData(MessageID.PlayerTeam, number: Main.myPlayer);
+		}
+			}
 		}
 
 		public override void SaveData(TagCompound tag) {
@@ -38,6 +46,8 @@ namespace EnhancedTeamUIDisplay
 
 			tag.Set("DamageMeterTopOffset", DamageMeterTopOffset, true);
 			tag.Set("DamageMeterLeftOffset", DamageMeterLeftOffset, true);
+
+			tag.Set("Team", Main.LocalPlayer.team, true);
 		}
 
 		public override void LoadData(TagCompound tag) {
@@ -53,7 +63,8 @@ namespace EnhancedTeamUIDisplay
 
 			DamageMeterTopOffset = tag.ContainsKey("DamageMeterTopOffset") ? (int) tag["DamageMeterTopOffset"] : MainPanelTopOffset;
 
-			DamageMeterLeftOffset = tag.ContainsKey("DamageMeterLeftOffset") ? (int) tag["DamageMeterLeftOffset"] : MainPanelLeftOffset - 300;
+			if (tag.ContainsKey("Team"))
+				_team = (int) tag["Team"];
 		}
 	}
 
