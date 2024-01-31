@@ -124,10 +124,10 @@ namespace EnhancedTeamUIDisplay.UIElements
 			};
 
 			for (int i = 0; i < 256; i++) {
-				if (sourceValues[i] == -1)
+				if (sourceValues[i] == -1 || !Main.player[i].active) // TODO: Show offline players option?
 					continue;
 
-				statValues.Add(i, sourceValues[i]);
+				statValues.Add(Main.player[i], sourceValues[i]);
 			}
 
 			statValues = statValues.OrderByDescending(pair => pair.Value).ToDictionary(pair => pair.Key, pair => pair.Value);
@@ -142,7 +142,7 @@ namespace EnhancedTeamUIDisplay.UIElements
 				return;
 			}
 
-			Player bestPlayer = Main.player[statValues.Keys.ElementAt(0)];
+			Player bestPlayer = statValues.Keys.ElementAt(0);
 			int highestValue = statValues.Values.ElementAt(0);
 
 			spriteBatch.Draw(
@@ -162,7 +162,7 @@ namespace EnhancedTeamUIDisplay.UIElements
 
 			for (int i = 1; i < playerCountToDraw; i++) {
 				float currentValue = statValues.Values.ElementAt(i);
-				Player currentPlayer = Main.player[statValues.Keys.ElementAt(i)];
+				Player currentPlayer = statValues.Keys.ElementAt(i);
 
 				Bar.Y += Bar.Height + 2;
 
@@ -187,7 +187,7 @@ namespace EnhancedTeamUIDisplay.UIElements
 					).health
 				);
 
-				barTexts[i].SetText($"{currentPlayer.name}({currentValue})");
+				barTexts[i].SetText($"{(currentPlayer.name.Length > 15 ? currentPlayer.name[..12] + "..." : currentPlayer.name)} ({currentValue})");
 
 				spriteBatch.Draw(
 					ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/DamageMeter/FrameMid").Value,
