@@ -1,4 +1,6 @@
-﻿using Terraria;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -39,30 +41,53 @@ namespace EnhancedTeamUIDisplay
 			InformServerOfDeaths,
 		}
 
+		private struct PlayerStatIncreases {
+			internal readonly byte Index;
+			internal readonly int Dps;
+			internal readonly int DealtDamage;
+			internal readonly int TakenDamage;
+			internal readonly int Deaths;
+
+			internal PlayerStatIncreases(byte index, int dps, int dealtDamage, int takenDamage, int deaths) {
+				Index = index;
+				Dps = dps;
+				DealtDamage = dealtDamage;
+				TakenDamage = takenDamage;
+				Deaths = deaths;
+			}
+		}
+
 		public override void PostUpdateWorld() {
 			if (Main.netMode is NetmodeID.SinglePlayer)
 				return;
 
+			List<PlayerStatIncreases> data
+				= Main.player
+					.Where(p => p.active)
+					.Select((p, i) => new PlayerStatIncreases(
+						(byte) i,
+						p.accDreamCatcher ? DPSTable[i] : -1,
+						DealtDamageIncreaseTable[i],
+						TakenDamageIncreaseTable[i],
+						DeathsIncreaseTable[i]
+					)).ToList();
+
 			ModPacket netMessage = Mod.GetPacket();
 			netMessage.Write((byte) DamageMeterPacketType.InformClientsOfValues);
 
-			byte count = (byte) Main.CurrentFrameFlags.ActivePlayersCount;
-			netMessage.Write(count);
+			netMessage.Write((byte) data.Count);
 
-			for (int i = 0; i < 256; i++) {
-				Player p = Main.player[i];
-				if (p.active) {
-					netMessage.Write((byte) i);
-					netMessage.Write(p.accDreamCatcher ? DPSTable[i] : -1);
-					netMessage.Write(DealtDamageIncreaseTable[i]);
-					netMessage.Write(TakenDamageIncreaseTable[i]);
-					netMessage.Write(DeathsIncreaseTable[i]);
-				}
+			foreach (PlayerStatIncreases inc in data) {
+				netMessage.Write(inc.Index);
+				netMessage.Write(inc.Dps);
+				netMessage.Write(inc.DealtDamage);
+				netMessage.Write(inc.TakenDamage);
+				netMessage.Write(inc.Deaths);
 			}
 
-			ResetIncreases();
-
 			netMessage.Send();
+
+			ResetIncreases();
 		}
 	}
 }
