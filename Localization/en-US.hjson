@@ -145,6 +145,11 @@ Mods: {
 
 				AdditionalFeaturesHeader: Additional features
 
+				KeepPlayerTeam: {
+					Label: Keep your team
+					Tooltip: On entering world you will appear in the same team you were last time on this character.
+				}
+
 				ShowBuffCheckButton: {
 					Label: Show buff check button
 					Tooltip: Shows a button that allows you to check your teammates for recommended buffs.
@@ -158,6 +163,11 @@ Mods: {
 						This code will make it easier for the mod developer to determine the cause of the error.
 						Automatically disables if too many errors are thrown.
 						'''
+				}
+
+				EnableAutoReset: {
+					Label: Enable Auto Reset
+					Tooltip: ""
 				}
 			}
 		}
