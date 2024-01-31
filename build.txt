@@ -4,3 +4,4 @@ version = 2.0.0
 hideCode = true
 hideResources = true
 sortAfter = CalamityMod, ThoriumMod
+homepage = https://github.com/RegularPhoenix/EnhancedTeamUIDisplay
