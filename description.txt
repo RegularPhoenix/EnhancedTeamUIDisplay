@@ -6,8 +6,6 @@ Features:
 	- Ally info panel: shows armour, accessories and some stats like defence, health regeneration rate etc. of allies shown in the main panels.
 	- StatMeter: shows current DPS, total damage received and dealt in a certain period of time.
 
-Compatible with Calamity Mod
-
 Note: the dps meter will not track the dps of players without a DPS Meter accessory equipped.
 
 Default keybind - 'L'
@@ -17,5 +15,10 @@ Compatible with Calamity and Thorium mods.
 Feel free to give your feedback on the mod on the Steam Workshop page.
 If you find a bug, please report it on mod GitHub page.
 
-Update 2.0.0:
-	- Full mod rework
+Update 2.1.0:
+	- Added an option to save player team on exit
+	- Added an option to automatically reset damage meter on boss spawn
+	- Updated localization
+	- Fix incorrect loading of UI position
+	- Fixed UI text formatting
+	- And some other small fixes...
