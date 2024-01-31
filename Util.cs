@@ -102,26 +102,6 @@ namespace EnhancedTeamUIDisplay
 		}
 		#endregion
 
-		#region Player
-		internal static bool HasAnyItem(Player player, int[] itemtypes) {
-			for (int i = 0; i < itemtypes.Length; i++) {
-				if (player.HasItem(itemtypes[i]))
-					return true;
-			}
-
-			return false;
-		}
-
-		internal static bool HasAnyBuff(Player player, int[] bufftypes) {
-			for (int i = 0; i < bufftypes.Length; i++) {
-				if (player.HasBuff(bufftypes[i]))
-					return true;
-			}
-
-			return false;
-		}
-		#endregion
-
 		#region Error handling
 		private static int ErrorAmount = 0;
 

@@ -56,14 +56,39 @@ namespace EnhancedTeamUIDisplay
 					_ => "ClassNone"
 				}).Value}] ";
 
+
+				static bool hasAnyItem(Player player, int?[] itemtypes) {
+					for (int i = 0; i < itemtypes.Length; i++) {
+						if (itemtypes[i] is null)
+							return false;
+
+						if (player.HasItem((int) itemtypes[i]))
+							return true;
+					}
+
+					return false;
+				}
+
+				static bool hasAnyBuff(Player player, int?[] bufftypes) {
+					for (int i = 0; i < bufftypes.Length; i++) {
+						if (bufftypes[i] is null)
+							return false;
+
+						if (player.HasBuff((int) bufftypes[i]))
+							return true;
+					}
+
+					return false;
+				}
+
 				bool hasClassBuffs = allyClass switch {
-					Util.PlayerClass.Melee => Util.HasAnyItem(ally, meleeItems) || Util.HasAnyBuff(ally, meleeBuffs),
-					Util.PlayerClass.Ranger => Util.HasAnyItem(ally, rangerItems) || Util.HasAnyBuff(ally, rangerBuffs),
-					Util.PlayerClass.Mage => Util.HasAnyItem(ally, mageItems) || Util.HasAnyBuff(ally, mageBuffs),
+					Util.PlayerClass.Melee => hasAnyItem(ally, meleeItems) || hasAnyBuff(ally, meleeBuffs),
+					Util.PlayerClass.Ranger => hasAnyItem(ally, rangerItems) || hasAnyBuff(ally, rangerBuffs),
+					Util.PlayerClass.Mage => hasAnyItem(ally, mageItems) || hasAnyBuff(ally, mageBuffs),
 					Util.PlayerClass.Summoner => ally.HasItem(ItemID.SummoningPotion) || ally.HasBuff(BuffID.Summoning),
-					Util.PlayerClass.Rogue => Util.HasAnyItem(ally, rogueItems) || Util.HasAnyBuff(ally, rogueBuffs),
-					Util.PlayerClass.Bard => Util.HasAnyItem(ally, bardItems) || Util.HasAnyBuff(ally, bardBuffs),
-					Util.PlayerClass.Healer => Util.HasAnyItem(ally, healerItems) || Util.HasAnyBuff(ally, healerBuffs),
+					Util.PlayerClass.Rogue => hasAnyItem(ally, rogueItems) || hasAnyBuff(ally, rogueBuffs),
+					Util.PlayerClass.Bard => hasAnyItem(ally, bardItems) || hasAnyBuff(ally, bardBuffs),
+					Util.PlayerClass.Healer => hasAnyItem(ally, healerItems) || hasAnyBuff(ally, healerBuffs),
 					_ => true
 				};
 
