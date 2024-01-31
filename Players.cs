@@ -36,7 +36,7 @@ namespace EnhancedTeamUIDisplay
 				if (Config.Instanse.KeepPlayerTeam && _team != 0) {
 					Main.LocalPlayer.team = _team;
 					NetMessage.SendData(MessageID.PlayerTeam, number: Main.myPlayer);
-		}
+				}
 			}
 		}
 

@@ -248,8 +248,8 @@ namespace EnhancedTeamUIDisplay.UIElements
 						case Util.PlayerClass.Rogue:
 							resourceText.SetText(
 								Language.GetText(
-								CrossModHelper.GetRogueStealth(Ally) < CrossModHelper.GetRogueStealthMax(Ally)
-								? "Mods.EnhancedTeamUIDisplay.MainPanel.Overt"
+									CrossModHelper.GetRogueStealth(Ally) < CrossModHelper.GetRogueStealthMax(Ally)
+									? "Mods.EnhancedTeamUIDisplay.MainPanel.Overt"
 									: "Mods.EnhancedTeamUIDisplay.MainPanel.Hidden"
 								)
 							);

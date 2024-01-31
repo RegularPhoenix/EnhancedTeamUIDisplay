@@ -95,8 +95,8 @@ namespace EnhancedTeamUIDisplay
 				foreach (MainPanel panel in Panels) {
 					if (panel.Ally is not null) {
 						if (panel.Ally.team != Main.LocalPlayer.team || (!panel.Ally.active && !Config.Instanse.ShowOfflinePlayers)) {
-						panel.Ally = null;
-					}
+							panel.Ally = null;
+						}
 
 						if (!panel.Ally.active && Main.player.First(p => p.name == panel.Ally.name) is Player p) {
 							panel.Ally = p;
