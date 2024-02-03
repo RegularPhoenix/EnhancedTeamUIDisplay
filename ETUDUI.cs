@@ -10,9 +10,10 @@ namespace EnhancedTeamUIDisplay
 {
 	internal class ETUDUI : ModSystem
 	{
-		private bool anyBossActive = false;
+		private bool _anyBossActive = false;
 
-		private GameTime lastUpdateUIGameTime;
+		private GameTime _lastUpdateUIGameTime;
+
 		internal static UserInterface MainInterface, AllyInfoInterface;
 
 		internal static List<MainPanel> Panels = new();
@@ -45,17 +46,17 @@ namespace EnhancedTeamUIDisplay
 			state.Append(firstPanel);
 			state.Append(firstButton);
 
-			if (Config.Instanse.ShowBuffCheckButton) {
+			if (Config.Instanse.IsEquipmentCheckButtonEnabled) {
 				EquipmentCheckButton button = new();
 				state.Append(button);
 			}
 
-			if (Config.Instanse.EnableDamageMeter) {
+			if (Config.Instanse.IsDamageMeterEnabled) {
 				DamageMeterPanel panel = new();
 				state.Append(panel);
 			}
 
-			for (int i = 1; i < Config.Instanse.PanelAmount; i++) {
+			for (int i = 1; i < Config.Instanse.MaxPanelAmount; i++) {
 				MainPanel additionalPanel = new(i);
 				AllyInfoButton additionalButton = new(i);
 				Panels.Add(additionalPanel);
@@ -94,7 +95,7 @@ namespace EnhancedTeamUIDisplay
 			if (Main.LocalPlayer.team != 0) {
 				foreach (MainPanel panel in Panels) {
 					if (panel.Ally is not null) {
-						if (panel.Ally.team != Main.LocalPlayer.team || (!panel.Ally.active && !Config.Instanse.ShowOfflinePlayers)) {
+						if (panel.Ally.team != Main.LocalPlayer.team || (!panel.Ally.active && !Config.Instanse.AreOfflinePlayersDisplayed)) {
 							panel.Ally = null;
 						}
 
@@ -114,7 +115,7 @@ namespace EnhancedTeamUIDisplay
 							player is not null
 							&& player != Main.LocalPlayer
 							&& player.team == Main.LocalPlayer.team
-							&& (player.active || Config.Instanse.ShowOfflinePlayers)
+							&& (player.active || Config.Instanse.AreOfflinePlayersDisplayed)
 							// Exclude tracked players from search to avoid duplicating
 							&& !trackedAllies.Contains(player),
 						null
@@ -129,21 +130,21 @@ namespace EnhancedTeamUIDisplay
 				}
 			}
 
-			if (Config.Instanse.EnableAutoReset) {
-				if (!anyBossActive && Main.CurrentFrameFlags.AnyActiveBossNPC)
+			if (Config.Instanse.IsAutoResetEnabled) {
+				if (!_anyBossActive && Main.CurrentFrameFlags.AnyActiveBossNPC)
 					Main.LocalPlayer.GetModPlayer<DamageMeterPlayer>().ResetTables();
 			}
 
-			anyBossActive = Main.CurrentFrameFlags.AnyActiveBossNPC;
+			_anyBossActive = Main.CurrentFrameFlags.AnyActiveBossNPC;
 
-			if (Config.Instanse.EnableAutoToggle) {
-				if (anyBossActive && MainInterface?.CurrentState is null)
+			if (Config.Instanse.IsAutoToggleEnabled) {
+				if (_anyBossActive && MainInterface?.CurrentState is null)
 					OpenMainInterface();
-				else if (!anyBossActive && MainInterface?.CurrentState is not null)
+				else if (!_anyBossActive && MainInterface?.CurrentState is not null)
 					CloseMainInterface();
 			}
 
-			lastUpdateUIGameTime = gameTime;
+			_lastUpdateUIGameTime = gameTime;
 
 			if (MainInterface?.CurrentState is not null)
 				MainInterface.Update(gameTime);
@@ -158,8 +159,8 @@ namespace EnhancedTeamUIDisplay
 				layers.Insert(++index, new LegacyGameInterfaceLayer(
 					"ETUD: Main Interface",
 					delegate {
-						if (lastUpdateUIGameTime is not null && MainInterface?.CurrentState is not null) {
-							MainInterface.Draw(Main.spriteBatch, lastUpdateUIGameTime);
+						if (_lastUpdateUIGameTime is not null && MainInterface?.CurrentState is not null) {
+							MainInterface.Draw(Main.spriteBatch, _lastUpdateUIGameTime);
 						}
 
 						return true;
@@ -170,8 +171,8 @@ namespace EnhancedTeamUIDisplay
 				layers.Insert(++index, new LegacyGameInterfaceLayer(
 					"ETUD: Ally Info Interface",
 					delegate {
-						if (lastUpdateUIGameTime is not null && AllyInfoInterface?.CurrentState is not null) {
-							AllyInfoInterface.Draw(Main.spriteBatch, lastUpdateUIGameTime);
+						if (_lastUpdateUIGameTime is not null && AllyInfoInterface?.CurrentState is not null) {
+							AllyInfoInterface.Draw(Main.spriteBatch, _lastUpdateUIGameTime);
 						}
 
 						return true;

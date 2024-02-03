@@ -33,7 +33,7 @@ namespace EnhancedTeamUIDisplay
 			} else {
 				ChatHelper.BroadcastChatMessage(Language.GetText("Mods.EnhancedTeamUIDisplay.Announcements.Multiplayer").ToNetworkText(), Util.ETUDTextColor); // TODO: Remove after some time
 
-				if (Config.Instanse.KeepPlayerTeam && _team != 0) {
+				if (Config.Instanse.IsPlayerTeamSaved && _team != 0) {
 					Main.LocalPlayer.team = _team;
 					NetMessage.SendData(MessageID.PlayerTeam, number: Main.myPlayer);
 				}
@@ -54,7 +54,7 @@ namespace EnhancedTeamUIDisplay
 			MainPanelTopOffset =
 				tag.ContainsKey("MainPanelTopOffset")
 					? (int) tag["MainPanelTopOffset"]
-					: -600 - MainPanel.width;
+					: -600 - MainPanel.ElementWidth;
 
 			MainPanelLeftOffset =
 				tag.ContainsKey("MainPanelLeftOffset")

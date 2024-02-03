@@ -41,7 +41,7 @@ namespace EnhancedTeamUIDisplay
 			InformServerOfDeaths,
 		}
 
-		private struct PlayerStatIncreases {
+		private readonly struct PlayerStatIncreases {
 			internal readonly byte Index;
 			internal readonly int Dps;
 			internal readonly int DealtDamage;

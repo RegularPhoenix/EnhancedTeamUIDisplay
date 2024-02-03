@@ -11,77 +11,66 @@ namespace EnhancedTeamUIDisplay.UIElements
 		internal AllyInfoButton(int number)
 			=> PanelNumber = number;
 
-		internal const int width = 20, height = 24;
-
-		private UIElement mainElement;
-		private UIImageButton imageButton;
+		internal const int ElementWidth = 20, ElementHeight = 24;
 
 		private int PanelNumber { get; }
 
-		private static bool hovered;
+		private UIImageButton _imageButton;
+
+		private bool _hovered;
 
 		public override void OnInitialize() {
-			Width.Pixels = width;
-			Height.Pixels = height;
+			Width.Pixels = ElementWidth;
+			Height.Pixels = ElementHeight;
 
-			mainElement = new UIElement();
-			mainElement.Left.Set(0, 0f);
-			mainElement.Top.Set(0, 0f);
-			mainElement.Width.Set(width, 0f);
-			mainElement.Height.Set(height, 0f);
+			_imageButton = new UIImageButton(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/AllyInfoButton"));
+			_imageButton.Width.Set(ElementWidth, 0f);
+			_imageButton.Height.Set(ElementHeight, 0f);
 
-			//Button
-			imageButton = new UIImageButton(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/AllyInfoButton"));
-			imageButton.Left.Set(0, 0f);
-			imageButton.Top.Set(0, 0f);
-			imageButton.Width.Set(width, 0f);
-			imageButton.Height.Set(height, 0f);
+			_imageButton.OnMouseOver += OnMouseOverAction;
+			_imageButton.OnMouseOut += OnMouseOutAction;
 
-			imageButton.OnMouseOver += OnMouseOverAction;
-			imageButton.OnMouseOut += OnMouseOutAction;
-
-			imageButton.OnLeftMouseDown += (e, l) => {
+			_imageButton.OnLeftMouseDown += (e, l) => {
 				ETUDUI.CloseAllyInfoInterface();
 				ETUDUI.OpenAllyInfoInterface(
 					PanelNumber,
 					true,
-					Left.Pixels - width - AllyInfoPanel.width,
-					Top.Pixels + height
+					Left.Pixels - ElementWidth - AllyInfoPanel.ElementWidth,
+					Top.Pixels + ElementHeight
 				);
 			};
 
-			imageButton.OnLeftMouseUp += (e, l) => {
+			_imageButton.OnLeftMouseUp += (e, l) => {
 				ETUDUI.CloseAllyInfoInterface();
-				if (hovered) {
+				if (_hovered) {
 					ETUDUI.OpenAllyInfoInterface(
 						PanelNumber,
 						false,
-						Left.Pixels - width - AllyInfoPanel.width,
-						Top.Pixels + height
+						Left.Pixels - ElementWidth - AllyInfoPanel.ElementWidth,
+						Top.Pixels + ElementHeight
 					);
 				}
 			};
 
-			mainElement.Append(imageButton);
-			Append(mainElement);
+			Append(_imageButton);
 		}
 
 		private void OnMouseOverAction(UIMouseEvent evt, UIElement listeningElement) {
-			hovered = true;
+			_hovered = true;
 
 			if (ETUDUI.AllyInfoInterface?.CurrentState is null) {
 				ETUDUI.OpenAllyInfoInterface(
 					PanelNumber,
 					false,
-					Left.Pixels - width - AllyInfoPanel.width,
-					Top.Pixels + height
+					Left.Pixels - ElementWidth - AllyInfoPanel.ElementWidth,
+					Top.Pixels + ElementHeight
 				);
 			}
 		}
 
 		private void OnMouseOutAction(UIMouseEvent evt, UIElement listeningElement) {
 			if (ETUDUI.AllyInfoInterface.CurrentState is not null)
-				hovered = false;
+				_hovered = false;
 
 			ETUDUI.CloseAllyInfoInterface();
 		}
@@ -98,7 +87,7 @@ namespace EnhancedTeamUIDisplay.UIElements
 
 			base.Update(gameTime);
 
-			Left.Pixels = ETUDUI.Panels[PanelNumber].Left.Pixels - width - 10;
+			Left.Pixels = ETUDUI.Panels[PanelNumber].Left.Pixels - ElementWidth - 10;
 			Top.Pixels = ETUDUI.Panels[PanelNumber].Top.Pixels + 45;
 		}
 	}

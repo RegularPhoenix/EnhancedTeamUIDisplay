@@ -103,20 +103,20 @@ namespace EnhancedTeamUIDisplay
 		#endregion
 
 		#region Error handling
-		private static int ErrorAmount = 0;
+		private static int _errorAmount = 0;
 
 		public static void CreateErrorMessage(string header, Exception exception) {
 			ETUD.Instance.Logger.Error($"Enhanced Team UI Display Error: In:{header} Error type:{exception.GetType().Name} Stack trace:{exception.StackTrace}");
 
-			if (!Config.Instanse.ShowErrorMessages)
+			if (!Config.Instanse.AreErrorMessagesDisplayed)
 				return;
 
-			ErrorAmount++;
+			_errorAmount++;
 
 			Main.NewText(Terraria.Localization.Language.GetText("Mods.EnhancedTeamUIDisplay.ErrorTexts.Error"), Color.Red);
 
-			if (ErrorAmount >= 5) {
-				Config.Instanse.ShowErrorMessages = false;
+			if (_errorAmount >= 5) {
+				Config.Instanse.AreErrorMessagesDisplayed = false;
 				Main.NewText("Mods.EnhancedTeamUIDisplay.ErrorTexts.TooManyErrors", Color.OrangeRed);
 			}
 		}

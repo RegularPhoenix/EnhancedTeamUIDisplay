@@ -15,22 +15,18 @@ namespace EnhancedTeamUIDisplay.UIElements
 		internal MainPanel(int number)
 			=> PanelNumber = number;
 
-		internal const int width = 200, height = 60;
+		internal const int ElementWidth = 200, ElementHeight = 60;
 
 		internal Player Ally { get; set; }
+
 		private int PanelNumber { get; }
 
-		private UIElement mainElement;
-		private UIImage frameImage;
-		private UIText nameText, healthText, resourceText, ammoText;
+		private UIImage _frameImage;
+		private UIText _nameText, _healthText, _resourceText, _ammoText;
 
 		public override void OnInitialize() {
-			Width.Pixels = width;
-			Height.Pixels = height;
-			mainElement = new();
-
-			mainElement.Width.Set(width, 0f);
-			mainElement.Height.Set(height, 0f);
+			Width.Pixels = ElementWidth;
+			Height.Pixels = ElementHeight;
 
 			/*
 			 * Layout:
@@ -42,44 +38,42 @@ namespace EnhancedTeamUIDisplay.UIElements
 			 */
 
 			// Frame
-			frameImage = new UIImage(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/MainPanel/Frame"));
-			frameImage.Width.Set(width, 0f);
-			frameImage.Height.Set(height, 0f);
+			_frameImage = new UIImage(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/MainPanel/Frame"));
+			_frameImage.Width.Set(ElementWidth, 0f);
+			_frameImage.Height.Set(ElementHeight, 0f);
+			Append(_frameImage);
 
 			// Name
-			nameText = new UIText(string.Empty, 0.7f);
-			nameText.Top.Set(12, 0f);
-			nameText.Width.Set(80, 0f);
-			nameText.HAlign = .15f;
-			nameText.TextOriginX = 0;
+			_nameText = new UIText(string.Empty, 0.7f);
+			_nameText.Top.Set(12, 0f);
+			_nameText.Width.Set(80, 0f);
+			_nameText.HAlign = .15f;
+			_nameText.TextOriginX = 0;
+			Append(_nameText);
 
 			// HP
-			healthText = new UIText(string.Empty, 0.7f);
-			healthText.Top.Set(12, 0f);
-			healthText.Width.Set(90, 0f);
-			healthText.HAlign = .85f;
-			healthText.TextOriginX = 1;
+			_healthText = new UIText(string.Empty, 0.7f);
+			_healthText.Top.Set(12, 0f);
+			_healthText.Width.Set(90, 0f);
+			_healthText.HAlign = .85f;
+			_healthText.TextOriginX = 1;
+			Append(_healthText);
 
 			// Resource (Mana or smth different from modded classes)
-			resourceText = new UIText(string.Empty, 0.7f);
-			resourceText.Top.Set(37, 0f);
-			resourceText.Width.Set(90, 0f);
-			resourceText.HAlign = .85f;
-			resourceText.TextOriginX = 1;
+			_resourceText = new UIText(string.Empty, 0.7f);
+			_resourceText.Top.Set(37, 0f);
+			_resourceText.Width.Set(90, 0f);
+			_resourceText.HAlign = .85f;
+			_resourceText.TextOriginX = 1;
+			Append(_resourceText);
 
 			// Ammo
-			ammoText = new UIText(string.Empty, 0.7f);
-			ammoText.Top.Set(37, 0f);
-			ammoText.Width.Set(90, 0f);
-			ammoText.HAlign = .15f;
-			ammoText.TextOriginX = 0;
-
-			mainElement.Append(frameImage);
-			mainElement.Append(nameText);
-			mainElement.Append(healthText);
-			mainElement.Append(resourceText);
-			mainElement.Append(ammoText);
-			Append(mainElement);
+			_ammoText = new UIText(string.Empty, 0.7f);
+			_ammoText.Top.Set(37, 0f);
+			_ammoText.Width.Set(90, 0f);
+			_ammoText.HAlign = .15f;
+			_ammoText.TextOriginX = 0;
+			Append(_ammoText);
 
 			Left.Set(Main.LocalPlayer.GetModPlayer<ETUDPlayer>().MainPanelLeftOffset, 0f);
 			Top.Set(Main.LocalPlayer.GetModPlayer<ETUDPlayer>().MainPanelTopOffset, 0f);
@@ -88,7 +82,7 @@ namespace EnhancedTeamUIDisplay.UIElements
 		protected override void DrawSelf(SpriteBatch spriteBatch) {
 			base.DrawSelf(spriteBatch);
 
-			Rectangle frame = frameImage.GetInnerDimensions().ToRectangle();
+			Rectangle frame = _frameImage.GetInnerDimensions().ToRectangle();
 			spriteBatch.Draw(
 				ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/MainPanel/Background").Value,
 				new Rectangle(frame.X + 8, frame.Y + 6, 184, 48), Color.White
@@ -96,10 +90,11 @@ namespace EnhancedTeamUIDisplay.UIElements
 
 			// Hover text
 			if (IsMouseHovering) {
-				if (Ally is not null && Config.Instanse.AllowOnClickTeleport)
+				if (Ally is not null && Config.Instanse.IsOnClickTeleportEnabled) {
 					Main.instance.MouseText($"{Language.GetText("Mods.EnhancedTeamUIDisplay.MainPanel.Teleport")} {Ally.name}");
-				else if (!Config.Instanse.LockUIPosition)
+				} else if (!Config.Instanse.IsUILocked) {
 					Main.instance.MouseText(Language.GetText("Mods.EnhancedTeamUIDisplay.MainPanel.Unfrozen").Value);
+				}
 			}
 
 			Util.PlayerClass allyClass = Util.GuessPlayerClass(Ally);
@@ -107,13 +102,13 @@ namespace EnhancedTeamUIDisplay.UIElements
 			// HP
 			(Color healthColor, Color resourceColor) = Util.GetClassColours(
 				Main.LocalPlayer.team != 0
-				? (Config.Instanse.EnableColorMatch
+				? (Config.Instanse.IsColorMatchEnabled
 					? allyClass
 					: Util.PlayerClass.None)
 				: Util.PlayerClass.Offline
 			);
 
-			Rectangle healthBar = frameImage.GetInnerDimensions().ToRectangle();
+			Rectangle healthBar = _frameImage.GetInnerDimensions().ToRectangle();
 			healthBar.X += 8;
 			healthBar.Width -= 16;
 			healthBar.Y += 6;
@@ -140,7 +135,7 @@ namespace EnhancedTeamUIDisplay.UIElements
 			// Resource
 			float resourceRelation = Util.GetClassResourceRelation(Ally, allyClass);
 
-			Rectangle resourceBar = frameImage.GetInnerDimensions().ToRectangle();
+			Rectangle resourceBar = _frameImage.GetInnerDimensions().ToRectangle();
 			resourceBar.X += 8;
 			resourceBar.Width -= 16;
 			resourceBar.Y += 30;
@@ -166,7 +161,7 @@ namespace EnhancedTeamUIDisplay.UIElements
 				return;
 
 			// If this is a leader panel, move it when dragging
-			if (PanelNumber == 0 && !Config.Instanse.LockUIPosition) {
+			if (PanelNumber == 0 && !Config.Instanse.IsUILocked) {
 				if (ContainsPoint(Main.MouseScreen)) {
 					Main.LocalPlayer.mouseInterface = true;
 				}
@@ -188,18 +183,18 @@ namespace EnhancedTeamUIDisplay.UIElements
 			// Otherwise, align it properly
 			if (PanelNumber != 0) {
 				Left.Pixels = ETUDUI.Panels[0].Left.Pixels;
-				Top.Pixels = ETUDUI.Panels[0].Top.Pixels + (PanelNumber * (height + 10));
+				Top.Pixels = ETUDUI.Panels[0].Top.Pixels + (PanelNumber * (ElementHeight + 10));
 			}
 
 			// Reset all labels
-			nameText.SetText(string.Empty);
-			resourceText.SetText(string.Empty);
-			healthText.SetText(string.Empty);
-			ammoText.SetText(string.Empty);
+			_nameText.SetText(string.Empty);
+			_resourceText.SetText(string.Empty);
+			_healthText.SetText(string.Empty);
+			_ammoText.SetText(string.Empty);
 
 			if (Main.LocalPlayer.team == 0) {
 				if (PanelNumber == 0)
-					nameText.SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.MainPanel.NoTeam"));
+					_nameText.SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.MainPanel.NoTeam"));
 
 				return;
 			}
@@ -208,18 +203,18 @@ namespace EnhancedTeamUIDisplay.UIElements
 			if (Ally is not null) {
 				Util.PlayerClass allyClass = Util.GuessPlayerClass(Ally);
 
-				nameText.SetText(Ally.name.Length > 15 ? Ally.name[..12] + "..." : Ally.name);
+				_nameText.SetText(Ally.name.Length > 15 ? Ally.name[..12] + "..." : Ally.name);
 
 				if (!Ally.active) {
-					ammoText.SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.MainPanel.Offline"));
+					_ammoText.SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.MainPanel.Offline"));
 				} else if (!Ally.dead) {
 					// HACK: Use packets instead of referencing player stats through Player directly?
 					// BUG: Lifeforce potion? causes health to reach absurtly high values; Unconfirmed
-					healthText.SetText($"{Ally.statLife}/{Ally.statLifeMax2}");
+					_healthText.SetText($"{Ally.statLife}/{Ally.statLifeMax2}");
 
 					switch (allyClass) {
 						case Util.PlayerClass.Melee:
-							resourceText.SetText(
+							_resourceText.SetText(
 								(
 									Ally.HasBuff(BuffID.PotionSickness)
 									? Language.GetText("Mods.EnhancedTeamUIDisplay.MainPanel.PotionCooldown")
@@ -229,24 +224,24 @@ namespace EnhancedTeamUIDisplay.UIElements
 							break;
 
 						case Util.PlayerClass.Ranger:
-							int bulletcount = 0, arrowcount = 0;
+							int bulletCount = 0, arrowCount = 0;
 
 							for (int i = 0; i < Ally.inventory.Length; i++) {
 								if (Ally.inventory[i].ammo == AmmoID.Bullet)
-									bulletcount += Ally.inventory[i].stack;
+									bulletCount += Ally.inventory[i].stack;
 
 								if (Ally.inventory[i].ammo == AmmoID.Arrow)
-									arrowcount += Ally.inventory[i].stack;
+									arrowCount += Ally.inventory[i].stack;
 							}
 
-							ammoText.SetText(
-								$"{Language.GetText("Mods.EnhancedTeamUIDisplay.MainPanel.Bullets")} {bulletcount} " +
-								$"{Language.GetText("Mods.EnhancedTeamUIDisplay.MainPanel.Arrows")} {arrowcount}"
+							_ammoText.SetText(
+								$"{Language.GetText("Mods.EnhancedTeamUIDisplay.MainPanel.Bullets")} {(bulletCount > 9999 ? "9999+" : bulletCount)} " +
+								$"{Language.GetText("Mods.EnhancedTeamUIDisplay.MainPanel.Arrows")} {(arrowCount > 9999 ? "9999+" : arrowCount)}"
 							);
 							break;
 
 						case Util.PlayerClass.Rogue:
-							resourceText.SetText(
+							_resourceText.SetText(
 								Language.GetText(
 									CrossModHelper.GetRogueStealth(Ally) < CrossModHelper.GetRogueStealthMax(Ally)
 									? "Mods.EnhancedTeamUIDisplay.MainPanel.Overt"
@@ -256,18 +251,18 @@ namespace EnhancedTeamUIDisplay.UIElements
 							break;
 
 						case Util.PlayerClass.Bard:
-							resourceText.SetText($"{CrossModHelper.GetBardInspiration(Ally)}/{CrossModHelper.GetBardInspirationMax(Ally)}");
+							_resourceText.SetText($"{CrossModHelper.GetBardInspiration(Ally)}/{CrossModHelper.GetBardInspirationMax(Ally)}");
 							break;
 
 						default:
-							resourceText.SetText($"{Ally.statMana}/{Ally.statManaMax2}");
+							_resourceText.SetText($"{Ally.statMana}/{Ally.statManaMax2}");
 							break;
 					}
 				} else {
-					ammoText.SetText($"{Language.GetText("Mods.EnhancedTeamUIDisplay.MainPanel.Dead")} {(Ally.respawnTimer / 60) + 1}");
+					_ammoText.SetText($"{Language.GetText("Mods.EnhancedTeamUIDisplay.MainPanel.Dead")} {(Ally.respawnTimer / 60) + 1}");
 				}
 			} else {
-				nameText.SetText(
+				_nameText.SetText(
 					PanelNumber == 0
 					? Language.GetText("Mods.EnhancedTeamUIDisplay.MainPanel.NoPlayers")
 					: Language.GetText("Mods.EnhancedTeamUIDisplay.MainPanel.NoOtherPlayers")
@@ -279,18 +274,18 @@ namespace EnhancedTeamUIDisplay.UIElements
 		private bool _dragging;
 
 		public override void LeftMouseDown(UIMouseEvent evt) {
-			if (PanelNumber == 0 && !Config.Instanse.LockUIPosition) {
+			if (PanelNumber == 0 && !Config.Instanse.IsUILocked) {
 				base.LeftMouseDown(evt); // HACK: Probably remove to prevent inventory interaction
 				DragStart(evt);
 			}
 		}
 
 		public override void LeftMouseUp(UIMouseEvent evt) {
-			if (PanelNumber == 0 && !Config.Instanse.LockUIPosition) {
+			if (PanelNumber == 0 && !Config.Instanse.IsUILocked) {
 				base.LeftMouseUp(evt);
 				DragEnd(evt);
-			} else if (Config.Instanse.LockUIPosition
-				  && Config.Instanse.AllowOnClickTeleport
+			} else if (Config.Instanse.IsUILocked
+				  && Config.Instanse.IsOnClickTeleportEnabled
 				  && Main.LocalPlayer.HasUnityPotion()
 				  && Ally is not null
 				  && !Ally.dead

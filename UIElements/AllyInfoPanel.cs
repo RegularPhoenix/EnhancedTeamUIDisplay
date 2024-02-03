@@ -19,107 +19,94 @@ namespace EnhancedTeamUIDisplay.UIElements
 			FixedTop = top;
 		}
 
-		internal const int width = 232, height = 264;
+		internal const int ElementWidth = 232, ElementHeight = 264;
 
 		private int PanelNumber { get; }
 		private bool IsExtended { get; }
 		private float FixedLeft { get; }
 		private float FixedTop { get; }
 
-		private UIElement mainElement;
-		private UIImage frame, background;
+		private UIImage _frame, _background;
 
 		// Default
-		private UIText nameText, armorText, accessoriesText, rightStatText, leftStatText;
+		private UIText _nameText, _armorText, _accessoriesText, _rightStatText, _leftStatText;
 
 		// Extended
-		private UIText playerClassText, classStatsText;
+		private UIText _playerClassText, _classStatsText;
 
 		// TODO: Some elements' position seem to be a bit off
 		public override void OnInitialize() {
-			Width.Pixels = width;
-			Height.Pixels = height;
+			Width.Pixels = ElementWidth;
+			Height.Pixels = ElementHeight;
 
-			mainElement = new UIElement();
-			mainElement.Left.Set(0, 0f);
-			mainElement.Top.Set(0, 0f);
-			mainElement.Width.Set(width, 0f);
-			mainElement.Height.Set(height, 0f);
-
-			background = new UIImage(
+			_background = new UIImage(
 				IsExtended
 				? ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/AllyInfoPanel/BackgroundExtended")
 				: ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/AllyInfoPanel/Background")
 			);
-			background.Left.Set(0, 0f);
-			background.Top.Set(0, 0f);
-			background.Width.Set(width, 0f);
-			background.Height.Set(height, 0f);
+			_background.Width.Set(ElementWidth, 0f);
+			_background.Height.Set(ElementHeight, 0f);
+			Append(_background);
 
-			frame = new UIImage(
+			_frame = new UIImage(
 				IsExtended
 				? ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/AllyInfoPanel/FrameExtended")
 				: ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/AllyInfoPanel/Frame")
 			);
-			frame.Width.Set(width, 0f);
-			frame.Height.Set(height, 0f);
+			_frame.Width.Set(ElementWidth, 0f);
+			_frame.Height.Set(ElementHeight, 0f);
+			Append( _frame );
 
-			armorText = new UIText(string.Empty);
-			armorText.Top.Set(35, 0f);
-			armorText.Width.Set(50, 0f);
-			armorText.HAlign = .15f;
-			armorText.TextOriginX = 0;
+			_armorText = new UIText(string.Empty);
+			_armorText.Top.Set(35, 0f);
+			_armorText.Width.Set(50, 0f);
+			_armorText.HAlign = .15f;
+			_armorText.TextOriginX = 0;
+			Append(_armorText);
 
-			accessoriesText = new UIText(string.Empty);
-			accessoriesText.Top.Set(72, 0f);
-			accessoriesText.Width.Set(50, 0f);
-			accessoriesText.HAlign = .10f;
-			accessoriesText.TextOriginX = 0;
+			_accessoriesText = new UIText(string.Empty);
+			_accessoriesText.Top.Set(72, 0f);
+			_accessoriesText.Width.Set(50, 0f);
+			_accessoriesText.HAlign = .10f;
+			_accessoriesText.TextOriginX = 0;
+			Append( _accessoriesText);
 
-			nameText = new UIText(string.Empty);
-			nameText.Top.Set(8, 0f);
-			nameText.Width.Set(160, 0f);
-			nameText.HAlign = .5f;
+			_nameText = new UIText(string.Empty);
+			_nameText.Top.Set(8, 0f);
+			_nameText.Width.Set(160, 0f);
+			_nameText.HAlign = .5f;
+			Append(_nameText);
 
-			rightStatText = new UIText(string.Empty);
-			rightStatText.Top.Set(37, 0f);
-			rightStatText.Height.Set(50, 0f);
-			rightStatText.HAlign = .92f;
-			rightStatText.TextOriginX = 1;
+			_rightStatText = new UIText(string.Empty);
+			_rightStatText.Top.Set(37, 0f);
+			_rightStatText.Height.Set(50, 0f);
+			_rightStatText.HAlign = .92f;
+			_rightStatText.TextOriginX = 1;
+			Append( _rightStatText);
 
-			leftStatText = new UIText(string.Empty);
-			leftStatText.Top.Set(37, 0f);
-			leftStatText.Height.Set(50, 0f);
-			leftStatText.HAlign = .67f;
-			leftStatText.TextOriginX = 0;
+			_leftStatText = new UIText(string.Empty);
+			_leftStatText.Top.Set(37, 0f);
+			_leftStatText.Height.Set(50, 0f);
+			_leftStatText.HAlign = .67f;
+			_leftStatText.TextOriginX = 0;
+			Append( _leftStatText);
 
-			playerClassText = new UIText(string.Empty);
-			playerClassText.Top.Set(136, 0f);
-			playerClassText.Width.Set(160, 0f);
-			playerClassText.HAlign = .5f;
+			_playerClassText = new UIText(string.Empty);
+			_playerClassText.Top.Set(136, 0f);
+			_playerClassText.Width.Set(160, 0f);
+			_playerClassText.HAlign = .5f;
 
-			classStatsText = new UIText(string.Empty, .8f);
-			classStatsText.Top.Set(167, 0f);
-			classStatsText.Width.Set(160, 0f);
-			classStatsText.HAlign = .2f;
-			classStatsText.TextOriginX = 0;
-			classStatsText.DynamicallyScaleDownToWidth = true;
-
-
-			mainElement.Append(background);
-			mainElement.Append(nameText);
-			mainElement.Append(frame);
-			mainElement.Append(armorText);
-			mainElement.Append(rightStatText);
-			mainElement.Append(leftStatText);
-			mainElement.Append(accessoriesText);
+			_classStatsText = new UIText(string.Empty, .8f);
+			_classStatsText.Top.Set(167, 0f);
+			_classStatsText.Width.Set(160, 0f);
+			_classStatsText.HAlign = .2f;
+			_classStatsText.TextOriginX = 0;
+			_classStatsText.DynamicallyScaleDownToWidth = true;
 
 			if (IsExtended) {
-				mainElement.Append(playerClassText);
-				mainElement.Append(classStatsText);
+				Append(_playerClassText);
+				Append(_classStatsText);
 			}
-
-			Append(mainElement);
 		}
 
 		public override void Update(GameTime gameTime) {
@@ -163,17 +150,17 @@ namespace EnhancedTeamUIDisplay.UIElements
 					[i:{ItemID.LeafWings}]{(Math.Round(ally.wingTimeMax / 60.0, 2) > 0 ? Math.Round(ally.wingTimeMax / 60.0, 2) : "-")}
 					""";
 
-				rightStatText.SetText(rightStatTextValue);
-				leftStatText.SetText(leftStatTextValue);
-				nameText.SetText(ally.name);
+				_rightStatText.SetText(rightStatTextValue);
+				_leftStatText.SetText(leftStatTextValue);
+				_nameText.SetText(ally.name);
 
-				armorText.SetText(
+				_armorText.SetText(
 					string.IsNullOrEmpty(armorTextValue)
 					? "No armor"
 					: armorTextValue
 				);
 
-				accessoriesText.SetText(
+				_accessoriesText.SetText(
 					string.IsNullOrEmpty(accessoriesTextValue)
 					? "No acc-ies"
 					: accessoriesTextValue
@@ -182,7 +169,7 @@ namespace EnhancedTeamUIDisplay.UIElements
 				if (IsExtended) {
 					Util.PlayerClass allyClass = Util.GuessPlayerClass(ally);
 
-					playerClassText.SetText(
+					_playerClassText.SetText(
 						Language.GetText("Mods.EnhancedTeamUIDisplay.GeneralNouns." + allyClass switch {
 							Util.PlayerClass.Melee => "ClassMelee",
 							Util.PlayerClass.Ranger => "ClassRanger",
@@ -200,46 +187,52 @@ namespace EnhancedTeamUIDisplay.UIElements
 					DamageClass bardClass = CrossModHelper.ThoriumMod?.Find<DamageClass>("BardDamage");
 					DamageClass healerClass = CrossModHelper.ThoriumMod?.Find<DamageClass>("HealerDamage");
 
-					classStatsText.SetText(
+					static int getClassDamage(DamageClass damageClass, Player player) {
+						return (int) Math.Round(
+							(player.GetTotalDamage(damageClass).Additive * player.GetTotalDamage(damageClass).Multiplicative * 100) - 100
+						);
+					};
+
+					_classStatsText.SetText(
 						allyClass switch {
 							Util.PlayerClass.Melee => $"""
-								[i:{ItemID.IronBroadsword}] Damage Increase: {GetClassDamage(DamageClass.Melee, ally)}
+								[i:{ItemID.IronBroadsword}] Damage Increase: {getClassDamage(DamageClass.Melee, ally)}
 								[i:{ItemID.PsychoKnife}] Crit. Chance: {(int) ally.GetTotalCritChance(DamageClass.Melee)}
 								[i:{ItemID.Arkhalis}] Attack Speed: {(int) (ally.GetTotalAttackSpeed(DamageClass.Melee) * 100)}%
 								[i:{ItemID.FleshKnuckles}] Aggro: {ally.aggro}
 								""",
 
 							Util.PlayerClass.Ranger => $"""
-								[i:{ItemID.IronBow}] Damage Increase: {GetClassDamage(DamageClass.Ranged, ally)}
+								[i:{ItemID.IronBow}] Damage Increase: {getClassDamage(DamageClass.Ranged, ally)}
 								[i:{ItemID.SniperRifle}] Crit. Chance: {(int) ally.GetTotalCritChance(DamageClass.Ranged)}
 								[i:{ItemID.SharkToothNecklace}] Armor Penetration: {ally.GetArmorPenetration(DamageClass.Generic)}
 								""",
 
 							Util.PlayerClass.Mage => $"""
-								[i:{ItemID.MagicalHarp}] Damage Increase: {GetClassDamage(DamageClass.Magic, ally)}
+								[i:{ItemID.MagicalHarp}] Damage Increase: {getClassDamage(DamageClass.Magic, ally)}
 								[i:{ItemID.SkyFracture}] Crit. Chance: {(int) ally.GetTotalCritChance(DamageClass.Magic)}
 								[i:{ItemID.CrystalBall}] MP Cost Reduction: {Math.Round((1.0 - ally.manaCost) * 100)}%
 								""",
 
 							Util.PlayerClass.Summoner => $"""
-								[i:{ItemID.StardustCellStaff}] Damage Increase: {GetClassDamage(DamageClass.Summon, ally)}
+								[i:{ItemID.StardustCellStaff}] Damage Increase: {getClassDamage(DamageClass.Summon, ally)}
 								[i:{ItemID.MonkAltHead}] Crit. Chance: {(int) ally.GetTotalCritChance(DamageClass.Summon)}
 								[i:{ItemID.ImpStaff}] Max Minions: {ally.maxMinions}
 								[i:{ItemID.DD2BallistraTowerT1Popper}] Max Centries: {ally.maxTurrets}
 								""",
 
 							Util.PlayerClass.Rogue => $"""
-								[i:{CrossModHelper.CalamityMod.Find<ModItem>("HeavenfallenStardisk").Type}] Damage Increase: {GetClassDamage(rogueClass, ally)}
+								[i:{CrossModHelper.CalamityMod.Find<ModItem>("HeavenfallenStardisk").Type}] Damage Increase: {getClassDamage(rogueClass, ally)}
 								[i:{CrossModHelper.CalamityMod.Find<ModItem>("GleamingDagger").Type}] Crit. Chance: {(int) ally.GetTotalCritChance(rogueClass)}
 								""",
 
 							Util.PlayerClass.Bard => $"""
-								[i:{CrossModHelper.ThoriumMod.Find<ModItem>("ScholarsHarp").Type}] Damage Increase: {GetClassDamage(bardClass, ally)}
+								[i:{CrossModHelper.ThoriumMod.Find<ModItem>("ScholarsHarp").Type}] Damage Increase: {getClassDamage(bardClass, ally)}
 								[i:{CrossModHelper.ThoriumMod.Find<ModItem>("MixTape").Type}] Crit. Chance: {(int) ally.GetTotalCritChance(bardClass)}
 								""",
 
 							Util.PlayerClass.Healer => $"""
-								[i:{CrossModHelper.ThoriumMod.Find<ModItem>("Liberation").Type}] Damage Increase: {GetClassDamage(healerClass, ally)}
+								[i:{CrossModHelper.ThoriumMod.Find<ModItem>("Liberation").Type}] Damage Increase: {getClassDamage(healerClass, ally)}
 								[i:{CrossModHelper.ThoriumMod.Find<ModItem>("DarkGlaze").Type}] Crit. Chance: {(int) ally.GetTotalCritChance(healerClass)}
 								[i:{CrossModHelper.ThoriumMod.Find<ModItem>("Twinkle").Type}] Bonus healing: {CrossModHelper.GetHealerHealBonus(ally)}
 								""",
@@ -249,17 +242,14 @@ namespace EnhancedTeamUIDisplay.UIElements
 					);
 				}
 			} catch (Exception e) {
-				nameText.SetText("Error");
-				rightStatText.SetText("N/A");
-				leftStatText.SetText("N/A");
-				armorText.SetText("N/A");
-				accessoriesText.SetText("N/A");
+				_nameText.SetText("Error");
+				_rightStatText.SetText("N/A");
+				_leftStatText.SetText("N/A");
+				_armorText.SetText("N/A");
+				_accessoriesText.SetText("N/A");
 
 				Util.CreateErrorMessage("AllyInfoPanel", e);
 			}
 		}
-
-		internal static int GetClassDamage(DamageClass damageClass, Player player)
-			=> (int) Math.Round((player.GetTotalDamage(damageClass).Additive * player.GetTotalDamage(damageClass).Multiplicative * 100) - 100);
 	}
 }

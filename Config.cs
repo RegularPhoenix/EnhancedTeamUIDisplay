@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -22,59 +23,60 @@ namespace EnhancedTeamUIDisplay
 		[Increment(1)]
 		[Range(1, 5)]
 		[DefaultValue(1)]
-		public int PanelAmount;
+		public int MaxPanelAmount;
+
+		[Obsolete("Will be removed from config")]
+		[DefaultValue(false)]
+		public bool IsUILocked;
+
+		[DefaultValue(true)]
+		public bool IsOnClickTeleportEnabled;
 
 		[DefaultValue(false)]
-		public bool LockUIPosition;
+		public bool IsAutoToggleEnabled;
 
 		[DefaultValue(true)]
-		public bool AllowOnClickTeleport;
-
-		[DefaultValue(false)]
-		public bool EnableAutoToggle;
+		public bool AreOfflinePlayersDisplayed;
 
 		[DefaultValue(true)]
-		public bool ShowOfflinePlayers;
-
-		[DefaultValue(true)]
-		public bool EnableColorMatch;
+		public bool IsColorMatchEnabled;
 
 		[Header("$Mods.EnhancedTeamUIDisplay.Configs.Config.DamageMeterOptionsHeader")]
 
 		[DefaultValue(true)]
-		public bool EnableDamageMeter;
+		public bool IsDamageMeterEnabled;
 
 		[DefaultValue(true)]
-		public bool EnableAutoReset;
+		public bool IsAutoResetEnabled;
 
 		[DrawTicks]
 		[Increment(1)]
 		[Range(1, 4)]
 		[DefaultValue(4)]
 		[Slider]
-		public int DamageMeterPlayerCountToShow;
+		public int DamageMeterMaxPlayerCount;
 
 		[Header("$Mods.EnhancedTeamUIDisplay.Configs.Config.AdditionalFeaturesHeader")]
 
 		[DefaultValue(true)]
-		public bool KeepPlayerTeam;
+		public bool IsPlayerTeamSaved;
 
 		[DefaultValue(true)]
-		public bool ShowBuffCheckButton;
+		public bool IsEquipmentCheckButtonEnabled;
 
 		[DefaultValue(true)]
-		public bool ShowErrorMessages;
+		public bool AreErrorMessagesDisplayed;
 
 		public override void OnChanged() {
 			base.OnChanged();
 
-			if (!LockUIPosition && AllowOnClickTeleport)
-				AllowOnClickTeleport = false;
+			if (!IsUILocked && IsOnClickTeleportEnabled)
+				IsOnClickTeleportEnabled = false;
 
 			if (ETUDUI.MainInterface is not null && Main.netMode != NetmodeID.SinglePlayer) {
 				ETUDUI.CloseMainInterface();
 
-				if (!EnableAutoToggle)
+				if (!IsAutoToggleEnabled)
 					ETUDUI.OpenMainInterface();
 			}
 		}

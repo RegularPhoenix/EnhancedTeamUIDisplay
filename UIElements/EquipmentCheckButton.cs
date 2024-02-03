@@ -10,31 +10,19 @@ namespace EnhancedTeamUIDisplay.UIElements
 {
 	internal class EquipmentCheckButton : UIElement
 	{
-		internal const int width = 46, height = 46;
+		internal const int ElementWidth = 46, ElementHeight = 46;
 
-		private UIElement mainElement;
-		private UIImageButton button;
+		private UIImageButton _button;
 
 		public override void OnInitialize() {
-			Width.Pixels = width;
-			Height.Pixels = height;
+			Width.Pixels = ElementWidth;
+			Height.Pixels = ElementHeight;
 
-			mainElement = new UIElement();
-			mainElement.Left.Set(0, 0f);
-			mainElement.Top.Set(0, 0f);
-			mainElement.Width.Set(width, 0f);
-			mainElement.Height.Set(height, 0f);
-
-			// Button
-			button = new UIImageButton(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/EquipmentCheckButton"));
-			button.Left.Set(0, 0f);
-			button.Top.Set(0, 0f);
-			button.Width.Set(width, 0f);
-			button.Height.Set(height, 0f);
-			button.OnLeftClick += (e, l) => EquipmentCheck.CheckAlliesEquipment();
-
-			mainElement.Append(button);
-			Append(mainElement);
+			_button = new UIImageButton(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/EquipmentCheckButton"));
+			_button.Width.Set(ElementWidth, 0f);
+			_button.Height.Set(ElementHeight, 0f);
+			_button.OnLeftClick += (e, l) => EquipmentCheck.CheckAlliesEquipment();
+			Append(_button);
 		}
 
 		protected override void DrawSelf(SpriteBatch spriteBatch) {
@@ -52,7 +40,7 @@ namespace EnhancedTeamUIDisplay.UIElements
 		public override void Update(GameTime gameTime) {
 			base.Update(gameTime);
 
-			Left.Pixels = ETUDUI.Panels[0].Left.Pixels - width - 10;
+			Left.Pixels = ETUDUI.Panels[0].Left.Pixels - ElementWidth - 10;
 			Top.Pixels = ETUDUI.Panels[0].Top.Pixels;
 		}
 	}

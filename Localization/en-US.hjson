@@ -87,17 +87,17 @@ Mods: {
 				DisplayName: User options
 				PanelHeader: Main panels options
 
-				PanelAmount: {
+				MaxPanelAmount: {
 					Label: Amount of panels
 					Tooltip: ""
 				}
 
-				LockUIPosition: {
+				IsUILocked: {
 					Label: Lock UI Position
 					Tooltip: When enabled, the UI position will be locked. If disabled, you can freely move the UI.
 				}
 
-				AllowOnClickTeleport: {
+				IsOnClickTeleportEnabled: {
 					Label: Allow teleport on click
 					Tooltip:
 						'''
@@ -106,17 +106,17 @@ Mods: {
 						'''
 				}
 
-				EnableAutoToggle: {
+				IsAutoToggleEnabled: {
 					Label: Enable auto toggle
 					Tooltip: Automatically enables ETUD when any boss appears and disables it when all bosses die or despawn.
 				}
 
-				ShowOfflinePlayers: {
+				AreOfflinePlayersDisplayed: {
 					Label: Show offline players
 					Tooltip: Offline players will not be removed from the panels.
 				}
 
-				EnableColorMatch: {
+				IsColorMatchEnabled: {
 					Label: Advanced colour system
 					Tooltip:
 						'''
@@ -133,29 +133,34 @@ Mods: {
 
 				DamageMeterOptionsHeader: Stat meter options
 
-				EnableDamageMeter: {
+				IsDamageMeterEnabled: {
 					Label: Enable damage meter
 					Tooltip: Adds an additional panel to ETUD that shows various in-combat stats like DPS, taken and dealt damage or deaths.
 				}
 
-				DamageMeterPlayerCountToShow: {
+				IsAutoResetEnabled: {
+					Label: Enable Auto Reset
+					Tooltip: ""
+				}
+
+				DamageMeterMaxPlayerCount: {
 					Label: Amount of players to show
 					Tooltip: ""
 				}
 
 				AdditionalFeaturesHeader: Additional features
 
-				KeepPlayerTeam: {
+				IsPlayerTeamSaved: {
 					Label: Keep your team
 					Tooltip: On entering world you will appear in the same team you were last time on this character.
 				}
 
-				ShowBuffCheckButton: {
+				IsEquipmentCheckButtonEnabled: {
 					Label: Show buff check button
 					Tooltip: Shows a button that allows you to check your teammates for recommended buffs.
 				}
 
-				ShowErrorMessages: {
+				AreErrorMessagesDisplayed: {
 					Label: Show error messages
 					Tooltip:
 						'''
@@ -163,11 +168,6 @@ Mods: {
 						This code will make it easier for the mod developer to determine the cause of the error.
 						Automatically disables if too many errors are thrown.
 						'''
-				}
-
-				EnableAutoReset: {
-					Label: Enable Auto Reset
-					Tooltip: ""
 				}
 			}
 		}

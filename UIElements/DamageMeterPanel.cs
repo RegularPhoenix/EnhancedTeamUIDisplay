@@ -13,82 +13,84 @@ namespace EnhancedTeamUIDisplay.UIElements
 {
 	internal class DamageMeterPanel : UIElement
 	{
-		internal const int width = 200, height = 120;
-		internal const int barWidth = 188, barHeight = 24;
+		internal const int ElementWidth = 200, ElementHeight = 120;
+		internal const int BarWidth = 188, BarHeight = 24;
 
-		internal static byte StatNum = 0;
+		private byte _statNum = 0;
 
-		private List<UIText> barTexts;
-		private UIText statTitleText;
-		private UIImage frameTop;
-		private UIImageButton leftButton, rightButton, resetButton;
+		private List<UIText> _barTexts;
+		private UIText _statTitleText;
+		private UIImage _frameTop;
+		private UIImageButton _leftButton, _rightButton, _resetButton;
 
-		private ETUDPlayer player;
+		private ETUDPlayer _player;
 
 		public override void OnInitialize() {
-			Width.Pixels = width;
-			Height.Pixels = height;
+			Width.Pixels = ElementWidth;
+			Height.Pixels = ElementHeight;
 
-			player = Main.LocalPlayer.GetModPlayer<ETUDPlayer>();
+			_player = Main.LocalPlayer.GetModPlayer<ETUDPlayer>();
 
-			Left.Set(player.DamageMeterLeftOffset, 0f);
-			Top.Set(player.DamageMeterTopOffset, 0f);
+			Left.Set(_player.DamageMeterLeftOffset, 0f);
+			Top.Set(_player.DamageMeterTopOffset, 0f);
 
-			frameTop = new(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/DamageMeter/FrameTop"));
-			Append(frameTop);
+			_frameTop = new(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/DamageMeter/FrameTop"));
+			Append(_frameTop);
 
-			barTexts = new();
+			_barTexts = new();
 
 			for (int i = 0; i < 4; i++) {
 				UIText barText = new(string.Empty, .8f);
-				barText.Top.Set(32 + ((barHeight + 4) * i), 0f);
+				barText.Top.Set(32 + ((BarHeight + 4) * i), 0f);
 				barText.Width.Set(140, 0);
 				barText.HAlign = .86f;
 				barText.TextOriginX = 1;
-				barTexts.Add(barText);
+				_barTexts.Add(barText);
 				Append(barText);
 			}
 
-			statTitleText = new UIText(string.Empty, .8f);
-			statTitleText.Top.Set(8, 0f);
-			statTitleText.Width.Set(120, 0);
-			statTitleText.HAlign = .13f;
-			statTitleText.TextOriginX = 0;
-			Append(statTitleText);
+			_statTitleText = new UIText(string.Empty, .8f);
+			_statTitleText.Top.Set(8, 0f);
+			_statTitleText.Width.Set(120, 0);
+			_statTitleText.HAlign = .13f;
+			_statTitleText.TextOriginX = 0;
+			Append(_statTitleText);
 
-			leftButton = new UIImageButton(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/DamageMeter/ArrowLeft"));
-			leftButton.Width.Set(18, 0f);
-			leftButton.Height.Set(22, 0f);
-			leftButton.HAlign = .75f;
-			leftButton.Top.Set(4, 0f);
-			leftButton.OnLeftClick += (e, l) => {
-				if (StatNum == 0)
-					StatNum = 3;
-				else
-					StatNum--;
+			_leftButton = new UIImageButton(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/DamageMeter/ArrowLeft"));
+			_leftButton.Width.Set(18, 0f);
+			_leftButton.Height.Set(22, 0f);
+			_leftButton.HAlign = .75f;
+			_leftButton.Top.Set(4, 0f);
+			_leftButton.OnLeftClick += (e, l) => {
+				if (_statNum == 0) {
+					_statNum = 3;
+				} else {
+					_statNum--;
+				}
 			};
-			Append(leftButton);
+			Append(_leftButton);
 
-			rightButton = new UIImageButton(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/DamageMeter/ArrowRight"));
-			rightButton.Width.Set(18, 0f);
-			rightButton.Height.Set(22, 0f);
-			rightButton.HAlign = .85f;
-			rightButton.Top.Set(4, 0f);
-			rightButton.OnLeftClick += (e, l) => {
-				if (StatNum == 3)
-					StatNum = 0;
-				else
-					StatNum++;
+			_rightButton = new UIImageButton(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/DamageMeter/ArrowRight"));
+			_rightButton.Width.Set(18, 0f);
+			_rightButton.Height.Set(22, 0f);
+			_rightButton.HAlign = .85f;
+			_rightButton.Top.Set(4, 0f);
+			_rightButton.OnLeftClick += (e, l) => {
+				if (_statNum == 3) {
+					_statNum = 0;
+				} else {
+					_statNum++;
+				}
 			};
-			Append(rightButton);
+			Append(_rightButton);
 
-			resetButton = new UIImageButton(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/DamageMeter/X"));
-			resetButton.Width.Set(18, 0f);
-			resetButton.Height.Set(22, 0f);
-			resetButton.HAlign = .95f;
-			resetButton.Top.Set(4, 0f);
-			resetButton.OnLeftClick += (e, l) => Main.LocalPlayer.GetModPlayer<DamageMeterPlayer>().ResetTables();
-			Append(resetButton);
+			_resetButton = new UIImageButton(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/DamageMeter/X"));
+			_resetButton.Width.Set(18, 0f);
+			_resetButton.Height.Set(22, 0f);
+			_resetButton.HAlign = .95f;
+			_resetButton.Top.Set(4, 0f);
+			_resetButton.OnLeftClick += (e, l) => Main.LocalPlayer.GetModPlayer<DamageMeterPlayer>().ResetTables();
+			Append(_resetButton);
 		}
 
 		protected override void DrawSelf(SpriteBatch spriteBatch) {
@@ -96,14 +98,14 @@ namespace EnhancedTeamUIDisplay.UIElements
 
 			Rectangle Bar = GetInnerDimensions().ToRectangle();
 			Bar.X += 6;
-			Bar.Width = barWidth;
+			Bar.Width = BarWidth;
 			Bar.Y += 26;
-			Bar.Height = barHeight + 2;
+			Bar.Height = BarHeight + 2;
 
 			for (int i = 0; i < 4; i++)
-				barTexts[i].SetText(string.Empty);
+				_barTexts[i].SetText(string.Empty);
 
-			statTitleText.SetText(StatNum switch {
+			_statTitleText.SetText(_statNum switch {
 				0 => Language.GetText("Mods.EnhancedTeamUIDisplay.DamageMeter.DPS"),
 				1 => Language.GetText("Mods.EnhancedTeamUIDisplay.DamageMeter.DealtDamage"),
 				2 => Language.GetText("Mods.EnhancedTeamUIDisplay.DamageMeter.TakenDamage"),
@@ -115,7 +117,7 @@ namespace EnhancedTeamUIDisplay.UIElements
 
 			Dictionary<Player, int> statValues = new();
 
-			int[] sourceValues = StatNum switch {
+			int[] sourceValues = _statNum switch {
 				0 => damageMeterPlayer.DPSTable,
 				1 => damageMeterPlayer.DealtDamageTable,
 				2 => damageMeterPlayer.TakenDamageTable,
@@ -138,7 +140,7 @@ namespace EnhancedTeamUIDisplay.UIElements
 					new Rectangle(Bar.X - 6, Bar.Y + 27, 200, 4),
 					Color.White
 				);
-				barTexts[0].SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.DamageMeter.NoData"));
+				_barTexts[0].SetText(Language.GetText("Mods.EnhancedTeamUIDisplay.DamageMeter.NoData"));
 				return;
 			}
 
@@ -153,10 +155,10 @@ namespace EnhancedTeamUIDisplay.UIElements
 				).health
 			);
 
-			barTexts[0].SetText($"{(bestPlayer.name.Length > 15 ? bestPlayer.name[..12] + "..." : bestPlayer.name)}({highestValue})");
+			_barTexts[0].SetText($"{(bestPlayer.name.Length > 15 ? bestPlayer.name[..12] + "..." : bestPlayer.name)}({highestValue})");
 
 			int playerCountToDraw = new int[2] {
-				Config.Instanse.DamageMeterPlayerCountToShow,
+				Config.Instanse.DamageMeterMaxPlayerCount,
 				statValues.Count
 			}.Min();
 
@@ -187,7 +189,7 @@ namespace EnhancedTeamUIDisplay.UIElements
 					).health
 				);
 
-				barTexts[i].SetText($"{(currentPlayer.name.Length > 15 ? currentPlayer.name[..12] + "..." : currentPlayer.name)} ({currentValue})");
+				_barTexts[i].SetText($"{(currentPlayer.name.Length > 15 ? currentPlayer.name[..12] + "..." : currentPlayer.name)} ({currentValue})");
 
 				spriteBatch.Draw(
 					ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/DamageMeter/FrameMid").Value,
@@ -209,8 +211,8 @@ namespace EnhancedTeamUIDisplay.UIElements
 		public override void Update(GameTime gameTime) {
 			base.Update(gameTime);
 
-			player.DamageMeterLeftOffset = (int) Left.Pixels;
-			player.DamageMeterTopOffset = (int) Top.Pixels;
+			_player.DamageMeterLeftOffset = (int) Left.Pixels;
+			_player.DamageMeterTopOffset = (int) Top.Pixels;
 
 			if (ContainsPoint(Main.MouseScreen)) {
 				Main.LocalPlayer.mouseInterface = true;
@@ -252,8 +254,8 @@ namespace EnhancedTeamUIDisplay.UIElements
 			Left.Set(end.X - offset.X, 0f);
 			Top.Set(end.Y - offset.Y, 0f);
 
-			player.DamageMeterLeftOffset = (int) Left.Pixels;
-			player.DamageMeterTopOffset = (int) Top.Pixels;
+			_player.DamageMeterLeftOffset = (int) Left.Pixels;
+			_player.DamageMeterTopOffset = (int) Top.Pixels;
 
 			Recalculate();
 		}

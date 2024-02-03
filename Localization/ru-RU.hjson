@@ -87,17 +87,17 @@ Mods: {
 				DisplayName: Пользовательские настройки
 				PanelHeader: Опции главных панелей
 
-				PanelAmount: {
+				MaxPanelAmount: {
 					Label: Количество панелей
 					Tooltip: ""
 				}
 
-				LockUIPosition: {
+				IsUILocked: {
 					Label: Зафиксировать позицию интерфейса
 					Tooltip: При включении позиция интерфейса будет заблокирована. Иначе можно свободно передвигать интерфейс.
 				}
 
-				AllowOnClickTeleport: {
+				IsOnClickTeleportEnabled: {
 					Label: Включить телепортацию при нажатии
 					Tooltip:
 						'''
@@ -106,17 +106,17 @@ Mods: {
 						'''
 				}
 
-				EnableAutoToggle: {
+				IsAutoToggleEnabled: {
 					Label: Включить автоматическое переключение
 					Tooltip: Автоматически включает ETUD при появлении любого босса и отключает при их исчезании/смерти.
 				}
 
-				ShowOfflinePlayers: {
+				AreOfflinePlayersDisplayed: {
 					Label: Показывать игроков не в сети
 					Tooltip: Игроки не в сети не будут исключаться из панелей.
 				}
 
-				EnableColorMatch: {
+				IsColorMatchEnabled: {
 					Label: Продвинутая цветовая схема
 					Tooltip:
 						'''
@@ -133,29 +133,35 @@ Mods: {
 
 				DamageMeterOptionsHeader: Настройки трекера статистики
 
-				EnableDamageMeter: {
+				IsDamageMeterEnabled: {
 					Label: Включить трекер статистики
 					Tooltip: Добавляет новую панель в ETUD, которая показывает различную статистику, такую как УВС, полученный и нанесённый урон и количество смертей.
 				}
 
-				DamageMeterPlayerCountToShow: {
+				IsAutoResetEnabled: {
+					Label: Включить автоматический сброс
+					Tooltip: ""
+				}
+
+
+				DamageMeterMaxPlayerCount: {
 					Label: Количество показываемых игроков
 					Tooltip: ""
 				}
 
 				AdditionalFeaturesHeader: Дополнительные возможности
 
-				KeepPlayerTeam: {
+				IsPlayerTeamSaved: {
 					Label: Сохранять команду
 					Tooltip: При заходе в мир вы появитесь в той же команде, в которой были на момент выхода из мира на этом персонаже.
 				}
 
-				ShowBuffCheckButton: {
+				IsEquipmentCheckButtonEnabled: {
 					Label: Включить кнопку проверки снаряжения
 					Tooltip: Добавляет кнопку, которая позволяет проверить, имеются ли у ваших союзников рекомендованные усиления.
 				}
 
-				ShowErrorMessages: {
+				AreErrorMessagesDisplayed: {
 					Label: Показывать сообщения об ошибке
 					Tooltip:
 						'''
@@ -163,11 +169,6 @@ Mods: {
 						Этот код поможет разработчику мода быстрее определить ошибку.
 						Опция автоматически отключается, если происходит слишком много ошибок.
 						'''
-				}
-
-				EnableAutoReset: {
-					Label: Включить автоматический сброс
-					Tooltip: ""
 				}
 			}
 		}
