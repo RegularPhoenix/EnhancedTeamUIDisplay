@@ -17,6 +17,7 @@ namespace EnhancedTeamUIDisplay
 		internal static UserInterface MainInterface, AllyInfoInterface;
 
 		internal static List<MainPanel> MainPanels = new();
+		internal static DamageMeterPanel DamageMeterPanel;
 
 		public override void OnModLoad() {
 			if (!Main.dedServ) {
@@ -38,14 +39,19 @@ namespace EnhancedTeamUIDisplay
 		}
 
 		internal static void OpenMainInterface() {
+			DamageMeterPanel = null;
+
 			UIState state = new();
 
 			MainPanel firstPanel = new(0);
-			AllyInfoButton firstButton = new(0);
-			Panels.Add(firstPanel);
 			MainPanels.Add(firstPanel);
 			state.Append(firstPanel);
+
+			AllyInfoButton firstButton = new(0);
 			state.Append(firstButton);
+
+			LockButton lockButton = new(firstPanel);
+			state.Append(lockButton);
 
 			if (Config.Instanse.IsEquipmentCheckButtonEnabled) {
 				EquipmentCheckButton button = new();
@@ -53,15 +59,20 @@ namespace EnhancedTeamUIDisplay
 			}
 
 			if (Config.Instanse.IsDamageMeterEnabled) {
-				DamageMeterPanel panel = new();
-				state.Append(panel);
+				DamageMeterPanel dmgMeterPanel = new();
+				DamageMeterPanel = dmgMeterPanel;
+				state.Append(dmgMeterPanel);
+
+				LockButton dmgMeterLockButton = new(dmgMeterPanel);
+				state.Append(dmgMeterLockButton);
 			}
 
 			for (int i = 1; i < Config.Instanse.MaxPanelAmount; i++) {
 				MainPanel additionalPanel = new(i);
-				AllyInfoButton additionalButton = new(i);
 				MainPanels.Add(additionalPanel);
 				state.Append(additionalPanel);
+
+				AllyInfoButton additionalButton = new(i);
 				state.Append(additionalButton);
 			}
 

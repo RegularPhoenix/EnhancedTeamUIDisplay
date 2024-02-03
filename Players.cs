@@ -18,6 +18,9 @@ namespace EnhancedTeamUIDisplay
 		public int DamageMeterTopOffset { get; set; }
 		public int DamageMeterLeftOffset { get; set; }
 
+		internal bool AreMainPanelsLocked { get; set; }
+		internal bool IsDamageMeterLocked { get; set; }
+
 		private int _team;
 
 		public override void ProcessTriggers(TriggersSet triggersSet) {
@@ -48,6 +51,9 @@ namespace EnhancedTeamUIDisplay
 			tag.Set("DamageMeterLeftOffset", DamageMeterLeftOffset, true);
 
 			tag.Set("Team", Main.LocalPlayer.team, true);
+
+			tag.Set("AreMainPanelsLocked", AreMainPanelsLocked, true);
+			tag.Set("IsDamageMeterLocked", IsDamageMeterLocked, true);
 		}
 
 		public override void LoadData(TagCompound tag) {
@@ -73,6 +79,14 @@ namespace EnhancedTeamUIDisplay
 
 			if (tag.ContainsKey("Team"))
 				_team = (int) tag["Team"];
+
+			AreMainPanelsLocked =
+				tag.ContainsKey("AreMainPanelsLocked")
+				&& (byte) tag["AreMainPanelsLocked"] == 1;
+
+			IsDamageMeterLocked =
+				tag.ContainsKey("IsDamageMeterLocked")
+				&& (byte) tag["IsDamageMeterLocked"] == 1;
 		}
 	}
 

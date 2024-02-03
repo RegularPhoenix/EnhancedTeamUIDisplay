@@ -25,10 +25,6 @@ namespace EnhancedTeamUIDisplay
 		[DefaultValue(1)]
 		public int MaxPanelAmount;
 
-		[Obsolete("Will be removed from config")]
-		[DefaultValue(false)]
-		public bool IsUILocked;
-
 		[DefaultValue(true)]
 		public bool IsOnClickTeleportEnabled;
 
@@ -69,9 +65,6 @@ namespace EnhancedTeamUIDisplay
 
 		public override void OnChanged() {
 			base.OnChanged();
-
-			if (!IsUILocked && IsOnClickTeleportEnabled)
-				IsOnClickTeleportEnabled = false;
 
 			if (ETUDUI.MainInterface is not null && Main.netMode != NetmodeID.SinglePlayer) {
 				ETUDUI.CloseMainInterface();

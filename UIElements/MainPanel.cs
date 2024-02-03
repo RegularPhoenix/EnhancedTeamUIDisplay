@@ -10,7 +10,7 @@ using Terraria.UI;
 
 namespace EnhancedTeamUIDisplay.UIElements
 {
-	internal class MainPanel : UIElement
+	internal class MainPanel : DraggableUIElement
 	{
 		internal MainPanel(int number)
 			=> PanelNumber = number;
@@ -23,6 +23,8 @@ namespace EnhancedTeamUIDisplay.UIElements
 
 		private UIImage _frameImage;
 		private UIText _nameText, _healthText, _resourceText, _ammoText;
+
+		private ETUDPlayer _player;
 
 		public override void OnInitialize() {
 			Width.Pixels = ElementWidth;
@@ -75,9 +77,16 @@ namespace EnhancedTeamUIDisplay.UIElements
 			_ammoText.TextOriginX = 0;
 			Append(_ammoText);
 
-			Left.Set(Main.LocalPlayer.GetModPlayer<ETUDPlayer>().MainPanelLeftOffset, 0f);
-			Top.Set(Main.LocalPlayer.GetModPlayer<ETUDPlayer>().MainPanelTopOffset, 0f);
+			_player = Main.LocalPlayer.GetModPlayer<ETUDPlayer>();
+
+			Left.Set(_player.MainPanelLeftOffset, 0f);
+			Top.Set(_player.MainPanelTopOffset, 0f);
+
+			IsLocked = _player.AreMainPanelsLocked;
 		}
+
+		public override void OnDeactivate()
+			=> Main.LocalPlayer.GetModPlayer<ETUDPlayer>().AreMainPanelsLocked = IsLocked;
 
 		protected override void DrawSelf(SpriteBatch spriteBatch) {
 			base.DrawSelf(spriteBatch);
@@ -88,11 +97,15 @@ namespace EnhancedTeamUIDisplay.UIElements
 				new Rectangle(frame.X + 8, frame.Y + 6, 184, 48), Color.White
 			);
 
+			// Sync locks
+			if (PanelNumber != 0)
+				IsLocked = ETUDUI.MainPanels[0].IsLocked;
+
 			// Hover text
 			if (IsMouseHovering) {
-				if (Ally is not null && Config.Instanse.IsOnClickTeleportEnabled) {
+				if (Ally is not null && Config.Instanse.IsOnClickTeleportEnabled && IsLocked) {
 					Main.instance.MouseText($"{Language.GetText("Mods.EnhancedTeamUIDisplay.MainPanel.Teleport")} {Ally.name}");
-				} else if (!Config.Instanse.IsUILocked) {
+				} else if (!IsLocked) {
 					Main.instance.MouseText(Language.GetText("Mods.EnhancedTeamUIDisplay.MainPanel.Unfrozen").Value);
 				}
 			}
@@ -155,29 +168,12 @@ namespace EnhancedTeamUIDisplay.UIElements
 		}
 
 		public override void Update(GameTime gameTime) {
-			base.Update(gameTime);
-
 			if (Main.netMode == NetmodeID.SinglePlayer)
 				return;
 
 			// If this is a leader panel, move it when dragging
-			if (PanelNumber == 0 && !Config.Instanse.IsUILocked) {
-				if (ContainsPoint(Main.MouseScreen)) {
-					Main.LocalPlayer.mouseInterface = true;
-				}
-
-				if (_dragging) {
-					Left.Set(Main.mouseX - _offset.X, 0f);
-					Top.Set(Main.mouseY - _offset.Y, 0f);
-					Recalculate();
-				}
-
-				Rectangle parentSpace = Parent.GetDimensions().ToRectangle();
-				if (!GetDimensions().ToRectangle().Intersects(parentSpace)) {
-					Left.Pixels = Utils.Clamp(Left.Pixels, 0, parentSpace.Right - Width.Pixels);
-					Top.Pixels = Utils.Clamp(Top.Pixels, 0, parentSpace.Bottom - Height.Pixels);
-					Recalculate();
-				}
+			if (PanelNumber == 0 && !IsLocked) {
+				Move();
 			}
 
 			// Otherwise, align it properly
@@ -270,21 +266,16 @@ namespace EnhancedTeamUIDisplay.UIElements
 			}
 		}
 
-		private Vector2 _offset;
-		private bool _dragging;
-
 		public override void LeftMouseDown(UIMouseEvent evt) {
-			if (PanelNumber == 0 && !Config.Instanse.IsUILocked) {
-				base.LeftMouseDown(evt); // HACK: Probably remove to prevent inventory interaction
-				DragStart(evt);
+			if (PanelNumber == 0) {
+				base.LeftMouseDown(evt);
 			}
 		}
 
 		public override void LeftMouseUp(UIMouseEvent evt) {
-			if (PanelNumber == 0 && !Config.Instanse.IsUILocked) {
+			if (PanelNumber == 0) {
 				base.LeftMouseUp(evt);
-				DragEnd(evt);
-			} else if (Config.Instanse.IsUILocked
+			} else if (IsLocked
 				  && Config.Instanse.IsOnClickTeleportEnabled
 				  && Main.LocalPlayer.HasUnityPotion()
 				  && Ally is not null
@@ -296,22 +287,11 @@ namespace EnhancedTeamUIDisplay.UIElements
 			}
 		}
 
-		private void DragStart(UIMouseEvent evt) {
-			_offset = new Vector2(evt.MousePosition.X - Left.Pixels, evt.MousePosition.Y - Top.Pixels);
-			_dragging = true;
-		}
+		public override void DragEnd(UIMouseEvent evt) {
+			base.DragEnd(evt);
 
-		private void DragEnd(UIMouseEvent evt) {
-			Vector2 end = evt.MousePosition;
-			_dragging = false;
-
-			Left.Set(end.X - _offset.X, 0f);
-			Top.Set(end.Y - _offset.Y, 0f);
-
-			Main.LocalPlayer.GetModPlayer<ETUDPlayer>().MainPanelLeftOffset = (int) Left.Pixels;
-			Main.LocalPlayer.GetModPlayer<ETUDPlayer>().MainPanelTopOffset = (int) Top.Pixels;
-
-			Recalculate();
+			_player.MainPanelLeftOffset = (int) Left.Pixels;
+			_player.MainPanelTopOffset = (int) Top.Pixels;
 		}
 	}
 }

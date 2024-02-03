@@ -11,7 +11,7 @@ using Terraria.UI;
 
 namespace EnhancedTeamUIDisplay.UIElements
 {
-	internal class DamageMeterPanel : UIElement
+	internal class DamageMeterPanel : DraggableUIElement
 	{
 		internal const int ElementWidth = 200, ElementHeight = 120;
 		internal const int BarWidth = 188, BarHeight = 24;
@@ -33,6 +33,8 @@ namespace EnhancedTeamUIDisplay.UIElements
 
 			Left.Set(_player.DamageMeterLeftOffset, 0f);
 			Top.Set(_player.DamageMeterTopOffset, 0f);
+
+			IsLocked = _player.IsDamageMeterLocked;
 
 			_frameTop = new(ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/DamageMeter/FrameTop"));
 			Append(_frameTop);
@@ -92,6 +94,9 @@ namespace EnhancedTeamUIDisplay.UIElements
 			_resetButton.OnLeftClick += (e, l) => Main.LocalPlayer.GetModPlayer<DamageMeterPlayer>().ResetTables();
 			Append(_resetButton);
 		}
+
+		public override void OnDeactivate()
+			=> Main.LocalPlayer.GetModPlayer<ETUDPlayer>().IsDamageMeterLocked = IsLocked;
 
 		protected override void DrawSelf(SpriteBatch spriteBatch) {
 			base.DrawSelf(spriteBatch);
@@ -205,59 +210,27 @@ namespace EnhancedTeamUIDisplay.UIElements
 			);
 		}
 
-		private Vector2 offset;
-		public bool dragging;
-
 		public override void Update(GameTime gameTime) {
 			base.Update(gameTime);
 
 			_player.DamageMeterLeftOffset = (int) Left.Pixels;
 			_player.DamageMeterTopOffset = (int) Top.Pixels;
 
-			if (ContainsPoint(Main.MouseScreen)) {
-				Main.LocalPlayer.mouseInterface = true;
-			}
-
-			if (dragging) {
-				Left.Set(Main.mouseX - offset.X, 0f);
-				Top.Set(Main.mouseY - offset.Y, 0f);
-				Recalculate();
-			}
-
-			Rectangle parentSpace = Parent.GetDimensions().ToRectangle();
-			if (!GetDimensions().ToRectangle().Intersects(parentSpace)) {
-				Left.Pixels = Utils.Clamp(Left.Pixels, 0, parentSpace.Right - Width.Pixels);
-				Top.Pixels = Utils.Clamp(Top.Pixels, 0, parentSpace.Bottom - Height.Pixels);
-				Recalculate();
+			if (IsLocked
+				&& ContainsPoint(Main.MouseScreen)
+				&& !_leftButton.ContainsPoint(Main.MouseScreen)
+				&& !_rightButton.ContainsPoint(Main.MouseScreen)
+				&& !_resetButton.ContainsPoint(Main.MouseScreen)
+			) {
+				Main.LocalPlayer.mouseInterface = false;
 			}
 		}
 
-		public override void LeftMouseDown(UIMouseEvent evt) {
-			base.LeftMouseDown(evt);
-			DragStart(evt);
-		}
-
-		public override void LeftMouseUp(UIMouseEvent evt) {
-			base.LeftMouseUp(evt);
-			DragEnd(evt);
-		}
-
-		private void DragStart(UIMouseEvent evt) {
-			offset = new Vector2(evt.MousePosition.X - Left.Pixels, evt.MousePosition.Y - Top.Pixels);
-			dragging = true;
-		}
-
-		private void DragEnd(UIMouseEvent evt) {
-			Vector2 end = evt.MousePosition;
-			dragging = false;
-
-			Left.Set(end.X - offset.X, 0f);
-			Top.Set(end.Y - offset.Y, 0f);
+		public override void DragEnd(UIMouseEvent evt) {
+			base.DragEnd(evt);
 
 			_player.DamageMeterLeftOffset = (int) Left.Pixels;
 			_player.DamageMeterTopOffset = (int) Top.Pixels;
-
-			Recalculate();
 		}
 	}
 }

@@ -36,7 +36,7 @@ Mods: {
 
 		MainPanel: {
 			Teleport: Teleport to
-			Unfrozen: Panels are currently draggable. Check the config to freeze the UI or/and enable other options.
+			Unfrozen: This panel is currently draggable. Press the lock icon to freeze it.
 			NoTeam: You are not in a team
 			PotionCooldown: On cooldown
 			PotionReady: Ready
@@ -92,17 +92,12 @@ Mods: {
 					Tooltip: ""
 				}
 
-				IsUILocked: {
-					Label: Lock UI Position
-					Tooltip: When enabled, the UI position will be locked. If disabled, you can freely move the UI.
-				}
-
 				IsOnClickTeleportEnabled: {
 					Label: Allow teleport on click
 					Tooltip:
 						'''
 						When enabled, click on the panel to teleport to the corresponding player
-						(You still need the wormhole potion; Option will be disabled if the "Lock UI position" option is disabled).
+						(You still need the wormhole potion; Panels must be locked (Lock icon near top panel must be yellow)).
 						'''
 				}
 
