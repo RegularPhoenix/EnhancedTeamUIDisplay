@@ -118,7 +118,7 @@ namespace EnhancedTeamUIDisplay.UIElements
 			string armorTextValue, accessoriesTextValue, rightStatTextValue, leftStatTextValue;
 			armorTextValue = accessoriesTextValue = string.Empty;
 
-			Player ally = ETUDUI.Panels[PanelNumber]?.Ally;
+			Player ally = ETUDUI.MainPanels[PanelNumber]?.Ally;
 
 			try {
 				for (int i = 0; i < 3; i++) {

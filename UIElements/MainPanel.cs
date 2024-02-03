@@ -182,8 +182,8 @@ namespace EnhancedTeamUIDisplay.UIElements
 
 			// Otherwise, align it properly
 			if (PanelNumber != 0) {
-				Left.Pixels = ETUDUI.Panels[0].Left.Pixels;
-				Top.Pixels = ETUDUI.Panels[0].Top.Pixels + (PanelNumber * (ElementHeight + 10));
+				Left.Pixels = ETUDUI.MainPanels[0].Left.Pixels;
+				Top.Pixels = ETUDUI.MainPanels[0].Top.Pixels + (PanelNumber * (ElementHeight + 10));
 			}
 
 			// Reset all labels

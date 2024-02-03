@@ -76,19 +76,19 @@ namespace EnhancedTeamUIDisplay.UIElements
 		}
 
 		public override void Draw(SpriteBatch spriteBatch) {
-			if (ETUDUI.Panels[PanelNumber]?.Ally is null)
+			if (ETUDUI.MainPanels[PanelNumber]?.Ally is null)
 				return;
 
 			base.Draw(spriteBatch);
 		}
 
 		public override void Update(GameTime gameTime) {
-			IgnoresMouseInteraction = ETUDUI.Panels[PanelNumber]?.Ally is null;
+			IgnoresMouseInteraction = ETUDUI.MainPanels[PanelNumber]?.Ally is null;
 
 			base.Update(gameTime);
 
-			Left.Pixels = ETUDUI.Panels[PanelNumber].Left.Pixels - ElementWidth - 10;
-			Top.Pixels = ETUDUI.Panels[PanelNumber].Top.Pixels + 45;
+			Left.Pixels = ETUDUI.MainPanels[PanelNumber].Left.Pixels - ElementWidth - 10;
+			Top.Pixels = ETUDUI.MainPanels[PanelNumber].Top.Pixels + 45;
 		}
 	}
 }

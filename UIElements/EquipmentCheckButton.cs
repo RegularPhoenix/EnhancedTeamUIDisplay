@@ -40,8 +40,8 @@ namespace EnhancedTeamUIDisplay.UIElements
 		public override void Update(GameTime gameTime) {
 			base.Update(gameTime);
 
-			Left.Pixels = ETUDUI.Panels[0].Left.Pixels - ElementWidth - 10;
-			Top.Pixels = ETUDUI.Panels[0].Top.Pixels;
+			Left.Pixels = ETUDUI.MainPanels[0].Left.Pixels - ElementWidth - 10;
+			Top.Pixels = ETUDUI.MainPanels[0].Top.Pixels;
 		}
 	}
 }

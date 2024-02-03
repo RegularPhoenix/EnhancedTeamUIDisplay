@@ -16,7 +16,7 @@ namespace EnhancedTeamUIDisplay
 
 		internal static UserInterface MainInterface, AllyInfoInterface;
 
-		internal static List<MainPanel> Panels = new();
+		internal static List<MainPanel> MainPanels = new();
 
 		public override void OnModLoad() {
 			if (!Main.dedServ) {
@@ -43,6 +43,7 @@ namespace EnhancedTeamUIDisplay
 			MainPanel firstPanel = new(0);
 			AllyInfoButton firstButton = new(0);
 			Panels.Add(firstPanel);
+			MainPanels.Add(firstPanel);
 			state.Append(firstPanel);
 			state.Append(firstButton);
 
@@ -59,7 +60,7 @@ namespace EnhancedTeamUIDisplay
 			for (int i = 1; i < Config.Instanse.MaxPanelAmount; i++) {
 				MainPanel additionalPanel = new(i);
 				AllyInfoButton additionalButton = new(i);
-				Panels.Add(additionalPanel);
+				MainPanels.Add(additionalPanel);
 				state.Append(additionalPanel);
 				state.Append(additionalButton);
 			}
@@ -69,7 +70,7 @@ namespace EnhancedTeamUIDisplay
 
 		internal static void CloseMainInterface() {
 			MainInterface.SetState(null);
-			Panels.Clear();
+			MainPanels.Clear();
 		}
 
 		internal static void ToggleMainInterface() {
@@ -93,7 +94,7 @@ namespace EnhancedTeamUIDisplay
 				Main.LocalPlayer.mouseInterface = true;
 
 			if (Main.LocalPlayer.team != 0) {
-				foreach (MainPanel panel in Panels) {
+				foreach (MainPanel panel in MainPanels) {
 					if (panel.Ally is not null) {
 						if (panel.Ally.team != Main.LocalPlayer.team || (!panel.Ally.active && !Config.Instanse.AreOfflinePlayersDisplayed)) {
 							panel.Ally = null;
@@ -106,7 +107,7 @@ namespace EnhancedTeamUIDisplay
 
 					// Create a list with all tracked players
 					List<Player> trackedAllies = new();
-					foreach (MainPanel temp in Panels)
+					foreach (MainPanel temp in MainPanels)
 						trackedAllies.Add(temp.Ally);
 
 					// Find new player
@@ -122,10 +123,10 @@ namespace EnhancedTeamUIDisplay
 					);
 				}
 
-				for (int i = Panels.Count - 1; i > 0; i--) {
-					if (Panels[i].Ally is not null && Panels[i - 1].Ally is null) {
-						Panels[i - 1].Ally = Panels[i].Ally;
-						Panels[i].Ally = null;
+				for (int i = MainPanels.Count - 1; i > 0; i--) {
+					if (MainPanels[i].Ally is not null && MainPanels[i - 1].Ally is null) {
+						MainPanels[i - 1].Ally = MainPanels[i].Ally;
+						MainPanels[i].Ally = null;
 					}
 				}
 			}
