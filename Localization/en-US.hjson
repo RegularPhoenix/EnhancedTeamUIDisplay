@@ -134,7 +134,7 @@ Mods: {
 				DamageMeterOptionsHeader: Stat meter options
 
 				IsDamageMeterEnabled: {
-					Label: Enable damage meter
+					Label: Enable stat meter
 					Tooltip: Adds an additional panel to ETUD that shows various in-combat stats like DPS, taken and dealt damage or deaths.
 				}
 
