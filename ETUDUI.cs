@@ -99,7 +99,7 @@ namespace EnhancedTeamUIDisplay
 							panel.Ally = null;
 						}
 
-						if (!panel.Ally.active && Main.player.First(p => p.name == panel.Ally.name) is Player p) {
+						if (!(panel.Ally?.active ?? true) && Main.player.First(p => p.name == panel.Ally.name) is Player p) {
 							panel.Ally = p;
 						}
 					}
