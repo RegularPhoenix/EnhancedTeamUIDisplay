@@ -26,10 +26,10 @@ namespace EnhancedTeamUIDisplay
 			Healer,
 		}
 
-		private static float GetClassCoefficient(Player player, DamageClass damageClass, float additional = 0) {
-			return player.GetTotalDamage(damageClass).Additive
-				+ (player.GetCritChance(damageClass) / 100)
-				+ (player.GetAttackSpeed(damageClass) / 2)
+		private static float GetClassCoefficient(Player player, DamageClass damageClass, float additional = 0) {;
+			return player.GetTotalDamage(damageClass).ApplyTo(1) - 1.5f
+				+ (player.GetCritChance(damageClass) / 50) // + 10% crit chance adds 0.2
+				+ (player.GetAttackSpeed(damageClass) / 2) // + 10% aspd adds 0.05
 				+ additional;
 		}
 
@@ -40,13 +40,13 @@ namespace EnhancedTeamUIDisplay
 			float melee = GetClassCoefficient(player, DamageClass.Melee);
 			float ranged = GetClassCoefficient(player, DamageClass.Ranged);
 			float magic = GetClassCoefficient(player, DamageClass.Magic);
-			float summon = GetClassCoefficient(player, DamageClass.Summon, player.maxMinions - 1);
+			float summon = GetClassCoefficient(player, DamageClass.Summon, (player.maxMinions - 1) / 10);
 
 			Dictionary<PlayerClass, float> coefficients = new() {
-				{ PlayerClass.Melee, GetClassCoefficient(player, DamageClass.Melee) },
-				{ PlayerClass.Ranger, GetClassCoefficient(player, DamageClass.Ranged) },
-				{ PlayerClass.Mage, GetClassCoefficient(player, DamageClass.Magic) },
-				{ PlayerClass.Summoner, GetClassCoefficient(player, DamageClass.Summon) }
+				{ PlayerClass.Melee, melee },
+				{ PlayerClass.Ranger, ranged },
+				{ PlayerClass.Mage, magic },
+				{ PlayerClass.Summoner, summon }
 			};
 
 			// CrossMod
@@ -64,7 +64,13 @@ namespace EnhancedTeamUIDisplay
 					coefficients.Add(PlayerClass.Healer, GetClassCoefficient(player, healerClass, CrossModHelper.GetHealerHealBonus(player)));
 			}
 
-			return coefficients.OrderByDescending(pair => pair.Value).First().Key;
+			var sorted = coefficients.OrderByDescending(pair => pair.Value);
+
+			if (Math.Round(sorted.ElementAt(0).Value, 1) == Math.Round(sorted.ElementAt(1).Value, 1)) {
+				return PlayerClass.None;
+		}
+
+			return sorted.First().Key;
 		}
 
 		internal static (Color health, Color resource) GetClassColours(PlayerClass playerClass) {

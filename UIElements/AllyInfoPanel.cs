@@ -202,8 +202,10 @@ namespace EnhancedTeamUIDisplay.UIElements
 					DamageClass healerClass = CrossModHelper.ThoriumMod?.Find<DamageClass>("HealerDamage");
 
 					static int getClassDamage(DamageClass damageClass, Player player) {
+						StatModifier modifier = player.GetTotalDamage(damageClass);
+
 						return (int) Math.Round(
-							(player.GetTotalDamage(damageClass).Additive * player.GetTotalDamage(damageClass).Multiplicative * 100) - 100
+							((1 + modifier.Base) * modifier.Additive * modifier.Multiplicative * 100) - 100
 						);
 					};
 
