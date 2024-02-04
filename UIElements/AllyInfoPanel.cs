@@ -29,7 +29,7 @@ namespace EnhancedTeamUIDisplay.UIElements
 		private UIImage _frame, _background;
 
 		// Default
-		private UIText _nameText, _armorText, _accessoriesText, _rightStatText, _leftStatText;
+		private UIText _nameText, _armorText, _accessoriesText, _leftStatsText, _rightStatsText;
 
 		// Extended
 		private UIText _playerClassText, _classStatsText;
@@ -55,52 +55,66 @@ namespace EnhancedTeamUIDisplay.UIElements
 			);
 			_frame.Width.Set(ElementWidth, 0f);
 			_frame.Height.Set(ElementHeight, 0f);
-			Append( _frame );
-
-			_armorText = new UIText(string.Empty);
-			_armorText.Top.Set(35, 0f);
-			_armorText.Width.Set(50, 0f);
-			_armorText.HAlign = .15f;
-			_armorText.TextOriginX = 0;
-			Append(_armorText);
-
-			_accessoriesText = new UIText(string.Empty);
-			_accessoriesText.Top.Set(72, 0f);
-			_accessoriesText.Width.Set(50, 0f);
-			_accessoriesText.HAlign = .10f;
-			_accessoriesText.TextOriginX = 0;
-			Append( _accessoriesText);
+			Append(_frame);
 
 			_nameText = new UIText(string.Empty);
-			_nameText.Top.Set(8, 0f);
-			_nameText.Width.Set(160, 0f);
+			_nameText.Width.Set(212, 0f);
+			_nameText.Height.Set(18, 0f);
+			_nameText.Top.Set(7, 0f);
 			_nameText.HAlign = .5f;
 			Append(_nameText);
 
-			_rightStatText = new UIText(string.Empty);
-			_rightStatText.Top.Set(37, 0f);
-			_rightStatText.Height.Set(50, 0f);
-			_rightStatText.HAlign = .92f;
-			_rightStatText.TextOriginX = 1;
-			Append( _rightStatText);
+			_armorText = new UIText(string.Empty);
+			_armorText.Width.Set(102, 0f);
+			_armorText.Height.Set(30, 0f);
+			_armorText.Top.Set(30, 0f);
+			_armorText.Left.Set(10, 0f);
+			_armorText.TextOriginX = .5f;
+			_armorText.TextOriginY = .4f;
+			Append(_armorText);
 
-			_leftStatText = new UIText(string.Empty);
-			_leftStatText.Top.Set(37, 0f);
-			_leftStatText.Height.Set(50, 0f);
-			_leftStatText.HAlign = .67f;
-			_leftStatText.TextOriginX = 0;
-			Append( _leftStatText);
+			_accessoriesText = new UIText(string.Empty);
+			_accessoriesText.Width.Set(102, 0f);
+			_accessoriesText.Height.Set(66, 0f);
+			_accessoriesText.Top.Set(64, 0f);
+			_accessoriesText.Left.Set(10, 0f);
+			_accessoriesText.TextOriginX = .5f;
+			_accessoriesText.TextOriginY = .16f;
+			Append( _accessoriesText);
+
+			_leftStatsText = new UIText(string.Empty, .9f);
+			_leftStatsText.Width.Set(50, 0f);
+			_leftStatsText.Height.Set(100, 0f);
+			_leftStatsText.Top.Set(30, 0f);
+			_leftStatsText.Left.Set(172, 0f);
+			_leftStatsText.TextOriginX = .1f;
+			_leftStatsText.TextOriginY = .14f;
+			_leftStatsText.DynamicallyScaleDownToWidth = true;
+			Append( _leftStatsText);
+
+			_rightStatsText = new UIText(string.Empty, .9f);
+			_rightStatsText.Width.Set(50, 0f);
+			_rightStatsText.Height.Set(100, 0f);
+			_rightStatsText.Top.Set(30, 0f);
+			_rightStatsText.Left.Set(120, 0f);
+			_rightStatsText.TextOriginX = .1f;
+			_rightStatsText.TextOriginY = .14f;
+			_rightStatsText.DynamicallyScaleDownToWidth = true;
+			Append( _rightStatsText);
 
 			_playerClassText = new UIText(string.Empty);
-			_playerClassText.Top.Set(136, 0f);
-			_playerClassText.Width.Set(160, 0f);
+			_playerClassText.Width.Set(212, 0f);
+			_playerClassText.Height.Set(18, 0f);
+			_playerClassText.Top.Set(135, 0f);
 			_playerClassText.HAlign = .5f;
 
 			_classStatsText = new UIText(string.Empty, .8f);
-			_classStatsText.Top.Set(167, 0f);
-			_classStatsText.Width.Set(160, 0f);
-			_classStatsText.HAlign = .2f;
-			_classStatsText.TextOriginX = 0;
+			_classStatsText.Width.Set(216, 0f);
+			_classStatsText.Height.Set(100, 0f);
+			_classStatsText.Top.Set(158, 0f);
+			_classStatsText.Left.Set(8, 0f);
+			_classStatsText.TextOriginX = .1f;
+			_classStatsText.TextOriginY = .08f;
 			_classStatsText.DynamicallyScaleDownToWidth = true;
 
 			if (IsExtended) {
@@ -115,7 +129,7 @@ namespace EnhancedTeamUIDisplay.UIElements
 			Left.Pixels = FixedLeft;
 			Top.Pixels = FixedTop;
 
-			string armorTextValue, accessoriesTextValue, rightStatTextValue, leftStatTextValue;
+			string armorTextValue, accessoriesTextValue, leftStatsTextValue, rightStatsTextValue;
 			armorTextValue = accessoriesTextValue = string.Empty;
 
 			Player ally = ETUDUI.MainPanels[PanelNumber]?.Ally;
@@ -138,20 +152,20 @@ namespace EnhancedTeamUIDisplay.UIElements
 					}
 				}
 
-				rightStatTextValue = $"""
+				leftStatsTextValue = $"""
 					[i:{ItemID.LifeCrystal}]{ally.statLifeMax2}
 					[i:{ItemID.CobaltShield}]{ally.statDefense}
 					[i:{ItemID.HermesBoots}]{(int) ((ally.accRunSpeed + ally.maxRunSpeed) / 2f * ally.moveSpeed * 6)}
 					""";
 
-				leftStatTextValue = $"""
+				rightStatsTextValue = $"""
 					[i:{ItemID.RegenerationPotion}]{ally.lifeRegen / 2}
 					[i:{ItemID.PaladinsShield}]{(int) (ally.endurance * 100)}
 					[i:{ItemID.LeafWings}]{(Math.Round(ally.wingTimeMax / 60.0, 2) > 0 ? Math.Round(ally.wingTimeMax / 60.0, 2) : "-")}
 					""";
 
-				_rightStatText.SetText(rightStatTextValue);
-				_leftStatText.SetText(leftStatTextValue);
+				_leftStatsText.SetText(leftStatsTextValue);
+				_rightStatsText.SetText(rightStatsTextValue);
 				_nameText.SetText(ally.name);
 
 				_armorText.SetText(
@@ -196,44 +210,44 @@ namespace EnhancedTeamUIDisplay.UIElements
 					_classStatsText.SetText(
 						allyClass switch {
 							Util.PlayerClass.Melee => $"""
-								[i:{ItemID.IronBroadsword}] Damage Increase: {getClassDamage(DamageClass.Melee, ally)}
-								[i:{ItemID.PsychoKnife}] Crit. Chance: {(int) ally.GetTotalCritChance(DamageClass.Melee)}
+								[i:{ItemID.IronBroadsword}] Damage Increase: {getClassDamage(DamageClass.Melee, ally)}%
+								[i:{ItemID.PsychoKnife}] Crit. Chance: {(int) ally.GetTotalCritChance(DamageClass.Melee)}%
 								[i:{ItemID.Arkhalis}] Attack Speed: {(int) (ally.GetTotalAttackSpeed(DamageClass.Melee) * 100)}%
 								[i:{ItemID.FleshKnuckles}] Aggro: {ally.aggro}
 								""",
 
 							Util.PlayerClass.Ranger => $"""
-								[i:{ItemID.IronBow}] Damage Increase: {getClassDamage(DamageClass.Ranged, ally)}
-								[i:{ItemID.SniperRifle}] Crit. Chance: {(int) ally.GetTotalCritChance(DamageClass.Ranged)}
+								[i:{ItemID.IronBow}] Damage Increase: {getClassDamage(DamageClass.Ranged, ally)}%
+								[i:{ItemID.SniperRifle}] Crit. Chance: {(int) ally.GetTotalCritChance(DamageClass.Ranged)}%
 								[i:{ItemID.SharkToothNecklace}] Armor Penetration: {ally.GetArmorPenetration(DamageClass.Generic)}
 								""",
 
 							Util.PlayerClass.Mage => $"""
-								[i:{ItemID.MagicalHarp}] Damage Increase: {getClassDamage(DamageClass.Magic, ally)}
-								[i:{ItemID.SkyFracture}] Crit. Chance: {(int) ally.GetTotalCritChance(DamageClass.Magic)}
+								[i:{ItemID.MagicalHarp}] Damage Increase: {getClassDamage(DamageClass.Magic, ally)}%
+								[i:{ItemID.SkyFracture}] Crit. Chance: {(int) ally.GetTotalCritChance(DamageClass.Magic)}%
 								[i:{ItemID.CrystalBall}] MP Cost Reduction: {Math.Round((1.0 - ally.manaCost) * 100)}%
 								""",
 
 							Util.PlayerClass.Summoner => $"""
-								[i:{ItemID.StardustCellStaff}] Damage Increase: {getClassDamage(DamageClass.Summon, ally)}
-								[i:{ItemID.MonkAltHead}] Crit. Chance: {(int) ally.GetTotalCritChance(DamageClass.Summon)}
+								[i:{ItemID.StardustCellStaff}] Damage Increase: {getClassDamage(DamageClass.Summon, ally)}%
+								[i:{ItemID.MonkAltHead}] Crit. Chance: {(int) ally.GetTotalCritChance(DamageClass.Summon)}%
 								[i:{ItemID.ImpStaff}] Max Minions: {ally.maxMinions}
 								[i:{ItemID.DD2BallistraTowerT1Popper}] Max Centries: {ally.maxTurrets}
 								""",
 
 							Util.PlayerClass.Rogue => $"""
-								[i:{CrossModHelper.CalamityMod.Find<ModItem>("HeavenfallenStardisk").Type}] Damage Increase: {getClassDamage(rogueClass, ally)}
-								[i:{CrossModHelper.CalamityMod.Find<ModItem>("GleamingDagger").Type}] Crit. Chance: {(int) ally.GetTotalCritChance(rogueClass)}
+								[i:{CrossModHelper.CalamityMod.Find<ModItem>("HeavenfallenStardisk").Type}] Damage Increase: {getClassDamage(rogueClass, ally)}%
+								[i:{CrossModHelper.CalamityMod.Find<ModItem>("GleamingDagger").Type}] Crit. Chance: {(int) ally.GetTotalCritChance(rogueClass)}%
 								""",
 
 							Util.PlayerClass.Bard => $"""
-								[i:{CrossModHelper.ThoriumMod.Find<ModItem>("ScholarsHarp").Type}] Damage Increase: {getClassDamage(bardClass, ally)}
-								[i:{CrossModHelper.ThoriumMod.Find<ModItem>("MixTape").Type}] Crit. Chance: {(int) ally.GetTotalCritChance(bardClass)}
+								[i:{CrossModHelper.ThoriumMod.Find<ModItem>("ScholarsHarp").Type}] Damage Increase: {getClassDamage(bardClass, ally)}%
+								[i:{CrossModHelper.ThoriumMod.Find<ModItem>("MixTape").Type}] Crit. Chance: {(int) ally.GetTotalCritChance(bardClass)}%
 								""",
 
 							Util.PlayerClass.Healer => $"""
-								[i:{CrossModHelper.ThoriumMod.Find<ModItem>("Liberation").Type}] Damage Increase: {getClassDamage(healerClass, ally)}
-								[i:{CrossModHelper.ThoriumMod.Find<ModItem>("DarkGlaze").Type}] Crit. Chance: {(int) ally.GetTotalCritChance(healerClass)}
+								[i:{CrossModHelper.ThoriumMod.Find<ModItem>("Liberation").Type}] Damage Increase: {getClassDamage(healerClass, ally)}%
+								[i:{CrossModHelper.ThoriumMod.Find<ModItem>("DarkGlaze").Type}] Crit. Chance: {(int) ally.GetTotalCritChance(healerClass)}%
 								[i:{CrossModHelper.ThoriumMod.Find<ModItem>("Twinkle").Type}] Bonus healing: {CrossModHelper.GetHealerHealBonus(ally)}
 								""",
 
@@ -243,8 +257,8 @@ namespace EnhancedTeamUIDisplay.UIElements
 				}
 			} catch (Exception e) {
 				_nameText.SetText("Error");
-				_rightStatText.SetText("N/A");
-				_leftStatText.SetText("N/A");
+				_leftStatsText.SetText("N/A");
+				_rightStatsText.SetText("N/A");
 				_armorText.SetText("N/A");
 				_accessoriesText.SetText("N/A");
 

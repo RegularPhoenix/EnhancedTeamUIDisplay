@@ -47,34 +47,42 @@ namespace EnhancedTeamUIDisplay.UIElements
 
 			// Name
 			_nameText = new UIText(string.Empty, 0.7f);
-			_nameText.Top.Set(12, 0f);
-			_nameText.Width.Set(80, 0f);
-			_nameText.HAlign = .15f;
+			_nameText.Width.Set(176, 0f);
+			_nameText.Height.Set(22, 0f);
+			_nameText.Top.Set(6, 0f);
+			_nameText.Left.Set(12, 0f);
 			_nameText.TextOriginX = 0;
+			_nameText.TextOriginY = .5f;
 			Append(_nameText);
 
 			// HP
 			_healthText = new UIText(string.Empty, 0.7f);
-			_healthText.Top.Set(12, 0f);
 			_healthText.Width.Set(90, 0f);
-			_healthText.HAlign = .85f;
+			_healthText.Height.Set(22, 0f);
+			_healthText.Top.Set(6, 0f);
+			_healthText.Left.Set(98, 0f);
 			_healthText.TextOriginX = 1;
+			_healthText.TextOriginY = .5f;
 			Append(_healthText);
 
 			// Resource (Mana or smth different from modded classes)
 			_resourceText = new UIText(string.Empty, 0.7f);
-			_resourceText.Top.Set(37, 0f);
-			_resourceText.Width.Set(90, 0f);
-			_resourceText.HAlign = .85f;
+			_resourceText.Width.Set(176, 0f);
+			_resourceText.Height.Set(22, 0f);
+			_resourceText.Top.Set(32, 0f);
+			_resourceText.Left.Set(12, 0f);
 			_resourceText.TextOriginX = 1;
+			_resourceText.TextOriginY = .5f;
 			Append(_resourceText);
 
 			// Ammo
 			_ammoText = new UIText(string.Empty, 0.7f);
-			_ammoText.Top.Set(37, 0f);
-			_ammoText.Width.Set(90, 0f);
-			_ammoText.HAlign = .15f;
+			_ammoText.Width.Set(176, 0f);
+			_ammoText.Height.Set(22, 0f);
+			_ammoText.Top.Set(32, 0f);
+			_ammoText.Left.Set(12, 0f);
 			_ammoText.TextOriginX = 0;
+			_ammoText.TextOriginY = .5f;
 			Append(_ammoText);
 
 			_player = Main.LocalPlayer.GetModPlayer<ETUDPlayer>();
