@@ -11,6 +11,9 @@ namespace EnhancedTeamUIDisplay
 	{
 		internal static readonly Color ETUDTextColor = new(215, 195, 240);
 
+		internal static readonly Color GenericHealthColor = new(175, 40, 60);
+		internal static readonly Color GenericManaColor = new(50, 80, 140);
+
 		#region Classes
 		internal enum PlayerClass
 		{
@@ -68,23 +71,23 @@ namespace EnhancedTeamUIDisplay
 
 			if (Math.Round(sorted.ElementAt(0).Value, 1) == Math.Round(sorted.ElementAt(1).Value, 1)) {
 				return PlayerClass.None;
-		}
+			}
 
 			return sorted.First().Key;
 		}
 
 		internal static (Color health, Color resource) GetClassColours(PlayerClass playerClass) {
 			return playerClass switch {
-				PlayerClass.Melee => new(new(200, 155, 100), new(145, 30, 50)),
-				PlayerClass.Ranger => new(new(170, 210, 115), new(165, 80, 40)),
-				PlayerClass.Mage => new(new(110, 200, 240), new(50, 80, 140)),
-				PlayerClass.Summoner => new(new(150, 130, 200), new(50, 80, 140)),
+				PlayerClass.Melee => new(new(200, 155, 100), GenericHealthColor),
+				PlayerClass.Ranger => new(new(170, 210, 115), new(185, 110, 50)),
+				PlayerClass.Mage => new(new(110, 200, 240), GenericManaColor),
+				PlayerClass.Summoner => new(new(150, 130, 200), GenericManaColor),
 				PlayerClass.Offline => new(Color.Gray, Color.LightGray),
 				// CrossMod
 				PlayerClass.Rogue => new(new(255, 240, 110), new(180, 150, 20)),
-				PlayerClass.Bard => new(new(160, 90, 120), new(85, 75, 115)),
-				PlayerClass.Healer => new(new(0, 160, 95), new(50, 80, 140)),
-				_ => new(Color.Green, Color.Blue)
+				PlayerClass.Bard => new(new(200, 130, 160), new(95, 85, 125)),
+				PlayerClass.Healer => new(new(0, 160, 95), GenericManaColor),
+				_ => new(GenericHealthColor, GenericManaColor)
 			};
 		}
 
