@@ -1,6 +1,6 @@
 displayName = Enhanced Team UI Display (ETUD)
 author = R.Phoenix
-version = 2.1.0
+version = 2.2.0
 hideCode = true
 hideResources = true
 sortAfter = CalamityMod, ThoriumMod

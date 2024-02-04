@@ -15,10 +15,7 @@ Compatible with Calamity and Thorium mods.
 Feel free to give your feedback on the mod on the Steam Workshop page.
 If you find a bug, please report it on mod GitHub page.
 
-Update 2.1.0:
-	- Added an option to save player team on exit
-	- Added an option to automatically reset damage meter on boss spawn
-	- Updated localization
-	- Fix incorrect loading of UI position
-	- Fixed UI text formatting
-	- And some other small fixes...
+Update 2.2.0:
+	- Updated UI lock (freeze) system. Now dragging panels is easier and more convenient!
+	- Fixed some typos
+	- Fixed occasional crash when another player changes their team
