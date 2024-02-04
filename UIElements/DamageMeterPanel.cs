@@ -157,7 +157,7 @@ namespace EnhancedTeamUIDisplay.UIElements
 			int highestValue = statValues.Values.ElementAt(0);
 
 			spriteBatch.Draw(
-				TextureAssets.MagicPixel.Value,
+				ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/MagicBar").Value,
 				Bar,
 				Util.GetClassColours(
 					Util.GuessPlayerClass(bestPlayer)
@@ -184,7 +184,7 @@ namespace EnhancedTeamUIDisplay.UIElements
 				);
 
 				spriteBatch.Draw(
-					TextureAssets.MagicPixel.Value,
+					ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/MagicBar").Value,
 					new Rectangle(
 						Bar.X,
 						Bar.Y,

@@ -147,7 +147,7 @@ namespace EnhancedTeamUIDisplay.UIElements
 
 			for (int i = 0; i < healthBarSteps; i++) {
 				spriteBatch.Draw(
-					TextureAssets.MagicPixel.Value,
+					ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/MagicBar").Value,
 					new Rectangle(healthBarLeft + i, healthBar.Y, 1, healthBar.Height),
 					healthColor
 				);
@@ -168,7 +168,7 @@ namespace EnhancedTeamUIDisplay.UIElements
 
 			for (int i = 0; i < resourceBarSteps; i++) {
 				spriteBatch.Draw(
-					TextureAssets.MagicPixel.Value,
+					ModContent.Request<Texture2D>("EnhancedTeamUIDisplay/Sprites/MagicBar").Value,
 					new Rectangle(resourceBarLeft + i, resourceBar.Y, 1, resourceBar.Height),
 					resourceColor
 				);
